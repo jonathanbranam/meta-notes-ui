@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
-import { metaNotes, parseFrontmatter } from "../../client/src/markdown.js";
+import { metaNotes, parseFrontmatter, propText, valueSegments } from "../../client/src/markdown.js";
 import { stripFrontmatter } from "../../client/src/notes.js";
 import { parseHash } from "../../shared/links.js";
 import { createApp } from "../../server/app.js";
@@ -31,7 +31,7 @@ const BLOCK = `### Time Block
 
 type World = Record<string, any>;
 
-const unescape = (s: string) => s.replace(/\\n/g, "\n");
+const unescape = (s: string) => s.replace(/\\n/g, "\n").replace(/\\"/g, '"');
 
 /** The page for the world's note, as the browser renders it, with attribute quotes made single. */
 function page(w: World): string {
@@ -71,8 +71,22 @@ export function renderingSteps(steps: Steps) {
   });
 
   steps.then(/^its properties are "(.*)"$/, (w, props) => {
-    expect(parseFrontmatter(w.md).map(([k, v]) => `${k}=${v}`).join("; ")).toBe(props);
+    expect(parseFrontmatter(w.md).map(([k, v]) => `${k}=${propText(v)}`).join("; ")).toBe(props);
   });
+  steps.when(/^a property holds "(.*)"$/, (w, text) => void (w.value = text));
+  steps.then(/^the value shows a link to "([^"]+)" labelled "([^"]+)"$/, (w, to, label) => {
+    const segs = valueSegments(w.value, { path: DAILY, files: FILES, today: "2026-10-04", nowMinutes: 0 });
+    expect(segs).toContainEqual({ text: label, href: `#${to}` });
+  });
+  steps.then(/^the value shows "([^"]+)" as a missing link$/, (w, label) => {
+    const segs = valueSegments(w.value, { path: DAILY, files: FILES, today: "2026-10-04", nowMinutes: 0 });
+    expect(segs).toContainEqual({ text: label, missing: true });
+  });
+  steps.then(/^the Log shows "([^"]+)"$/, (w, log) => {
+    const found = [...page(w).matchAll(/<span class='logtime'>([^<]*)<\/span>/g)].map((m) => m[1]);
+    expect(found.join(", ")).toBe(log);
+  });
+  steps.then(/^the page contains "([^"]+)"$/, (w, text) => expect(page(w)).toContain(text));
   steps.then(/^it has no properties$/, (w) => expect(parseFrontmatter(w.md)).toEqual([]));
   steps.then(/^its body is "(.*)"$/, (w, body) => expect(stripFrontmatter(w.md)).toBe(unescape(body)));
 

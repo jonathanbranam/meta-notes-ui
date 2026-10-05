@@ -17,7 +17,7 @@ Tests and `npm run dev:example` copy it to a temp dir first
 - `area/health.md`: frontmatter aliases, 🔁 recurrence (`every year`,
   `every weekday when done`), an overdue task, canceled and rescheduled
   statuses.
-- `area/Home Care.md`: a heading link target, `#wait`.
+- `area/Home Care.md`: frontmatter with a nested map and a list of links, a heading link target, `#wait`.
 - `plan/daily/26-Q3/`: dated daily notes with a Log and a Time Block with
   a struck plan (`~standup~`) and `no plan` rows.
 - `plan/week/`, `plan/quarter/`: week and quarter notes linked from daily.

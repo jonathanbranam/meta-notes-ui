@@ -3,7 +3,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
-import { isOpen, metaNotes, parseFrontmatter } from "./markdown";
+import { isOpen, metaNotes, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { flattenFiles, frontmatterLines, quickOpen, stripFrontmatter } from "./notes";
 
@@ -64,6 +64,42 @@ function Editor({ edit, onSave, onCancel }: { edit: Edit; onSave: (draft: string
       <button onClick={() => onSave(draft)}>{edit.current !== undefined ? "Save over it" : "Save"}</button>
       <button onClick={onCancel}>Cancel</button>
     </div>
+  );
+}
+
+/** A frontmatter value: lists as lists, maps as nested properties, `[[links]]` as links. */
+function PropView({ value, ctx }: { value: PropValue; ctx: RenderContext }) {
+  if (typeof value === "string")
+    return (
+      <>
+        {valueSegments(value, ctx).map((s, i) =>
+          s.href ? (
+            <a key={i} href={s.href} className="wikilink">{s.text}</a>
+          ) : s.missing ? (
+            <span key={i} className="wikilink missing" title="No such note">{s.text}</span>
+          ) : (
+            s.text
+          ),
+        )}
+      </>
+    );
+  if (Array.isArray(value))
+    return (
+      <ul className="prop-list">
+        {value.map((v, i) => (
+          <li key={i}><PropView value={v} ctx={ctx} /></li>
+        ))}
+      </ul>
+    );
+  return (
+    <dl className="prop-map">
+      {Object.entries(value).map(([k, v]) => (
+        <div key={k}>
+          <dt>{k}</dt>
+          <dd><PropView value={v} ctx={ctx} /></dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -315,10 +351,8 @@ export function App() {
   const files = useMemo(() => flattenFiles(tree), [tree]);
   const filePaths = useMemo(() => new Set(files.map((f) => f.path)), [files]);
   const { today, nowMinutes } = clock(now);
-  const plugins = useMemo(
-    () => [remarkGfm, metaNotes({ path, files: filePaths, today, nowMinutes })],
-    [path, filePaths, today, nowMinutes],
-  );
+  const ctx = useMemo(() => ({ path, files: filePaths, today, nowMinutes }), [path, filePaths, today, nowMinutes]);
+  const plugins = useMemo(() => [remarkGfm, metaNotes(ctx)], [ctx]);
   const props = useMemo(() => (note ? parseFrontmatter(note.text) : []), [note]);
 
   const openToday = () => open(TODAY_PATH);
@@ -355,7 +389,9 @@ export function App() {
                 {props.map(([k, v]) => (
                   <div key={k}>
                     <dt>{k}</dt>
-                    <dd>{v}</dd>
+                    <dd>
+                      <PropView value={v} ctx={ctx} />
+                    </dd>
                   </div>
                 ))}
               </dl>
