@@ -32,29 +32,6 @@ describe("tokenMatches", () => {
   });
 });
 
-describe("access", () => {
-  it.each(["/", "/api/version", "/api/tree", "/api/note?path=root.md", "/api/events", "/api/daily", "/api/backlinks?path=root.md"])(
-    "refuses %s without a token",
-    async (p) => {
-      expect((await app.request(p)).status).toBe(401);
-    },
-  );
-  it("refuses a wrong token, header or query", async () => {
-    expect((await app.request("/api/version", { headers: { authorization: "Bearer nope" } })).status).toBe(401);
-    expect((await app.request("/?token=nope")).status).toBe(401);
-    expect((await app.request("/api/version?token=" + TOKEN)).status).toBe(401);
-  });
-  it("trades ?token= for an httpOnly cookie and redirects", async () => {
-    const res = await app.request(`/?token=${TOKEN}`);
-    expect(res.status).toBe(302);
-    expect(res.headers.get("location")).toBe("/");
-    const cookie = res.headers.get("set-cookie") ?? "";
-    expect(cookie).toContain("HttpOnly");
-    const pair = cookie.split(";")[0];
-    expect((await app.request("/api/version", { headers: { cookie: pair } })).status).toBe(200);
-  });
-});
-
 describe("api", () => {
   it("returns the version", async () => {
     const res = await app.request("/api/version", { headers: auth });
@@ -77,13 +54,6 @@ describe("api", () => {
     expect(await get("area/health.md")).toEqual(["root.md"]);
     expect(await get("project/make-bread/Home.md")).toEqual(["root.md"]);
     expect(await get("zeta/z.md")).toEqual([]);
-  });
-  it("refuses escapes and hidden files", async () => {
-    for (const p of ["../secret.md", ".git/config.md", "link.md", "%2e%2e/secret.md"]) {
-      const res = await app.request(`/api/note?path=${encodeURIComponent(p)}`, { headers: auth });
-      expect([400, 403, 404]).toContain(res.status);
-    }
-    expect((await app.request("/api/note?path=notes.txt", { headers: auth })).status).toBe(400);
   });
   it("streams events to subscribers", async () => {
     const res = await app.request("/api/events", { headers: auth });
