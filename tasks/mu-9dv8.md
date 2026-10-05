@@ -2,9 +2,9 @@
 id = "mu-9dv8"
 title = "Specs 2/5: tree, notes and live updates (ticket hzf9)"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-05T02:36:23.674Z"
-updated_at = "2026-10-05T02:36:28.037872532Z"
+updated_at = "2026-10-05T02:37:26.206522673Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++

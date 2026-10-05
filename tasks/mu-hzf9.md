@@ -2,9 +2,9 @@
 id = "mu-hzf9"
 title = "Specs 1/5: access and server lifecycle (ticket hzf9)"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-05T02:36:16.720Z"
-updated_at = "2026-10-05T02:36:27.648633899Z"
+updated_at = "2026-10-05T02:37:26.028837178Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++

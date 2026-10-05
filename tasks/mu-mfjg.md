@@ -2,9 +2,9 @@
 id = "mu-mfjg"
 title = "Specs 4/5: edits through the CLI (ticket hzf9)"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-05T02:36:24.051Z"
-updated_at = "2026-10-05T02:36:28.315568168Z"
+updated_at = "2026-10-05T02:37:26.818590126Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++

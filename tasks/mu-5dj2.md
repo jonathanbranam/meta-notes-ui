@@ -2,9 +2,9 @@
 id = "mu-5dj2"
 title = "Watcher: don't watch .git, .venv and other hidden trees on Linux"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-10-05T02:19:58.501Z"
-updated_at = "2026-10-05T02:20:00.409905351Z"
+updated_at = "2026-10-05T02:37:24.170914711Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++
