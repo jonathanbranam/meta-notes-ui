@@ -79,10 +79,8 @@ export function treeSteps(steps: Steps) {
     const paths = flatten(await treeOf(w)).map((n) => n.path);
     for (const prefix of [a, b, c]) expect(paths.some((p) => p.startsWith(prefix))).toBe(false);
   });
-  steps.then(/^the tree holds no "([^"]+)" and no "([^"]+)"$/, async (w, a, b) => {
-    const names = flatten(await treeOf(w)).map((n) => n.name);
-    expect(names).not.toContain(a);
-    expect(names).not.toContain(b);
+  steps.then(/^the tree holds no "([^"]+)"$/, async (w, a) => {
+    expect(flatten(await treeOf(w)).map((n) => n.name)).not.toContain(a);
   });
 
   steps.then(/^the note text is "(.*)"$/, async (w, text) => {

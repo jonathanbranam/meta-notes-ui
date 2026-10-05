@@ -38,6 +38,29 @@ const MIME: Record<string, string> = {
   ".map": "application/json",
 };
 
+/** Content types of the notes root's files; anything else is downloaded as bytes. */
+const FILE_MIME: Record<string, string> = {
+  ".md": "text/markdown; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
+  ".csv": "text/csv; charset=utf-8",
+  ".json": "application/json",
+  ".html": "text/html; charset=utf-8",
+  ".htm": "text/html; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".avif": "image/avif",
+  ".bmp": "image/bmp",
+  ".pdf": "application/pdf",
+  ".mp3": "audio/mpeg",
+  ".mp4": "video/mp4",
+};
+
+const SCRIPTABLE = new Set([".html", ".htm", ".svg"]);
+
 export function createApp(opts: AppOptions): Hono {
   const { root, token } = opts;
   const app = new Hono();
@@ -76,6 +99,27 @@ export function createApp(opts: AppOptions): Hono {
       const [text, st] = await Promise.all([readFile(abs, "utf8"), stat(abs)]);
       const body: NoteResponse = { path: rel, text, mtime: st.mtimeMs };
       return c.json(body);
+    } catch (e) {
+      if (e instanceof PathError) return c.json({ error: e.message }, e.message === "not found" ? 404 : 403);
+      return c.json({ error: "cannot read" }, 404);
+    }
+  });
+
+  // Any visible file, raw. HTML and SVG could run script in the UI's origin, so they get a sandbox.
+  app.get("/api/file", async (c) => {
+    const rel = c.req.query("path") ?? "";
+    try {
+      const abs = await confine(root, rel);
+      if (!(await stat(abs)).isFile()) return c.json({ error: "not a file" }, 400);
+      const data = await readFile(abs);
+      const ext = path.extname(abs).toLowerCase();
+      const headers: Record<string, string> = {
+        "content-type": FILE_MIME[ext] ?? "application/octet-stream",
+        "x-content-type-options": "nosniff",
+      };
+      // Not for PDFs: a sandbox stops the browser's PDF viewer.
+      if (SCRIPTABLE.has(ext)) headers["content-security-policy"] = "sandbox; default-src 'none'; style-src 'unsafe-inline'";
+      return c.body(new Uint8Array(data), 200, headers);
     } catch (e) {
       if (e instanceof PathError) return c.json({ error: e.message }, e.message === "not found" ? 404 : 403);
       return c.json({ error: "cannot read" }, 404);

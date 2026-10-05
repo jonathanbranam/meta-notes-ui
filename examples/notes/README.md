@@ -21,6 +21,7 @@ Tests and `npm run dev:example` copy it to a temp dir first
 - `plan/daily/26-Q3/`: dated daily notes with a Log and a Time Block with
   a struck plan (`~standup~`) and `no plan` rows.
 - `plan/week/`, `plan/quarter/`: week and quarter notes linked from daily.
+- `resource/files/`: a PNG, a text file and a tiny PDF, to check that every file is listed and served; `area/Home Care.md` embeds the PNG both ways (`![[dot.png]]` and `![](../resource/files/dot.png)`).
 - `resource/template/`: the templates `meta-notes init` installs.
 
 ## Extending it

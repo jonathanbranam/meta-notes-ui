@@ -30,6 +30,19 @@ export function accessSteps(steps: Steps) {
   steps.when(/^a client requests the note "([^"]+)" with the right token$/, (w, p) =>
     get(w, `/api/note?path=${encodeURIComponent(p)}`, TOKEN),
   );
+  steps.when(/^a client requests the file "([^"]+)" with the right token$/, (w, p) =>
+    get(w, `/api/file?path=${encodeURIComponent(p)}`, TOKEN),
+  );
+  steps.when(/^a client requests the file "([^"]+)" without a token$/, (w, p) =>
+    get(w, `/api/file?path=${encodeURIComponent(p)}`),
+  );
+  steps.then(/^the file content type is "([^"]+)"$/, (w, t) => expect(w.res.headers.get("content-type")).toBe(t));
+  steps.then(/^the file is sandboxed and not sniffable$/, (w) => {
+    expect(w.res.headers.get("content-security-policy")).toMatch(/^sandbox/);
+    expect(w.res.headers.get("x-content-type-options")).toBe("nosniff");
+  });
+  steps.then(/^the file body is "([^"]*)"$/, async (w, text) => expect(await w.res.text()).toBe(text));
+  steps.then(/^the file is not served$/, (w) => expect(w.res.status).toBeGreaterThanOrEqual(400));
   steps.when(/^a client visits "([^"]+)"$/, async (w, url) => {
     const app = await appFor(w);
     w.res = await app.request(url);

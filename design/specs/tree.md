@@ -11,18 +11,18 @@ to the files; one watcher pushes changes over one SSE stream.
 
 ### Requirement: The tree lists the notes  {#r-97d0}
 
-The server SHALL list the folders and `.md` files under the notes root as a
-tree, with the PPARA folders (plan, project, area, resource, archive) first
+The server SHALL list the folders and files (of any type) under the notes
+root as a tree, with the PPARA folders (plan, project, area, resource, archive) first
 in that order, then other folders, then files, each group sorted by name. It
 SHALL skip hidden names (`.git`, `.venv`, `.meta-notes-cache`,
-`node_modules`) at any depth, symlinks, non-markdown files and empty folders.
+`node_modules`) at any depth, symlinks and empty folders.
 
 #### Scenario: Order  {#s-1c8a}
 
 *Verification*: **executable**
 
 - **WHEN** a client requests "/api/tree" with the right token
-- **THEN** the top-level names are "plan, project, area, alpha, zeta, root.md"
+- **THEN** the top-level names are "plan, project, area, alpha, img, zeta, data.bin, doc.pdf, notes.txt, page.html, root.md"
 
 #### Scenario: Nested notes carry their root-relative path  {#s-5fc1}
 
@@ -31,20 +31,80 @@ SHALL skip hidden names (`.git`, `.venv`, `.meta-notes-cache`,
 - **WHEN** a client requests "/api/tree" with the right token
 - **THEN** the tree holds the file "plan/daily/26-Q4/2026-10-04 Sun.md"
 
-#### Scenario: Hidden names, other files and symlinks are skipped  {#s-6042}
+#### Scenario: Hidden names and symlinks are skipped  {#s-6042}
 
 *Verification*: **executable**
 
 - **WHEN** a client requests "/api/tree" with the right token
 - **THEN** the tree holds no path starting with ".git", ".meta-notes-cache" or "node_modules"
-- **AND** the tree holds no "notes.txt" and no "link.md"
+- **AND** the tree holds no "link.md"
 
 #### Scenario: Notes that are not markdown are listed  {#s-7c6d}
 
+*Verification*: **executable**
+
+- **WHEN** a client requests "/api/tree" with the right token
+- **THEN** the tree holds the file "notes.txt"
+- **AND** the tree holds the file "img/dot.png"
+
+### Requirement: Any file is served raw  {#r-016e}
+
+The server SHALL serve any visible file under the notes root, as bytes with a
+content type from its extension, at `/api/file?path=`, with the same token and
+confinement as notes. A file that could run script in the UI's origin (HTML,
+SVG) SHALL be served with a sandbox `Content-Security-Policy`, and every file
+with `X-Content-Type-Options: nosniff`. Note reads and edits stay `.md` only.
+
+#### Scenario: Content types  {#s-2d15}
+
+*Verification*: **executable**
+
+- **WHEN** a client requests the file "\<path\>" with the right token
+- **THEN** the file content type is "\<type\>"
+
+*Examples*:
+
+| path        | type                     |
+| ----------- | ------------------------ |
+| img/dot.png | image/png                |
+| notes.txt   | text/plain; charset=utf-8 |
+| doc.pdf     | application/pdf          |
+| data.bin    | application/octet-stream |
+
+#### Scenario: Bytes arrive intact and sandboxed  {#s-88ab}
+
+*Verification*: **executable**
+
+- **WHEN** a client requests the file "page.html" with the right token
+- **THEN** the file is sandboxed and not sniffable
+- **AND** the file body is "hi"
+
+#### Scenario: Refused files  {#s-be98}
+
+*Verification*: **executable**
+
+- **WHEN** a client requests the file "\<path\>" without a token
+- **THEN** the response status is 401
+- **WHEN** a client requests the file "\<path\>" with the right token
+- **THEN** the file is not served
+
+*Examples*:
+
+| path                       |
+| -------------------------- |
+| ../secret.md               |
+| .git/config.md             |
+| node_modules/pkg/readme.md |
+| link.md                    |
+
+#### Scenario: Files show in the client  {#s-b2ce}
+
 *Verification*: **non-executable**
 
-- **WHEN** the notes root holds files that are not `.md` (images, text, PDFs)
-- **THEN** the tree lists them and they open, as in Obsidian
+- **WHEN** a file other than a note is opened from the tree
+- **THEN** an image shows inline, a ".txt" shows as text, a PDF opens raw and any other file is a download link
+- **WHEN** a note embeds an image with `![](x.png)` or `![[x.png]]`
+- **THEN** the image shows in the note
 
 ### Requirement: A note is read when asked  {#r-e65b}
 
