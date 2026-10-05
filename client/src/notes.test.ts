@@ -24,3 +24,11 @@ describe("quickOpen", () => {
     expect(quickOpen(files, "  ")).toEqual([]);
   });
 });
+
+import { frontmatterLines as fmLines } from "./notes";
+describe("frontmatterLines", () => {
+  it("counts the lines the frontmatter takes, 0 without it", () => {
+    expect(fmLines("---\na: 1\n---\n# T\n")).toBe(3);
+    expect(fmLines("# T\n")).toBe(0);
+  });
+});
