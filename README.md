@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v1 in development.
+Status: v0.1.0, v1 in development.
 
 ## How it fits
 
@@ -24,3 +24,35 @@ cd meta-notes-ui && npm ci && npm run build
 ```
 
 Needs Node and `meta-notes` on PATH.
+
+## Start contract
+
+`meta-notes ui` starts the server with exactly this:
+
+```bash
+node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --token-file <path>
+```
+
+- `--host` defaults to `127.0.0.1` (bind a LAN or Tailscale address for the
+  phone); `--port` defaults to `0` (a free port).
+- `--token-file` holds the secret (created, mode 0600, if missing). Every
+  request needs it: open `<url>/?token=<token>` once and the server sets an
+  httpOnly cookie and redirects; API clients may send `Authorization: Bearer`.
+- On listen it writes `<root>/.meta-notes-cache/ui/server.json`
+  (`pid`, `host`, `port`, `url`, `version`) and removes it on exit.
+- It serves only `.md` notes under the root; `.git`, `.venv`,
+  `.meta-notes-cache` and `node_modules` are hidden, and nothing outside the
+  root (symlinks included) is read.
+
+API: `GET /api/version`, `/api/tree`, `/api/note?path=`, `/api/daily`
+(today's daily note path, via `meta-notes note daily`), `/api/events` (SSE of
+`{type: changed|added|removed, path}`, debounced 200 ms, from one recursive
+watch of the root).
+
+## Develop
+
+`npm run check` runs tsc, vitest and the build (what CI runs). The code is
+`server/` (Hono on Node), `client/` (Vite + React) and `shared/` (types).
+For client work, start the server by hand and run `npm run build:client -- --watch`,
+or `npx vite` with `MN_UI_SERVER=<server url>` (the token cookie is per origin,
+so open the server URL once with `?token=`).
