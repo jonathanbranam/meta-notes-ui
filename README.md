@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.3.0, v1 in development.
+Status: v0.4.0, v1 in development.
 
 ## How it fits
 
@@ -98,3 +98,27 @@ dev:example [-- --port N]` builds, copies it to a temp root and runs the
 server there (port `0` unless given; `bridle port allocate` is used if the
 binary exists), printing the URL with token. **Whenever a feature needs
 content to verify, extend the example** and its README.
+
+## Today, alerts and the phone app
+
+- **Today** (header button; `#!today`): today's Time Block with the current
+  row and the next planned row marked, open tasks due today or overdue, and
+  the day's calendar agenda when `meta-notes calendar` is set up (otherwise
+  the section is absent). `GET /api/today` gathers it: `meta-notes tasks
+  --overdue --due`, `calendar` and `note daily` (all `execFile`, argument
+  arrays) plus a read of the daily note. The view refetches (debounced 1 s)
+  when the watcher reports a change.
+- **Alerts**: browser notifications at the time of a timed task due today
+  (`⏰ HH:MM`) and at each planned Time Block row (not empty, `no plan` or
+  struck out), while a tab is open. "Enable alerts" on the Today view asks for
+  permission. A fired alert shows at the top of the page with **Snooze 10
+  min** and **Dismiss**. All timers are `setTimeout`s in the browser; the
+  server never polls. Push to a closed phone is later (the phone bridge).
+- **PWA**: `manifest.webmanifest`, icons (`client/public/`, made by
+  `scripts/make-icons.mjs`) and a minimal service worker (installability and
+  notification clicks; it caches nothing). The token still guards them: the
+  manifest link is `crossorigin="use-credentials"` so the cookie is sent. Add
+  to the home screen from the phone's browser over the `--host` address; note
+  that browsers only install and notify over HTTPS or `localhost`, so a plain
+  `http://` LAN address may allow viewing but not install or alerts
+  (Tailscale HTTPS works).

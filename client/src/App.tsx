@@ -3,6 +3,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, parseFrontmatter } from "./markdown";
+import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { flattenFiles, frontmatterLines, quickOpen, stripFrontmatter } from "./notes";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -167,13 +168,15 @@ export function App() {
   const [quick, setQuick] = useState(false);
   const [backlinks, setBacklinks] = useState<string[]>([]);
   const [now, setNow] = useState(() => new Date());
+  const [refreshKey, setRefreshKey] = useState(0);
+  const todayState = useToday(refreshKey, now);
   const pathRef = useRef(path);
   pathRef.current = path;
 
   const loadTree = useCallback(() => getJson<TreeNode[]>("/api/tree").then(setTree).catch(() => {}), []);
   const loadNote = useCallback(() => {
     const p = pathRef.current;
-    if (!p) return setNote(null);
+    if (!p || p === TODAY_PATH) return setNote(null);
     getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(p)}`)
       .then((n) => {
         setNote(n);
@@ -187,7 +190,7 @@ export function App() {
 
   const loadBacklinks = useCallback(() => {
     const p = pathRef.current;
-    if (!p) return setBacklinks([]);
+    if (!p || p === TODAY_PATH) return setBacklinks([]);
     getJson<BacklinksResponse>(`/api/backlinks?path=${encodeURIComponent(p)}`)
       .then((b) => setBacklinks(b.backlinks))
       .catch(() => setBacklinks([]));
@@ -222,6 +225,7 @@ export function App() {
       const e = JSON.parse(m.data) as ChangeEvent;
       if (e.type !== "changed") void loadTree();
       if (e.path === pathRef.current) loadNote();
+      setRefreshKey((k) => k + 1);
       loadBacklinks();
     };
     return () => es.close();
@@ -287,6 +291,7 @@ export function App() {
   );
   const props = useMemo(() => (note ? parseFrontmatter(note.text) : []), [note]);
 
+  const openToday = () => open(TODAY_PATH);
   const openDaily = () =>
     getJson<{ path: string }>("/api/daily")
       .then((d) => open(d.path))
@@ -298,8 +303,9 @@ export function App() {
         <button className="menu" onClick={() => setDrawer(!drawer)} aria-label="Files">
           ☰
         </button>
-        <span className="title">{path.replace(/\.md$/, "") || "meta-notes"}</span>
-        <button onClick={openDaily}>Today</button>
+        <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
+        <button onClick={openToday}>Today</button>
+        <button onClick={openDaily}>Daily</button>
         <button onClick={newNote}>New</button>
         <button onClick={() => setQuick(true)}>Open…</button>
       </header>
@@ -308,8 +314,11 @@ export function App() {
       </nav>
       {drawer && <div className="scrim" onClick={() => setDrawer(false)} />}
       <main>
+        <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
-        {note ? (
+        {path === TODAY_PATH ? (
+          <TodayView today={todayState} now={now} open={open} />
+        ) : note ? (
           <article className="note">
             {props.length > 0 && (
               <dl className="props">
