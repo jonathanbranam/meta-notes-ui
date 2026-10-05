@@ -24,3 +24,8 @@ export interface ServerInfo {
   url: string;
   version: string;
 }
+
+export interface BacklinksResponse {
+  /** Notes that link to the path, sorted. */
+  backlinks: string[];
+}

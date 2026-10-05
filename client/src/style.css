@@ -41,3 +41,33 @@ main { overflow: auto; padding: 1rem 1.5rem; }
   .scrim { position: fixed; inset: 0; background: #0005; z-index: 5; }
   main { padding: .75rem; }
 }
+.note a.wikilink { color: #2563eb; text-decoration: none; border-bottom: 1px dotted; }
+.note .wikilink.missing { color: #c0392b; border-bottom: 1px dashed; opacity: .8; }
+.note .tag { color: #7c3aed; }
+.props { display: flex; flex-wrap: wrap; gap: .25rem .75rem; margin: 0 0 1rem; padding: .5rem .75rem; background: #f4f4f6; border-radius: 6px; font-size: .85rem; }
+.props div { display: flex; gap: .35rem; }
+.props dt { color: #888; }
+.props dd { margin: 0; }
+.task-item { list-style: none; }
+.task-item::before { content: "☐"; margin: 0 .4rem 0 -1.4rem; }
+.task-item.status-done::before { content: "☑"; }
+.task-item.status-moved::before { content: "➜"; }
+.task-item.status-canceled::before { content: "☒"; }
+.task-item.status-partial::before { content: "◐"; }
+.task-item.status-done > p, .task-item.status-canceled > p { opacity: .6; }
+.task-item.status-canceled > p { text-decoration: line-through; }
+.chip { font-size: .8em; padding: 0 .4em; border-radius: 999px; background: #e8eaee; white-space: nowrap; }
+.chip.overdue { background: #fde2e0; color: #c0392b; font-weight: 600; }
+.task-item.overdue { color: #c0392b; }
+.timeblock tr.noplan td { color: #999; font-style: italic; }
+.timeblock tr.now td { background: #fff3c4; font-weight: 600; }
+.timeblock del { opacity: .6; }
+.backlinks { margin-top: 2rem; border-top: 1px solid #ddd; font-size: .9rem; }
+@media (prefers-color-scheme: dark) {
+  .note a.wikilink { color: #7aa7ff; }
+  .props, .chip { background: #2a2c30; }
+  .chip.overdue { background: #4a2523; color: #ff8b82; }
+  .task-item.overdue { color: #ff8b82; }
+  .timeblock tr.now td { background: #4a4220; }
+  .backlinks { border-color: #444; }
+}

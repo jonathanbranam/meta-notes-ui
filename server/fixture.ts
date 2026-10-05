@@ -13,7 +13,7 @@ export async function makeFixtureRoot(): Promise<{ root: string; outside: string
     "area/health.md": "# Health\n",
     "zeta/z.md": "# Z\n",
     "alpha/a.md": "# A\n",
-    "root.md": "# Root\n",
+    "root.md": "# Root\n\nSee [[area/health|health]] and [[project/make-bread]].\n",
     "notes.txt": "not markdown",
     ".git/config.md": "git",
     ".meta-notes-cache/ui/x.md": "cache",

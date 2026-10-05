@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.1.0, v1 in development.
+Status: v0.2.0, v1 in development.
 
 ## How it fits
 
@@ -44,10 +44,25 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
   `.meta-notes-cache` and `node_modules` are hidden, and nothing outside the
   root (symlinks included) is read.
 
-API: `GET /api/version`, `/api/tree`, `/api/note?path=`, `/api/daily`
+API: `GET /api/version`, `/api/tree`, `/api/note?path=`, `/api/backlinks?path=`
+(notes linking to one, link targets cached by mtime), `/api/daily`
 (today's daily note path, via `meta-notes note daily`), `/api/events` (SSE of
 `{type: changed|added|removed, path}`, debounced 200 ms, from one recursive
 watch of the root).
+
+## Rendering
+
+Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
+
+- `[[path]]` and `[[path|alias]]` resolve like the plugin: from the notes
+  root (`.md` added), else relative to the note; `[[x]]` also finds the
+  folder note `x/Home.md` (`shared/links.ts`). Missing targets are red.
+- Frontmatter shows as a property panel; `#tags` are highlighted.
+- Task lines (`- [c]`) show their status and chips for `📅 ⏳ 🛫 ✅ ⏰ 🔁`
+  and times; an open task due before today is red.
+- The Time Block table: single-tilde plans struck out, `no plan` rows
+  dimmed, and on today's note the row holding the current time highlighted.
+- Backlinks list under the note.
 
 ## Develop
 

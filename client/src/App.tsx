@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
+import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
+import { metaNotes, parseFrontmatter } from "./markdown";
 import { flattenFiles, quickOpen, stripFrontmatter } from "./notes";
+
+const pad = (n: number) => String(n).padStart(2, "0");
+function clock(d: Date) {
+  return { today: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`, nowMinutes: d.getHours() * 60 + d.getMinutes() };
+}
 
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
@@ -75,6 +81,8 @@ export function App() {
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
   const [quick, setQuick] = useState(false);
+  const [backlinks, setBacklinks] = useState<string[]>([]);
+  const [now, setNow] = useState(() => new Date());
   const pathRef = useRef(path);
   pathRef.current = path;
 
@@ -93,6 +101,14 @@ export function App() {
       });
   }, []);
 
+  const loadBacklinks = useCallback(() => {
+    const p = pathRef.current;
+    if (!p) return setBacklinks([]);
+    getJson<BacklinksResponse>(`/api/backlinks?path=${encodeURIComponent(p)}`)
+      .then((b) => setBacklinks(b.backlinks))
+      .catch(() => setBacklinks([]));
+  }, []);
+
   const open = useCallback((p: string) => {
     location.hash = encodeURIComponent(p).replace(/%2F/g, "/");
     setPath(p);
@@ -107,6 +123,12 @@ export function App() {
   }, []);
 
   useEffect(loadNote, [path, loadNote]);
+  useEffect(loadBacklinks, [path, loadBacklinks]);
+  // Keeps the Time Block's current row on the right quarter hour.
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(t);
+  }, []);
   useEffect(() => void loadTree(), [loadTree]);
 
   // Live updates: re-fetch the tree on add/remove and the open note when it changes.
@@ -116,9 +138,10 @@ export function App() {
       const e = JSON.parse(m.data) as ChangeEvent;
       if (e.type !== "changed") void loadTree();
       if (e.path === pathRef.current) loadNote();
+      loadBacklinks();
     };
     return () => es.close();
-  }, [loadTree, loadNote]);
+  }, [loadTree, loadNote, loadBacklinks]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -132,6 +155,13 @@ export function App() {
   }, []);
 
   const files = useMemo(() => flattenFiles(tree), [tree]);
+  const filePaths = useMemo(() => new Set(files.map((f) => f.path)), [files]);
+  const { today, nowMinutes } = clock(now);
+  const plugins = useMemo(
+    () => [remarkGfm, metaNotes({ path, files: filePaths, today, nowMinutes })],
+    [path, filePaths, today, nowMinutes],
+  );
+  const props = useMemo(() => (note ? parseFrontmatter(note.text) : []), [note]);
 
   const openDaily = () =>
     getJson<{ path: string }>("/api/daily")
@@ -156,7 +186,29 @@ export function App() {
         {error && <p className="error">{error}</p>}
         {note ? (
           <article className="note">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{stripFrontmatter(note.text)}</ReactMarkdown>
+            {props.length > 0 && (
+              <dl className="props">
+                {props.map(([k, v]) => (
+                  <div key={k}>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <ReactMarkdown remarkPlugins={plugins}>{stripFrontmatter(note.text)}</ReactMarkdown>
+            {backlinks.length > 0 && (
+              <section className="backlinks">
+                <h4>Backlinks</h4>
+                <ul>
+                  {backlinks.map((b) => (
+                    <li key={b}>
+                      <a href={`#${encodeURIComponent(b).replace(/%2F/g, "/")}`}>{b.replace(/\.md$/, "")}</a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </article>
         ) : (
           !error && <p className="hint">Pick a note from the tree, or press Ctrl+K.</p>
