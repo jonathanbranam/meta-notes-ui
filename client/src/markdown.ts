@@ -19,6 +19,8 @@ export interface RenderContext {
   today: string;
   /** Minutes since midnight, local. */
   nowMinutes: number;
+  /** Alias tag to canonical tag, from meta-notes; absent means no folding. */
+  tagAliases?: Readonly<Record<string, string>>;
 }
 
 const span = (cls: string, text: string, extra: Record<string, unknown> = {}): Node => ({
@@ -59,8 +61,11 @@ export function wikiLinks(nodes: Node[], ctx: RenderContext): Node[] {
 
 /** `#tag`: letters, digits, `_`, `-`, not glued to a word or a path. */
 const TAG = /(?<![\w/&#])#([A-Za-z0-9_-]+)/;
-export function tags(nodes: Node[]): Node[] {
-  return mapText(nodes, TAG, (m) => span("tag", m[0], { "data-tag": m[1].toLowerCase() }));
+export function tags(nodes: Node[], aliases: Readonly<Record<string, string>> = {}): Node[] {
+  return mapText(nodes, TAG, (m) => {
+    const tag = m[1].toLowerCase();
+    return span("tag", m[0], { "data-tag": Object.hasOwn(aliases, tag) ? aliases[tag] : tag });
+  });
 }
 
 export interface TaskInfo {
@@ -148,7 +153,7 @@ function walk(node: Node, ctx: RenderContext): void {
   if (!node.children || node.type === "link" || node.type === "inlineCode" || node.type === "code") return;
   // Inline content: links, then tags, among the text children.
   if (node.type === "paragraph" || node.type === "heading" || node.type === "tableCell" || node.type === "emphasis" || node.type === "strong" || node.type === "delete") {
-    node.children = tags(wikiLinks(node.children, ctx));
+    node.children = tags(wikiLinks(node.children, ctx), ctx.tagAliases);
   }
   node.children.forEach((c) => walk(c, ctx));
 }

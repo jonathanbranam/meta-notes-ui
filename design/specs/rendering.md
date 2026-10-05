@@ -151,10 +151,11 @@ that is part of a word, a path or a URL fragment.
 
 #### Scenario: Tag aliases  {#s-38b3}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** a note holds "#mtg", an alias of "#meeting" in meta-notes
-- **THEN** the page marks it as the tag "meeting"
+- **WHEN** a note holds "#mtg"
+- **AND** the tag aliases are read from meta-notes for the example root
+- **THEN** the page marks the tags "meeting"
 
 ### Requirement: Tasks show status and chips  {#r-b58a}
 

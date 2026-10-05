@@ -56,3 +56,6 @@ export interface TodayResponse {
   /** Today's calendar events; null when calendar is not set up. */
   agenda: AgendaEvent[] | null;
 }
+
+/** `GET /api/tag-aliases`: alias tag to canonical tag, as `meta-notes conventions --json` reports it; empty when unavailable. */
+export type TagAliasesResponse = Record<string, string>;

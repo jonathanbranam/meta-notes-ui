@@ -376,7 +376,11 @@ export function App() {
   const files = useMemo(() => flattenFiles(tree), [tree]);
   const filePaths = useMemo(() => new Set(files.map((f) => f.path)), [files]);
   const { today, nowMinutes } = clock(now);
-  const ctx = useMemo(() => ({ path, files: filePaths, today, nowMinutes }), [path, filePaths, today, nowMinutes]);
+  const [tagAliases, setTagAliases] = useState<Record<string, string>>({});
+  useEffect(() => {
+    getJson<Record<string, string>>("/api/tag-aliases").then(setTagAliases).catch(() => {});
+  }, []);
+  const ctx = useMemo(() => ({ path, files: filePaths, today, nowMinutes, tagAliases }), [path, filePaths, today, nowMinutes, tagAliases]);
   // Markdown images: a src relative to the note (or the root) becomes a raw-file URL.
   const components = useMemo(
     () => ({

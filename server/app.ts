@@ -5,9 +5,9 @@ import { promisify } from "node:util";
 import { Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { streamSSE } from "hono/streaming";
-import type { BacklinksResponse, ChangeEvent, NoteResponse } from "../shared/types.js";
+import type { BacklinksResponse, ChangeEvent, NoteResponse, TagAliasesResponse } from "../shared/types.js";
 import { createBacklinks } from "./backlinks.js";
-import { editRoutes } from "./edits.js";
+import { editRoutes, runMetaNotes } from "./edits.js";
 import { confine, PathError } from "./paths.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
@@ -66,6 +66,9 @@ export function createApp(opts: AppOptions): Hono {
   const app = new Hono();
   const backlinks = createBacklinks(root);
 
+  // Tag aliases come from the CLI, read lazily and kept while .meta-notes is unchanged. A failure is not kept.
+  let aliases: { mtime: number; value: Promise<TagAliasesResponse> } | null = null;
+
   // Token on every request: cookie, or `Authorization: Bearer`. `GET /?token=` trades it for the cookie.
   app.use("*", async (c, next) => {
     const url = new URL(c.req.url);
@@ -88,6 +91,22 @@ export function createApp(opts: AppOptions): Hono {
   });
 
   app.get("/api/version", (c) => c.json({ version: opts.version }));
+
+  app.get("/api/tag-aliases", async (c) => {
+    const mtime = await stat(path.join(root, ".meta-notes")).then((st) => st.mtimeMs, () => 0);
+    if (aliases?.mtime !== mtime) {
+      const value = runMetaNotes(root, ["conventions"]).then((r) => {
+        const t = r.ok ? r.tag_aliases : undefined;
+        if (!t || typeof t !== "object") {
+          aliases = null;
+          return {};
+        }
+        return Object.fromEntries(Object.entries(t).filter(([, v]) => typeof v === "string")) as TagAliasesResponse;
+      });
+      aliases = { mtime, value };
+    }
+    return c.json(await aliases.value);
+  });
 
   app.get("/api/tree", async (c) => c.json(await listTree(root)));
 

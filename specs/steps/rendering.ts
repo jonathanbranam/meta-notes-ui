@@ -9,6 +9,7 @@ import type { Steps } from "vitest-bridle";
 import { metaNotes, parseFrontmatter, propText, valueSegments } from "../../client/src/markdown.js";
 import { stripFrontmatter } from "../../client/src/notes.js";
 import { parseHash } from "../../shared/links.js";
+import { EXAMPLE_ROOT } from "../../server/example.js";
 import { createApp } from "../../server/app.js";
 import { makeFixtureRoot } from "../../server/fixture.js";
 
@@ -35,7 +36,7 @@ const unescape = (s: string) => s.replace(/\\n/g, "\n").replace(/\\"/g, '"');
 
 /** The page for the world's note, as the browser renders it, with attribute quotes made single. */
 function page(w: World): string {
-  const ctx = { path: w.path ?? DAILY, files: FILES, today: "2026-10-04", nowMinutes: w.now ?? 9 * 60 + 20 };
+  const ctx = { path: w.path ?? DAILY, files: FILES, today: "2026-10-04", nowMinutes: w.now ?? 9 * 60 + 20, tagAliases: w.aliases };
   const html = renderToStaticMarkup(
     createElement(ReactMarkdown, { remarkPlugins: [remarkGfm, metaNotes(ctx)], children: stripFrontmatter(w.md) }),
   );
@@ -50,6 +51,16 @@ export function renderingSteps(steps: Steps) {
   steps.when(/^the note "([^"]+)" holds a Time Block$/, (w, p) => {
     w.path = p;
     w.md = BLOCK;
+  });
+  steps.when(/^the tag aliases are read from meta-notes for the example root$/, async (w) => {
+    const app = createApp({ root: EXAMPLE_ROOT, token: "alias-token", version: "0.0.0", subscribe: () => () => {} });
+    const res = await app.request("/api/tag-aliases", { headers: { authorization: "Bearer alias-token" } });
+    w.aliases = (await res.json()) as Record<string, string>;
+    if (!w.aliases.mtg) {
+      const err = new Error("tag aliases skipped: this meta-notes reports no tag_aliases");
+      (err as any).skipScenario = true;
+      throw err;
+    }
   });
   steps.when(/^the time is "(\d+):(\d+)"$/, (w, h, m) => void (w.now = Number(h) * 60 + Number(m)));
 
