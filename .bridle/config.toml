@@ -1,0 +1,54 @@
+# meta-notes-ui on bridle: created 2026-10-04 (ticket 5wam in meta-notes).
+# Reference: docs/design/agent-host/roles-and-config.md in the bridle repo.
+# bridle names the project after the repo directory ("meta-notes-ui").
+
+# L1 base layer and packs, from the NUC's bridle checkout.
+workflow = "/srv/shared/work/bridle-work/bridle/workflow"
+packs = ["typescript"]
+
+[tasks]
+prefix = "mu"
+
+# All work merges into main; releases are tags on it.
+[branches]
+integration = "main"
+
+# Definition of done for a worker; substituted into the bridle-worker skill.
+[commands]
+check = "npm run check"
+
+[worktrees]
+setup = "npm ci"
+
+[ci]
+github = true
+
+# One worker at a time.
+[budget]
+max_workers = 1
+
+[roles.worker]
+model            = "sonnet"
+effort           = "medium"
+workdir          = "worktree"
+permission_mode  = "acceptEdits"
+allowed_tools    = ["Bash", "Read", "Edit", "Write", "Glob", "Grep"]
+# A worker merges the local main into its own branch; only the manager pushes.
+disallowed_tools = ["Bash(git push *)", "Bash(git checkout main*)", "Bash(git fetch *)", "Bash(git pull *)", "Bash(git merge origin*)"]
+system_prompt    = ".bridle/roles/worker.md"
+max_budget_usd   = 50.0
+
+[roles.manager]
+model             = "sonnet"
+workdir           = "repo"
+permission_mode   = "dontAsk"
+allowed_tools     = ["Bash(bridle *)", "Bash(git log*)", "Bash(git diff*)", "Bash(git show*)", "Bash(git status*)", "Bash(git branch*)", "Bash(git merge-base *)", "Bash(git merge --no-ff *)", "Bash(git push origin main)", "Bash(git tag v*)", "Bash(git push origin v*)", "Bash(git -C * status*)", "Read", "Glob", "Grep"]
+system_prompt     = ".bridle/roles/manager.md"
+# Started by the orchestrator when there's work, stopped when idle.
+autostart         = false
+resume_on_restart = true
+max_budget_usd    = 50.0
+start_prompt      = """
+You're starting up. Run `bridle status --json`, `bridle agents --json` and \
+`bridle inbox --json`, then send external:orchestrator one short line saying \
+you're ready and what, if anything, is already in flight. Then wait for work."""

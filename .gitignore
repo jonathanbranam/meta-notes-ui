@@ -1,0 +1,7 @@
+
+# bridle runtime files
+.bridle/*.db*
+.bridle/daemon.json
+.bridle/cache/
+node_modules/
+dist/
