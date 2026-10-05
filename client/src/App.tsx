@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, parseFrontmatter } from "./markdown";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
@@ -161,7 +162,8 @@ function QuickOpen({ files, onOpen, onClose }: { files: TreeNode[]; onOpen: (p: 
 
 export function App() {
   const [tree, setTree] = useState<TreeNode[]>([]);
-  const [path, setPath] = useState(() => decodeURIComponent(location.hash.slice(1)));
+  const [target, setTarget] = useState(() => parseHash(decodeURIComponent(location.hash.slice(1))));
+  const path = target.path;
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
@@ -198,16 +200,23 @@ export function App() {
 
   const open = useCallback((p: string) => {
     location.hash = encodeURIComponent(p).replace(/%2F/g, "/");
-    setPath(p);
+    setTarget({ path: p });
     setDrawer(false);
     setQuick(false);
   }, []);
 
   useEffect(() => {
-    const onHash = () => setPath(decodeURIComponent(location.hash.slice(1)));
+    const onHash = () => setTarget(parseHash(decodeURIComponent(location.hash.slice(1))));
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
+
+  // Scrolls to a `[[path#heading]]` link's heading once the note is shown.
+  useEffect(() => {
+    if (!target.heading || !note || note.path !== path) return;
+    const h = [...document.querySelectorAll<HTMLElement>("article.note :is(h1,h2,h3,h4,h5,h6)")].find((e) => headingSlug(e.textContent ?? "") === target.heading);
+    h?.scrollIntoView();
+  }, [target, note, path]);
 
   useEffect(loadNote, [path, loadNote]);
   useEffect(loadBacklinks, [path, loadBacklinks]);

@@ -2,6 +2,8 @@ export interface WikiLink {
   /** The path part, without alias or `#anchor`. */
   target: string;
   alias?: string;
+  /** The `#heading` part, if any. */
+  heading?: string;
 }
 
 export const WIKI_LINK = /\[\[([^\]\n]+)\]\]/g;
@@ -11,7 +13,20 @@ export function parseWikiLink(inner: string): WikiLink {
   const bar = inner.indexOf("|");
   const raw = bar === -1 ? inner : inner.slice(0, bar);
   const alias = bar === -1 ? undefined : inner.slice(bar + 1).trim() || undefined;
-  return { target: raw.split("#")[0].trim(), alias };
+  const [target, ...rest] = raw.split("#");
+  const heading = rest.join("#").trim() || undefined;
+  return { target: target.trim(), alias, heading };
+}
+
+/** A heading's anchor id: lowercase, punctuation dropped, spaces to `-`. */
+export function headingSlug(text: string): string {
+  return text.trim().toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, "").replace(/\s+/g, "-");
+}
+
+/** The address hash (without `#`, decoded) → the note path and the heading to scroll to. */
+export function parseHash(hash: string): { path: string; heading?: string } {
+  const i = hash.indexOf("#");
+  return i === -1 ? { path: hash } : { path: hash.slice(0, i), heading: hash.slice(i + 1) || undefined };
 }
 
 /** Join and normalise; null when the result leaves the notes root. */

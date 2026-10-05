@@ -1,4 +1,4 @@
-import { parseWikiLink, resolveLink, WIKI_LINK } from "../../shared/links";
+import { headingSlug, parseWikiLink, resolveLink, WIKI_LINK } from "../../shared/links";
 
 // A small subset of mdast, enough for the plugins below.
 export interface Node {
@@ -47,12 +47,12 @@ function mapText(nodes: Node[], re: RegExp, make: (m: RegExpExecArray) => Node |
 
 export function wikiLinks(nodes: Node[], ctx: RenderContext): Node[] {
   return mapText(nodes, WIKI_LINK, (m) => {
-    const { target, alias } = parseWikiLink(m[1]);
+    const { target, alias, heading } = parseWikiLink(m[1]);
     const label = alias ?? target;
     const found = resolveLink(target, ctx.path, ctx.files);
     const text: Node[] = [{ type: "text", value: label }];
     return found
-      ? { type: "link", url: `#${encodeURIComponent(found).replace(/%2F/g, "/")}`, title: null, children: text, data: { hProperties: { className: "wikilink" } } }
+      ? { type: "link", url: `#${encodeURIComponent(found).replace(/%2F/g, "/")}${heading ? `#${encodeURIComponent(headingSlug(heading))}` : ""}`, title: null, children: text, data: { hProperties: { className: "wikilink" } } }
       : { type: "wikimissing", children: text, data: { hName: "span", hProperties: { className: "wikilink missing", title: "No such note" } } };
   });
 }
@@ -67,19 +67,22 @@ export interface TaskInfo {
   status: string;
   due?: string;
   overdue: boolean;
+  /** A task has a due or start date; without one it is a checklist item. */
+  dated: boolean;
 }
 
 const CHIP = /(📅|⏳|🛫|✅)\s*(\d{4}-\d{2}-\d{2})?(?:[ ](\d{1,2}:\d{2}))?|⏰\s*(\d{1,2}:\d{2})|🔁\s*([^📅⏳🛫✅⏰#\n]*?)(?=\s*(?:[📅⏳🛫✅⏰#]|$))/u;
 const CHIP_CLASS: Record<string, string> = { "📅": "due", "⏳": "scheduled", "🛫": "start", "✅": "done" };
 
 export function taskChips(nodes: Node[], status: string, today: string): { nodes: Node[]; info: TaskInfo } {
-  const info: TaskInfo = { status, overdue: false };
+  const info: TaskInfo = { status, overdue: false, dated: false };
   const out = mapText(nodes, CHIP, (m) => {
     if (m[1]) {
       const date = m[2];
       const time = m[3];
       const kind = CHIP_CLASS[m[1]];
       let cls = `chip ${kind}`;
+      if (kind === "due" || kind === "start") info.dated = true;
       if (kind === "due" && date) {
         info.due = date;
         if (date < today && isOpen(status)) {
@@ -167,7 +170,7 @@ function taskItem(item: Node, ctx: RenderContext): void {
   para.children = nodes;
   item.data = {
     hProperties: {
-      className: ["task-item", `status-${statusName(status)}`, ...(info.overdue ? ["overdue"] : [])].join(" "),
+      className: ["task-item", ...(info.dated ? [] : ["checklist"]), `status-${statusName(status)}`, ...(info.overdue ? ["overdue"] : [])].join(" "),
       "data-status": status,
     },
   };

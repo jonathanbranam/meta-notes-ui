@@ -14,7 +14,7 @@ today's date and the time of day.
 
 ### Requirement: Wiki links open notes  {#r-776a}
 
-The UI SHALL render `[[path]]` and `[[path|alias]]` as a link to the note,
+The UI SHALL render `[[path]]`, `[[path|alias]]` and `[[path#heading]]` as a link to the note,
 resolving the path like meta-notes does: from the notes root (`.md` added),
 else relative to the linking note, and a folder note `x/Home.md` for `x`. A
 link to a note that does not exist SHALL show as a missing link, not a dead
@@ -64,10 +64,24 @@ anchor. Links inside code stay text.
 
 #### Scenario: A link to a heading  {#s-7d77}
 
+*Verification*: **executable**
+
+- **WHEN** a note holds "See [[area/health#Goals and plans|health goals]]."
+- **THEN** the page shows a link to "area/health.md#goals-and-plans" labelled "health goals"
+
+#### Scenario: Opening a heading link  {#s-d597}
+
+*Verification*: **executable**
+
+- **WHEN** the address is "area/health.md#goals"
+- **THEN** it opens the note "area/health.md" at the heading "goals"
+
+#### Scenario: Scrolling to the heading  {#s-2c86}
+
 *Verification*: **non-executable**
 
-- **WHEN** a note holds `[[area/health#goals]]`
-- **THEN** the link opens the note and scrolls to its "goals" heading
+- **WHEN** the browser opens a note from a link with a heading
+- **THEN** the page scrolls to the heading whose text matches, once the note has loaded
 
 ### Requirement: Frontmatter is shown as properties  {#r-ff52}
 
@@ -136,7 +150,8 @@ that is part of a word, a path or a URL fragment.
 ### Requirement: Tasks show status and chips  {#r-b58a}
 
 The UI SHALL render a checkbox line (`- [c] text`) as a task showing its
-status: open, done (`x`, `X`), rescheduled (`>`), canceled (`-`) or partial
+status (a checklist item, with no due or start date, shows the same but is
+not a task, as in meta-notes): open, done (`x`, `X`), rescheduled (`>`), canceled (`-`) or partial
 (`.`, `o`, `O`); any other character reads as open. The status character
 SHALL NOT appear in the text. Dates and marks SHALL show as chips: due `📅`,
 scheduled `⏳`, start `🛫`, done `✅`, time `⏰ HH:MM`, a time after the due
@@ -165,13 +180,13 @@ task never does. Notes and subtasks under a task render as a nested list.
 
 *Verification*: **executable**
 
-- **WHEN** a note holds "- [>] Carried 📅 2026-09-10\n- [-] Dropped 🛫 2026-10-01\n- [.] Half ⏳ 2026-10-05\n- [?] Odd 📅 2026-10-10\n"
+- **WHEN** a note holds "- [>] Carried 📅 2026-09-10\n- [-] Dropped 🛫 2026-10-01\n- [.] Half ⏳ 2026-10-05 📅 2026-10-12\n- [?] Odd 📅 2026-10-10\n"
 - **THEN** the task "Carried" is rescheduled and not overdue
 - **AND** the task "Dropped" is canceled
 - **AND** the task "Half" is partial
 - **AND** the task "Odd" is open
 - **AND** the page does not contain "[&gt;]"
-- **AND** the page shows the chips "due: 📅 2026-09-10, start: 🛫 2026-10-01, scheduled: ⏳ 2026-10-05, due: 📅 2026-10-10"
+- **AND** the page shows the chips "due: 📅 2026-09-10, start: 🛫 2026-10-01, scheduled: ⏳ 2026-10-05, due: 📅 2026-10-12, due: 📅 2026-10-10"
 
 #### Scenario: Time and recurrence  {#s-39a2}
 
@@ -184,8 +199,10 @@ task never does. Notes and subtasks under a task render as a nested list.
 
 *Verification*: **executable**
 
-- **WHEN** a note holds "- [ ] plain item\n"
-- **THEN** the task "plain item" is open and not overdue
+- **WHEN** a note holds "- [ ] plain item\n- [ ] only scheduled ⏳ 2026-09-01\n- [ ] dated 🛫 2026-09-01\n"
+- **THEN** the checklist item "plain item" is open
+- **AND** the checklist item "only scheduled" is open
+- **AND** the task "dated" is open
 
 #### Scenario: Notes and subtasks  {#s-6459}
 
