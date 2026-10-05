@@ -18,3 +18,9 @@ export function quickOpen(files: TreeNode[], query: string, limit = 20): TreeNod
   const byName = (f: TreeNode) => (words.every((w) => f.name.toLowerCase().includes(w)) ? 0 : 1);
   return hits.sort((a, b) => byName(a) - byName(b) || a.path.localeCompare(b.path)).slice(0, limit);
 }
+
+/** Lines `stripFrontmatter` removes, so rendered line numbers can be turned into file line numbers. */
+export function frontmatterLines(text: string): number {
+  const stripped = text.length - stripFrontmatter(text).length;
+  return stripped === 0 ? 0 : text.slice(0, stripped).split("\n").length - 1;
+}

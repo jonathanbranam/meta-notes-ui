@@ -7,6 +7,7 @@ import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { streamSSE } from "hono/streaming";
 import type { BacklinksResponse, ChangeEvent, NoteResponse } from "../shared/types.js";
 import { createBacklinks } from "./backlinks.js";
+import { editRoutes } from "./edits.js";
 import { confine, PathError } from "./paths.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
@@ -95,6 +96,8 @@ export function createApp(opts: AppOptions): Hono {
       return c.json({ error: "meta-notes failed" }, 502);
     }
   });
+
+  editRoutes(app, root);
 
   app.get("/api/events", (c) =>
     streamSSE(c, async (stream) => {

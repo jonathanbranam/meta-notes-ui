@@ -71,3 +71,8 @@ main { overflow: auto; padding: 1rem 1.5rem; }
   .timeblock tr.now td { background: #4a4220; }
   .backlinks { border-color: #444; }
 }
+
+.editor textarea { width: 100%; box-sizing: border-box; font: inherit; font-family: ui-monospace, monospace; }
+.editor button { margin-right: .5rem; }
+.editor .conflict pre { white-space: pre-wrap; background: rgba(192, 57, 43, .12); padding: .4rem; }
+.task-item { cursor: default; }

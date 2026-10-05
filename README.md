@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.2.0, v1 in development.
+Status: v0.3.0, v1 in development.
 
 ## How it fits
 
@@ -63,6 +63,23 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
 - The Time Block table: single-tilde plans struck out, `no plan` rows
   dimmed, and on today's note the row holding the current time highlighted.
 - Backlinks list under the note.
+
+## Editing
+
+Every write is a `meta-notes ... --json` command run with an argument array
+(no shell), carrying `--expect` (what the UI showed); the server never writes
+a file itself. Routes (token required, `.md` paths inside the root only):
+
+- `POST /api/task` `{path, line, expect, status}`: `task update`. Click a
+  task's box to check it off or reopen it (a recurring task spawns its next line).
+- `POST /api/write` `{path, from, to, expect, text}`: `note write --lines`.
+  Double-click a paragraph, list item or table to edit its raw lines. If the
+  lines changed meanwhile the save is refused (409 with `current`); the
+  editor keeps your draft, shows the current text and offers "Save over it".
+- `POST /api/new` `{path}`: `note new`, from the template meta-notes picks
+  (the **New** button asks for a path; an existing note is refused).
+
+CLI errors are shown inline.
 
 ## Develop
 

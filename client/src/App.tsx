@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
-import { metaNotes, parseFrontmatter } from "./markdown";
-import { flattenFiles, quickOpen, stripFrontmatter } from "./notes";
+import { isOpen, metaNotes, parseFrontmatter } from "./markdown";
+import { flattenFiles, frontmatterLines, quickOpen, stripFrontmatter } from "./notes";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 function clock(d: Date) {
@@ -15,6 +15,90 @@ async function getJson<T>(url: string): Promise<T> {
   if (!res.ok) throw new Error(`${res.status}`);
   return (await res.json()) as T;
 }
+
+/** POST JSON to an edit route; a refusal comes back as `{ok: false, error, current?}`. */
+async function postJson(url: string, body: unknown): Promise<{ ok: boolean; error?: string; current?: unknown }> {
+  try {
+    const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    return (await res.json()) as { ok: boolean; error?: string; current?: unknown };
+  } catch {
+    return { ok: false, error: "Cannot reach the server" };
+  }
+}
+
+interface Edit {
+  /** File lines, 1-based inclusive. */
+  from: number;
+  to: number;
+  /** The lines as loaded. */
+  expect: string;
+  /** Set when a save was refused: the lines as they are now. */
+  current?: string;
+  error?: string;
+}
+
+interface EditApi {
+  lineOffset: number;
+  edit: Edit | null;
+  start: (from: number, to: number) => void;
+  save: (draft: string) => void;
+  cancel: () => void;
+  toggleTask: (line: number, status: string) => void;
+}
+const EditCtx = createContext<EditApi | null>(null);
+
+function Editor({ edit, onSave, onCancel }: { edit: Edit; onSave: (draft: string) => void; onCancel: () => void }) {
+  const [draft, setDraft] = useState(edit.expect);
+  return (
+    <div className="editor">
+      <textarea autoFocus value={draft} rows={Math.max(3, draft.split("\n").length + 1)} onChange={(e) => setDraft(e.target.value)} />
+      {edit.error && <p className="error">{edit.error}</p>}
+      {edit.current !== undefined && (
+        <div className="conflict">
+          <p>This changed while you were editing. It is now:</p>
+          <pre>{edit.current}</pre>
+        </div>
+      )}
+      <button onClick={() => onSave(draft)}>{edit.current !== undefined ? "Save over it" : "Save"}</button>
+      <button onClick={onCancel}>Cancel</button>
+    </div>
+  );
+}
+
+type BlockProps = { node?: { position?: { start: { line: number }; end: { line: number } } }; children?: ReactNode } & Record<string, unknown>;
+
+/** A paragraph, list item or table: double-click opens its raw lines for editing; clicking a task's box toggles it. */
+function block(Tag: "p" | "li" | "table") {
+  return function Block({ node, children, ...rest }: BlockProps) {
+    const api = useContext(EditCtx)!;
+    const pos = node?.position;
+    if (!pos) return <Tag {...(rest as object)}>{children}</Tag>;
+    const from = pos.start.line + api.lineOffset;
+    const to = pos.end.line + api.lineOffset;
+    if (api.edit && api.edit.from === from && api.edit.to === to) return <Editor edit={api.edit} onSave={api.save} onCancel={api.cancel} />;
+    const status = rest["data-status"] as string | undefined;
+    return (
+      <Tag
+        {...(rest as object)}
+        onDoubleClick={(e: React.MouseEvent) => {
+          e.stopPropagation();
+          api.start(from, to);
+        }}
+        onClick={
+          Tag === "li" && status !== undefined
+            ? (e: React.MouseEvent) => {
+                // The box is the item's ::before, so a click on the item itself.
+                if (e.target === e.currentTarget) api.toggleTask(from, status);
+              }
+            : undefined
+        }
+      >
+        {children}
+      </Tag>
+    );
+  };
+}
+const COMPONENTS = { p: block("p"), li: block("li"), table: block("table") } as unknown as Components;
 
 function TreeView({ nodes, current, onOpen }: { nodes: TreeNode[]; current: string; onOpen: (p: string) => void }) {
   return (
@@ -154,6 +238,46 @@ export function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  const [edit, setEdit] = useState<Edit | null>(null);
+  useEffect(() => setEdit(null), [path]);
+  const editApi = useMemo<EditApi>(() => {
+    const lines = note ? note.text.split("\n") : [];
+    const text = (from: number, to: number) => lines.slice(from - 1, to).join("\n");
+    return {
+      lineOffset: note ? frontmatterLines(note.text) : 0,
+      edit,
+      start: (from, to) => setEdit({ from, to, expect: text(from, to) }),
+      cancel: () => setEdit(null),
+      save: async (draft) => {
+        if (!edit) return;
+        const r = await postJson("/api/write", { path, from: edit.from, to: edit.to, expect: edit.expect, text: draft });
+        if (r.ok) {
+          setEdit(null);
+          loadNote();
+        } else if (Array.isArray(r.current)) {
+          // Refused: show what is there now; "Save over it" retries against that.
+          const current = (r.current as string[]).join("\n");
+          setEdit({ ...edit, expect: current, current, error: undefined });
+        } else setEdit({ ...edit, error: r.error ?? "Save failed" });
+      },
+      toggleTask: async (line, status) => {
+        const r = await postJson("/api/task", { path, line, expect: lines[line - 1], status: isOpen(status) ? "x" : " " });
+        if (!r.ok) setError(r.error ?? "Cannot update the task");
+        loadNote();
+      },
+    };
+  }, [note, edit, path, loadNote]);
+
+  const newNote = async () => {
+    const dir = path.includes("/") ? path.slice(0, path.lastIndexOf("/") + 1) : "";
+    const name = window.prompt("New note path (from the notes root):", dir);
+    if (!name) return;
+    const rel = name.endsWith(".md") ? name : `${name}.md`;
+    const r = await postJson("/api/new", { path: rel });
+    if (r.ok) open(rel);
+    else setError(r.error ?? "Cannot create the note");
+  };
+
   const files = useMemo(() => flattenFiles(tree), [tree]);
   const filePaths = useMemo(() => new Set(files.map((f) => f.path)), [files]);
   const { today, nowMinutes } = clock(now);
@@ -176,6 +300,7 @@ export function App() {
         </button>
         <span className="title">{path.replace(/\.md$/, "") || "meta-notes"}</span>
         <button onClick={openDaily}>Today</button>
+        <button onClick={newNote}>New</button>
         <button onClick={() => setQuick(true)}>Open…</button>
       </header>
       <nav className={drawer ? "drawer open" : "drawer"}>
@@ -196,7 +321,11 @@ export function App() {
                 ))}
               </dl>
             )}
-            <ReactMarkdown remarkPlugins={plugins}>{stripFrontmatter(note.text)}</ReactMarkdown>
+            <EditCtx.Provider value={editApi}>
+              <ReactMarkdown remarkPlugins={plugins} components={COMPONENTS}>
+                {stripFrontmatter(note.text)}
+              </ReactMarkdown>
+            </EditCtx.Provider>
             {backlinks.length > 0 && (
               <section className="backlinks">
                 <h4>Backlinks</h4>
