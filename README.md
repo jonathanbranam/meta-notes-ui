@@ -48,7 +48,7 @@ API: `GET /api/version`, `/api/tree`, `/api/note?path=`, `/api/backlinks?path=`
 (notes linking to one, link targets cached by mtime), `/api/daily`
 (today's daily note path, via `meta-notes note daily`), `/api/events` (SSE of
 `{type: changed|added|removed, path}`, debounced 200 ms, from one recursive
-watch of the root).
+watch of the root; on Linux one watch per non-hidden directory, so `.git` and `.venv` cost nothing).
 
 ## Rendering
 

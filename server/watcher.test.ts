@@ -1,4 +1,4 @@
-import { mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -44,4 +44,37 @@ describe("watchRoot", () => {
       await rm(root, { recursive: true, force: true });
     }
   });
+
+  it.runIf(process.platform === "linux")(
+    "on Linux skips hidden dirs and watches new subfolders",
+    async () => {
+      const root = await realpath(await mkdtemp(path.join(tmpdir(), "mnui-w-")));
+      await mkdir(path.join(root, ".git"));
+      await mkdir(path.join(root, "a"));
+      const batches: ChangeEvent[][] = [];
+      const w = watchRoot(root, (e) => batches.push(e), 30);
+      const until = async (f: () => boolean) => {
+        for (let i = 0; i < 200 && !f(); i++) await new Promise((r) => setTimeout(r, 25));
+      };
+      try {
+        await until(() => w.watched().length >= 2);
+        expect(w.watched().sort()).toEqual(["", "a"]);
+        await writeFile(path.join(root, ".git", "x"), "1");
+        await mkdir(path.join(root, "a", "b"));
+        await until(() => w.watched().includes("a/b"));
+        expect(w.watched()).toContain("a/b");
+        await writeFile(path.join(root, "a", "b", "n.md"), "1");
+        await until(() => batches.flat().some((e) => e.path === "a/b/n.md"));
+        const paths = batches.flat().map((e) => e.path);
+        expect(paths).toContain("a/b/n.md");
+        expect(paths.some((p) => p.startsWith(".git"))).toBe(false);
+        await rm(path.join(root, "a"), { recursive: true });
+        await until(() => !w.watched().includes("a"));
+        expect(w.watched()).toEqual([""]);
+      } finally {
+        w.close();
+        await rm(root, { recursive: true, force: true });
+      }
+    },
+  );
 });
