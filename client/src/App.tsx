@@ -5,7 +5,7 @@ import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
-import { flattenFiles, frontmatterLines, quickOpen, stripFrontmatter } from "./notes";
+import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 function clock(d: Date) {
@@ -138,6 +138,31 @@ function block(Tag: "p" | "li" | "table") {
 }
 const COMPONENTS = { p: block("p"), li: block("li"), table: block("table") } as unknown as Components;
 
+/** A file that is not a note: images inline, text as text, PDFs and the rest as links to the raw file. */
+function FileView({ path }: { path: string }) {
+  const [text, setText] = useState<string | null>(null);
+  const isText = path.endsWith(".txt");
+  useEffect(() => {
+    setText(null);
+    if (isText) fetch(fileUrl(path)).then((r) => r.text()).then(setText).catch(() => setText("Cannot read the file"));
+  }, [path, isText]);
+  return (
+    <article className="note">
+      {isImage(path) ? (
+        <img className="file-image" src={fileUrl(path)} alt={path} />
+      ) : isText ? (
+        <pre>{text ?? ""}</pre>
+      ) : (
+        <p>
+          <a href={fileUrl(path)} target="_blank" rel="noreferrer" {...(path.endsWith(".pdf") ? {} : { download: path.split("/").pop() })}>
+            {path.endsWith(".pdf") ? "Open the PDF" : "Download"} {path.split("/").pop()}
+          </a>
+        </p>
+      )}
+    </article>
+  );
+}
+
 function TreeView({ nodes, current, onOpen }: { nodes: TreeNode[]; current: string; onOpen: (p: string) => void }) {
   return (
     <ul className="tree">
@@ -214,7 +239,7 @@ export function App() {
   const loadTree = useCallback(() => getJson<TreeNode[]>("/api/tree").then(setTree).catch(() => {}), []);
   const loadNote = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH) return setNote(null);
+    if (!p || p === TODAY_PATH || !isNote(p)) return setNote(null);
     getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(p)}`)
       .then((n) => {
         setNote(n);
@@ -228,7 +253,7 @@ export function App() {
 
   const loadBacklinks = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH) return setBacklinks([]);
+    if (!p || p === TODAY_PATH || !isNote(p)) return setBacklinks([]);
     getJson<BacklinksResponse>(`/api/backlinks?path=${encodeURIComponent(p)}`)
       .then((b) => setBacklinks(b.backlinks))
       .catch(() => setBacklinks([]));
@@ -352,6 +377,17 @@ export function App() {
   const filePaths = useMemo(() => new Set(files.map((f) => f.path)), [files]);
   const { today, nowMinutes } = clock(now);
   const ctx = useMemo(() => ({ path, files: filePaths, today, nowMinutes }), [path, filePaths, today, nowMinutes]);
+  // Markdown images: a src relative to the note (or the root) becomes a raw-file URL.
+  const components = useMemo(
+    () => ({
+      ...COMPONENTS,
+      img: ({ src, alt }: { src?: string; alt?: string }) => {
+        const found = src && !/^([a-z]+:|\/)/i.test(src) ? resolveFile(decodeURIComponent(src), path, filePaths) : null;
+        return <img src={found ? fileUrl(found) : src} alt={alt ?? ""} />;
+      },
+    }) as Components,
+    [path, filePaths],
+  );
   const plugins = useMemo(() => [remarkGfm, metaNotes(ctx)], [ctx]);
   const props = useMemo(() => (note ? parseFrontmatter(note.text) : []), [note]);
 
@@ -382,6 +418,8 @@ export function App() {
         {error && <p className="error">{error}</p>}
         {path === TODAY_PATH ? (
           <TodayView today={todayState} now={now} open={open} />
+        ) : path && !isNote(path) ? (
+          <FileView path={path} />
         ) : note ? (
           <article className="note">
             {props.length > 0 && (
@@ -397,8 +435,8 @@ export function App() {
               </dl>
             )}
             <EditCtx.Provider value={editApi}>
-              <ReactMarkdown remarkPlugins={plugins} components={COMPONENTS}>
-                {stripFrontmatter(note.text)}
+              <ReactMarkdown remarkPlugins={plugins} components={components}>
+                {embedImages(stripFrontmatter(note.text), path, filePaths)}
               </ReactMarkdown>
             </EditCtx.Provider>
             {backlinks.length > 0 && (

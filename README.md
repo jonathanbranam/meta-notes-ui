@@ -40,11 +40,17 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
   httpOnly cookie and redirects; API clients may send `Authorization: Bearer`.
 - On listen it writes `<root>/.meta-notes-cache/ui/server.json`
   (`pid`, `host`, `port`, `url`, `version`) and removes it on exit.
-- It serves only `.md` notes under the root; `.git`, `.venv`,
+- It lists and serves every file under the root: notes are read and edited
+  as `.md` only, any other file is served raw at `GET /api/file?path=` with a
+  content type from its extension and `nosniff` (HTML and SVG also get a
+  sandbox CSP, so they cannot run script in the UI's origin). The client shows
+  images inline (also in notes, as `![](x.png)` or `![[x.png]]`), `.txt` as
+  text, a PDF as a link that opens it raw, other files as a download link.
+  `.git`, `.venv`,
   `.meta-notes-cache` and `node_modules` are hidden, and nothing outside the
   root (symlinks included) is read.
 
-API: `GET /api/version`, `/api/tree`, `/api/note?path=`, `/api/backlinks?path=`
+API: `GET /api/version`, `/api/tree`, `/api/note?path=`, `/api/file?path=`, `/api/backlinks?path=`
 (notes linking to one, link targets cached by mtime), `/api/daily`
 (today's daily note path, via `meta-notes note daily`), `/api/events` (SSE of
 `{type: changed|added|removed, path}`, debounced 200 ms, from one recursive

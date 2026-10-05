@@ -18,7 +18,7 @@ export function sortNodes(nodes: TreeNode[]): TreeNode[] {
   );
 }
 
-/** Folders and `.md` files under `root`, hidden names skipped. Empty folders are kept out. */
+/** Folders and files under `root`, hidden names skipped. Empty folders are kept out. */
 export async function listTree(root: string, rel = ""): Promise<TreeNode[]> {
   const entries = await readdir(path.join(root, rel), { withFileTypes: true });
   const nodes: TreeNode[] = [];
@@ -28,7 +28,7 @@ export async function listTree(root: string, rel = ""): Promise<TreeNode[]> {
     if (e.isDirectory()) {
       const children = await listTree(root, childRel);
       if (children.length) nodes.push({ name: e.name, path: childRel, type: "dir", children });
-    } else if (e.isFile() && e.name.endsWith(".md")) {
+    } else if (e.isFile()) {
       nodes.push({ name: e.name, path: childRel, type: "file" });
     }
   }
