@@ -65,7 +65,10 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
   folder note `x/Home.md` (`shared/links.ts`). Missing targets are red.
   `[[path#heading]]` opens the note and scrolls to the heading.
 - Frontmatter shows as a property panel: lists as lists, nested maps as
-  nested properties, `[[links]]` in values as links. `#tags` are highlighted.
+  nested properties, `[[links]]` in values as links. `#tags` are highlighted, with
+  aliases folded: `data-tag` is the canonical tag, from `tag_aliases` in
+  `meta-notes conventions --json` (`/api/tag-aliases`; unfolded if the CLI
+  lacks it).
 - Checkbox lines (`- [c]`) with a `📅` or `🛫` date are tasks; without one
   they are checklist items (class `checklist`) and show the same status.
   Both show their status and chips for `📅 ⏳ 🛫 ✅ ⏰ 🔁`
