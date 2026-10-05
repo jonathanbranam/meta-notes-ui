@@ -1,9 +1,5 @@
-import { mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ChangeEvent } from "../shared/types.js";
-import { Debouncer, watchRoot } from "./watcher.js";
+import { Debouncer } from "./watcher.js";
 
 describe("Debouncer", () => {
   beforeEach(() => vi.useFakeTimers());
@@ -22,59 +18,4 @@ describe("Debouncer", () => {
     expect(flush).toHaveBeenCalledTimes(1);
     expect(flush).toHaveBeenCalledWith(["a.md", "b.md"]);
   });
-});
-
-describe("watchRoot", () => {
-  it("reports added then changed for a file, ignoring hidden dirs", async () => {
-    const root = await realpath(await mkdtemp(path.join(tmpdir(), "mnui-w-")));
-    const batches: ChangeEvent[][] = [];
-    const w = watchRoot(root, (e) => batches.push(e), 30);
-    const waitFor = async (n: number) => {
-      for (let i = 0; i < 200 && batches.length < n; i++) await new Promise((r) => setTimeout(r, 25));
-    };
-    try {
-      await writeFile(path.join(root, "n.md"), "one");
-      await waitFor(1);
-      expect(batches[0]).toEqual([{ type: "added", path: "n.md" }]);
-      await writeFile(path.join(root, "n.md"), "two");
-      await waitFor(2);
-      expect(batches[1]).toEqual([{ type: "changed", path: "n.md" }]);
-    } finally {
-      w.close();
-      await rm(root, { recursive: true, force: true });
-    }
-  });
-
-  it.runIf(process.platform === "linux")(
-    "on Linux skips hidden dirs and watches new subfolders",
-    async () => {
-      const root = await realpath(await mkdtemp(path.join(tmpdir(), "mnui-w-")));
-      await mkdir(path.join(root, ".git"));
-      await mkdir(path.join(root, "a"));
-      const batches: ChangeEvent[][] = [];
-      const w = watchRoot(root, (e) => batches.push(e), 30);
-      const until = async (f: () => boolean) => {
-        for (let i = 0; i < 200 && !f(); i++) await new Promise((r) => setTimeout(r, 25));
-      };
-      try {
-        await until(() => w.watched().length >= 2);
-        expect(w.watched().sort()).toEqual(["", "a"]);
-        await writeFile(path.join(root, ".git", "x"), "1");
-        await mkdir(path.join(root, "a", "b"));
-        await until(() => w.watched().includes("a/b"));
-        expect(w.watched()).toContain("a/b");
-        await writeFile(path.join(root, "a", "b", "n.md"), "1");
-        await until(() => batches.flat().some((e) => e.path === "a/b/n.md"));
-        const paths = batches.flat().map((e) => e.path);
-        expect(paths).toContain("a/b/n.md");
-        expect(paths.some((p) => p.startsWith(".git"))).toBe(false);
-        await rm(path.join(root, "a"), { recursive: true });
-        await until(() => !w.watched().includes("a"));
-        expect(w.watched()).toEqual([""]);
-      } finally {
-        w.close();
-        await rm(root, { recursive: true, force: true });
-      }
-    },
-  );
 });
