@@ -17,8 +17,12 @@ npm ci && npm run build
 The token file must exist before the first start. `meta-notes ui url` (run
 in the notes root) creates it, mode 0600, if missing, or create it yourself.
 
-Review `deploy/meta-notes-ui.service`, replace `CHECKOUT`, `NODE` and
-`NOTES`, and copy it:
+Review `deploy/meta-notes-ui.service`, replace `CHECKOUT`, `NODE`, `NOTES`,
+`NODE_BIN_DIR` and `META_NOTES_BIN_DIR`, and copy it. `META_NOTES_BIN_DIR` is
+the directory of `command -v meta-notes`, `NODE_BIN_DIR` that of `command -v
+node`. The unit's `PATH` is minimal, and the server runs `meta-notes` for
+edits, the daily note, today and tag aliases; without it on `PATH` they fail
+with ENOENT.
 
 ```sh
 mkdir -p ~/.config/systemd/user
@@ -27,6 +31,8 @@ cp deploy/meta-notes-ui.service ~/.config/systemd/user/
 systemctl --user daemon-reload
 systemctl --user enable --now meta-notes-ui
 systemctl --user status meta-notes-ui
+systemctl --user show -p Environment meta-notes-ui   # PATH must list both dirs
+journalctl --user -u meta-notes-ui | grep ENOENT       # nothing expected
 ```
 
 ## One-time steps (need sudo)
