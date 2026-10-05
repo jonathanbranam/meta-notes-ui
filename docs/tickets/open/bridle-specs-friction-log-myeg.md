@@ -48,3 +48,10 @@ what happened, where it came from, the bridle ID.
   refresh of the open note and tree, the editor's conflict view, and the
   browser reconnecting after a phone sleeps are all non-executable;
   vitest-bridle has no DOM or browser harness. From mu-9dv8. Bridle: br-ekfw.
+- **2026-10-05: step text can't quote code or markup.** `bridle spec check`
+  rejects backticks, `<code>` and HTML in steps, so the rendering spec can't
+  quote the markdown it renders or the HTML it expects; the worker rephrased
+  and normalised quotes in step code. From mu-pfgp. Bridle: br-awh4.
+- **2026-10-05: `bridle spec id` duplicated hand-written IDs.** On a spec file
+  already holding IDs written by hand, it added duplicate `.ids` entries; the
+  worker reset `.ids` and re-ran. From mu-pfgp. Bridle: br-dbvd.
