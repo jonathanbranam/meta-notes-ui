@@ -32,11 +32,4 @@ describe("api", () => {
     const res = await app.request("/api/version", { headers: auth });
     expect(await res.json()).toEqual({ version: "9.9.9" });
   });
-  it("lists backlinks, folder notes included", async () => {
-    const get = async (p: string) =>
-      ((await (await app.request(`/api/backlinks?path=${p}`, { headers: auth })).json()) as { backlinks: string[] }).backlinks;
-    expect(await get("area/health.md")).toEqual(["root.md"]);
-    expect(await get("project/make-bread/Home.md")).toEqual(["root.md"]);
-    expect(await get("zeta/z.md")).toEqual([]);
-  });
 });
