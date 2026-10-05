@@ -1,18 +1,38 @@
-import { mkdtemp, readFile, stat } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { expect } from "vitest";
+import { afterAll, expect } from "vitest";
 import type { Steps } from "vitest-bridle";
 import { createApp } from "../../server/app.js";
 import { makeFixtureRoot } from "../../server/fixture.js";
+import { startServer, UsageError, type RunningServer } from "../../server/start.js";
 import { loadToken } from "../../server/token.js";
 
 const TOKEN = "s3cret-token";
 
+const started: RunningServer[] = [];
+afterAll(() => started.forEach((s) => s.close()));
+
+/** A client build directory with a secret file next to it (outside it). */
+async function makeClientDir(): Promise<string> {
+  const base = await mkdtemp(path.join(tmpdir(), "mnui-client-"));
+  const dir = path.join(base, "client");
+  await mkdir(dir);
+  await writeFile(path.join(dir, "index.html"), "<html>client</html>");
+  await writeFile(path.join(base, "outside.txt"), "secret outside the client");
+  return dir;
+}
+
 async function appFor(world: Record<string, any>) {
   if (!world.app) {
     const { root } = await makeFixtureRoot();
-    world.app = createApp({ root, token: TOKEN, version: "0.0.0", subscribe: () => () => {} });
+    world.app = createApp({
+      root,
+      token: TOKEN,
+      version: "0.0.0",
+      clientDir: await makeClientDir(),
+      subscribe: () => () => {},
+    });
   }
   return world.app as ReturnType<typeof createApp>;
 }
@@ -80,5 +100,73 @@ export function accessSteps(steps: Steps) {
   steps.then(/^the note is not served$/, async (w) => {
     expect(w.res.status).toBeGreaterThanOrEqual(400);
     expect(await w.res.text()).not.toContain("secret");
+  });
+
+  steps.when(/^a client requests the client file "([^"]+)" without a token$/, (w, url) => get(w, url));
+  steps.when(/^a client requests the client file "([^"]+)" with the right token$/, (w, url) => get(w, url, TOKEN));
+  steps.then(/^the client file is served$/, async (w) => {
+    expect(w.res.status).toBe(200);
+    expect(await w.res.text()).toBe("<html>client</html>");
+  });
+  steps.then(/^no file outside the client directory is served$/, async (w) => {
+    expect(await w.res.text()).not.toContain("secret");
+  });
+
+  async function start(w: Record<string, any>, extra: string[]) {
+    const { root } = await makeFixtureRoot();
+    w.root = root;
+    const tokenFile = path.join(root, ".meta-notes-cache", "ui", "token");
+    try {
+      w.running = await startServer(["--root", root, "--token-file", tokenFile, ...extra]);
+      started.push(w.running);
+    } catch (err) {
+      w.error = err;
+    }
+  }
+  const infoOf = async (w: Record<string, any>) => JSON.parse(await readFile(w.running.infoFile, "utf8"));
+
+  steps.when(/^the server is started without a token file$/, async (w) => {
+    try {
+      await startServer(["--root", (await makeFixtureRoot()).root]);
+    } catch (err) {
+      w.error = err;
+    }
+  });
+  steps.then(/^it fails with a usage error, which the entry point prints before exiting with status 2$/, (w) => {
+    expect(w.error).toBeInstanceOf(UsageError);
+    expect(w.error.message).toMatch(/^usage: .*--root.*--token-file/);
+  });
+  steps.when(/^the server is started on a notes root with port 0$/, (w) => start(w, ["--port", "0"]));
+  steps.then(/^the info file holds the pid, host, the chosen port, the url and the version$/, async (w) => {
+    const info = await infoOf(w);
+    expect(w.error).toBeUndefined();
+    expect(info.pid).toBe(process.pid);
+    expect(info.host).toBe("127.0.0.1");
+    expect(info.port).toBeGreaterThan(0);
+    expect(info.url).toBe(`http://127.0.0.1:${info.port}`);
+    expect(info.version).toMatch(/^\d+\.\d+\.\d+/);
+  });
+  steps.when(/^the running server is stopped, as SIGINT and SIGTERM do$/, async (w) => {
+    await start(w, []);
+    expect((await stat(w.running.infoFile)).isFile()).toBe(true);
+    w.running.close();
+  });
+  steps.then(/^the info file is gone$/, async (w) => {
+    await expect(stat(w.running.infoFile)).rejects.toThrow();
+  });
+  steps.when(/^the server is started without a host$/, (w) => start(w, []));
+  steps.when(/^the server is started with host "([^"]+)"$/, (w, host) => start(w, ["--host", host]));
+  steps.then(/^it listens on 127\.0\.0\.1 and the info file host is "([^"]+)"$/, async (w, host) => {
+    expect(w.error).toBeUndefined();
+    const info = await infoOf(w);
+    expect(info.host).toBe(host);
+    const res = await fetch(`http://127.0.0.1:${info.port}/api/version`);
+    expect(res.status).toBe(401);
+  });
+  steps.then(/^it listens on that address and the info file url starts with "([^"]+)"$/, async (w, prefix) => {
+    expect(w.error).toBeUndefined();
+    const info = await infoOf(w);
+    expect(info.url.startsWith(prefix)).toBe(true);
+    expect((await fetch(`${info.url}/api/version`)).status).toBe(401);
   });
 }
