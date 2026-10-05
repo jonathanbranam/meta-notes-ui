@@ -1,0 +1,18 @@
+# systemd USER unit for the always-on meta-notes-ui. See deploy/nuc.md.
+# Copy to ~/.config/systemd/user/meta-notes-ui.service and replace the three
+# placeholders: CHECKOUT, NODE and NOTES. On the NUC:
+#   CHECKOUT = /home/jbranam/apps/meta-notes-ui
+#   NODE     = the output of `command -v node`
+#   NOTES    = /srv/shared/work/notes-work/notes
+[Unit]
+Description=meta-notes-ui (always-on notes UI)
+After=network.target
+
+[Service]
+WorkingDirectory=CHECKOUT
+ExecStart=NODE dist/server/index.js --root NOTES --port 7480 --host 127.0.0.1 --token-file NOTES/.meta-notes-cache/ui/token
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
