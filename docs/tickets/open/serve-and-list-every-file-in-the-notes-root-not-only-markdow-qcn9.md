@@ -7,7 +7,7 @@ repos: [meta-notes-ui]
 changes: []
 specs: []
 needs: []
-see: [hzf9, 9dv8]
+see: [hzf9]
 tasks: [mu-qcn9]
 ---
 

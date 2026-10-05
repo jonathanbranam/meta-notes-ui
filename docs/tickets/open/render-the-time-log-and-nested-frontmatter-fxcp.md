@@ -7,7 +7,7 @@ repos: [meta-notes-ui]
 changes: []
 specs: []
 needs: []
-see: [hzf9, pfgp]
+see: [hzf9]
 tasks: [mu-fxcp]
 ---
 
