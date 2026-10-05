@@ -11,4 +11,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # The tests run the real meta-notes CLI (stdlib-only Python).
+      - uses: actions/checkout@v4
+        with:
+          repository: jonathanbranam/meta-notes
+          path: meta-notes
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: echo "$GITHUB_WORKSPACE/meta-notes/bin" >> $GITHUB_PATH
       - run: npm ci && npm run check
