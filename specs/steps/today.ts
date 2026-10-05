@@ -1,10 +1,11 @@
-import { readFile } from "node:fs/promises";
+import { cp, mkdtemp, readdir, realpath, readFile } from "node:fs/promises";
 import path from "node:path";
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
 import type { TodayResponse, TodayTask } from "../../shared/types.js";
+import { tmpdir } from "node:os";
 import { createApp } from "../../server/app.js";
-import { makeExampleRoot } from "../../server/example.js";
+import { EXAMPLE_ROOT, makeExampleRoot } from "../../server/example.js";
 import { buildAlerts, currentRow, isPlanned, parseTimeBlock } from "../../client/src/today";
 
 const TOKEN = "today-token";
@@ -55,7 +56,26 @@ async function getAll(w: World, urls: string[], token?: string) {
   w.responses = await Promise.all(urls.map((u) => app.request(u, { headers })));
 }
 
+const listing = async (root: string) => (await readdir(root, { recursive: true })).sort().join("\n");
+
 export function todaySteps(steps: Steps) {
+  steps.when(/^the Today view is requested for a root with no daily note$/, async (w) => {
+    const root = path.join(await realpath(await mkdtemp(path.join(tmpdir(), "mnui-nodaily-"))), "notes");
+    await cp(EXAMPLE_ROOT, root, { recursive: true });
+    w.before = await listing(root);
+    const app = createApp({ root, token: TOKEN, version: "0.0.0", clientDir: path.resolve("client/public"), subscribe: () => () => {} });
+    w.today = (await (await app.request("/api/today", { headers: { authorization: `Bearer ${TOKEN}` } })).json()) as TodayResponse;
+    w.after = await listing(root);
+  });
+  steps.then(/^no note is created and the Today view has no daily note$/, (w) => {
+    expect(w.after).toBe(w.before);
+    expect(w.today.daily).toBeNull();
+  });
+  steps.when(/^alerts are built for 2026-10-04 from a daily note planning "([^"]+)" from 9:00am to 10:00am$/, (w, plan) => {
+    const rows = ["9:00am", "9:15am", "9:30am", "9:45am", "10:00am"].map((t) => `| ${t} | ${plan} | |`).join("\n");
+    w.alerts = buildAlerts(new Date(2026, 9, 4, 6, 0), "2026-10-04", [], parseTimeBlock(`### Time Block\n\n| Time | Plan | Actual |\n| - | - | - |\n${rows}\n`));
+  });
+
   steps.when(/^the Today view is requested without a token$/, (w) => getAll(w, ["/api/today"]));
   steps.when(/^the Today view is requested with the right token$/, async (w) => {
     await getAll(w, ["/api/today"], TOKEN);

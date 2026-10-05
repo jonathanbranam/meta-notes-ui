@@ -58,7 +58,7 @@ function at(day: Date, minutes: number): number {
   return new Date(day.getFullYear(), day.getMonth(), day.getDate(), 0, minutes).getTime();
 }
 
-/** Today's alerts: timed tasks due today, and each planned Time Block row. */
+/** Today's alerts: timed tasks due today, and each planned Time Block row whose plan differs from the row before. */
 export function buildAlerts(day: Date, todayIso: string, tasks: TodayTask[], rows: BlockRow[]): Alert[] {
   const out: Alert[] = [];
   for (const t of tasks) {
@@ -66,10 +66,10 @@ export function buildAlerts(day: Date, todayIso: string, tasks: TodayTask[], row
     if (m === null || t.due !== todayIso) continue;
     out.push({ id: `task:${t.file}:${t.line}:${t.time}`, at: at(day, m), title: `${t.time} ${t.text.replace(/^- \[.\]\s*/, "").replace(/\s*[⏰📅⏳🛫].*$/u, "")}` });
   }
-  for (const r of rows) {
-    if (!isPlanned(r.plan)) continue;
+  rows.forEach((r, i) => {
+    if (!isPlanned(r.plan) || (i > 0 && rows[i - 1].plan.trim() === r.plan.trim())) return;
     const hm = `${String(Math.floor(r.minutes / 60)).padStart(2, "0")}:${String(r.minutes % 60).padStart(2, "0")}`;
     out.push({ id: `row:${hm}`, at: at(day, r.minutes), title: `${hm} ${r.plan}` });
-  }
+  });
   return out.sort((a, b) => a.at - b.at);
 }

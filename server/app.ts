@@ -89,12 +89,12 @@ export function createApp(opts: AppOptions): Hono {
     return c.json(body);
   });
 
-  // Today's daily note path, from the meta-notes CLI.
+  // Today's daily note path, from the meta-notes CLI, and whether it exists (--render never creates it).
   app.get("/api/daily", async (c) => {
     try {
-      const { stdout } = await exec("meta-notes", ["note", "daily", "--root", root, "--json"]);
-      const out = JSON.parse(stdout) as { path?: string };
-      return out.path ? c.json({ path: out.path }) : c.json({ error: "no path" }, 502);
+      const { stdout } = await exec("meta-notes", ["note", "daily", "--render", "--root", root, "--json"]);
+      const out = JSON.parse(stdout) as { path?: string; exists?: boolean };
+      return out.path ? c.json({ path: out.path, exists: out.exists === true }) : c.json({ error: "no path" }, 502);
     } catch {
       return c.json({ error: "meta-notes failed" }, 502);
     }

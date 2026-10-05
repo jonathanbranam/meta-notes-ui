@@ -134,6 +134,7 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
           </tbody>
         </table>
       )}
+      {!data.daily && <p className="hint">No daily note for today yet.</p>}
       {data.daily && (
         <p>
           <a href={`#${encodeURIComponent(data.daily.path).replace(/%2F/g, "/")}`} onClick={() => open(data.daily!.path)}>

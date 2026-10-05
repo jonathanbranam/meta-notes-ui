@@ -293,8 +293,8 @@ export function App() {
 
   const openToday = () => open(TODAY_PATH);
   const openDaily = () =>
-    getJson<{ path: string }>("/api/daily")
-      .then((d) => open(d.path))
+    getJson<{ path: string; exists: boolean }>("/api/daily")
+      .then((d) => (d.exists ? open(d.path) : setError("No daily note for today yet")))
       .catch(() => setError("Cannot find today's daily note"));
 
   return (
