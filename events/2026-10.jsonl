@@ -9,3 +9,4 @@
 {"actor":"external:orchestrator","at":"2026-10-05T02:20:00.632692272Z","from":"pending","task":"mu-eqqv","to":"open"}
 {"actor":"external:orchestrator","at":"2026-10-05T02:20:00.721830079Z","from":"pending","task":"mu-35z9","to":"open"}
 {"actor":"external:orchestrator","at":"2026-10-05T02:20:06.559837441Z","queue":"reprioritized"}
+{"actor":"agent:manager-1","at":"2026-10-05T02:20:14.816175453Z","from":"open","task":"mu-83ya","to":"integrated"}
