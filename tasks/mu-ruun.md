@@ -4,7 +4,7 @@ title = "Render checklist items, heading links and tag aliases as meta-notes doe
 kind = "bug"
 state = "integrated"
 created_at = "2026-10-05T03:04:41.943Z"
-updated_at = "2026-10-05T03:13:26.063436341Z"
+updated_at = "2026-10-05T10:39:59.051326744Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/render-fix"
@@ -24,3 +24,6 @@ integrated: 7298627 (branch bridle/render-fix)
 
 ### note · agent:manager-1 · 2026-10-05T03:13:26.063Z
 cleanup: removed nothing
+
+### answer · agent:manager-1 · 2026-10-05T10:39:59.051Z
+Answered by the orchestrator (m-0146): aliases come from tag_aliases in meta-notes conventions --json, built in mu-n8w6 (merged, v0.7.0). Closing this stale question.
