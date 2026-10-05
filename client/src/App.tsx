@@ -227,15 +227,26 @@ export function App() {
   }, []);
   useEffect(() => void loadTree(), [loadTree]);
 
-  // Live updates: re-fetch the tree on add/remove and the open note when it changes.
+  // Live updates: re-fetch the tree on add/remove and the open note when it changes. Backlinks only
+  // when a note may have changed them; after a reconnect (events were missed) everything is re-fetched.
   useEffect(() => {
     const es = new EventSource("/api/events");
+    let opened = false;
+    es.onopen = () => {
+      if (opened) {
+        void loadTree();
+        loadNote();
+        loadBacklinks();
+        setRefreshKey((k) => k + 1);
+      }
+      opened = true;
+    };
     es.onmessage = (m) => {
       const e = JSON.parse(m.data) as ChangeEvent;
       if (e.type !== "changed") void loadTree();
       if (e.path === pathRef.current) loadNote();
       setRefreshKey((k) => k + 1);
-      loadBacklinks();
+      if (e.path.endsWith(".md")) loadBacklinks();
     };
     return () => es.close();
   }, [loadTree, loadNote, loadBacklinks]);
@@ -253,6 +264,16 @@ export function App() {
 
   const [edit, setEdit] = useState<Edit | null>(null);
   useEffect(() => setEdit(null), [path]);
+  // A disk change under an open editor shows as a conflict at once; the draft stays.
+  useEffect(() => {
+    if (!note) return;
+    const lines = note.text.split("\n");
+    setEdit((ed) => {
+      if (!ed) return ed;
+      const cur = lines.slice(ed.from - 1, ed.to).join("\n");
+      return cur === ed.expect ? ed : { ...ed, expect: cur, current: cur, error: undefined };
+    });
+  }, [note]);
   const editApi = useMemo<EditApi>(() => {
     const lines = note ? note.text.split("\n") : [];
     const text = (from: number, to: number) => lines.slice(from - 1, to).join("\n");

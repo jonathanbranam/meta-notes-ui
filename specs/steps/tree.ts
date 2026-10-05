@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, realpath, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, expect } from "vitest";
@@ -136,6 +136,21 @@ export function treeSteps(steps: Steps) {
   steps.then(/^"a\/b" is watched$/, async (w) => {
     if (!linux) return;
     await until(() => w.watcher.watched().includes("a/b"));
+  });
+  steps.when(/^a folder with notes is moved into a watched root in one step$/, async (w) => {
+    if (!linux) return;
+    await watcherFor(w);
+    const stage = await mkdtemp(path.join(tmpdir(), "mnui-spec-s-"));
+    cleanups.push(() => rm(stage, { recursive: true, force: true }));
+    await mkdir(path.join(stage, "d/sub"), { recursive: true });
+    await writeFile(path.join(stage, "d/one.md"), "1");
+    await writeFile(path.join(stage, "d/sub/two.md"), "2");
+    await rename(path.join(stage, "d"), file(w, "d"));
+  });
+  steps.then(/^"added" events arrive for its notes, and the folder is watched$/, async (w) => {
+    if (!linux) return;
+    await until(() => hasEvent(w, "added", "d/one.md") && hasEvent(w, "added", "d/sub/two.md"));
+    await until(() => w.watcher.watched().includes("d/sub"));
   });
   steps.when(/^a note is written in "a\/b"$/, async (w) => {
     if (!linux) return;

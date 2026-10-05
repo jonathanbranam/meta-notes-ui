@@ -83,7 +83,8 @@ export function watchRoot(
       }
     }
   };
-  const watchTree = async (rel: string): Promise<void> => {
+  // `announce`: the directory appeared after start (moved or cloned in whole), so its files get "added" events.
+  const watchTree = async (rel: string, announce = false): Promise<void> => {
     if (closed || dirs.has(rel)) return;
     let w: FSWatcher;
     try {
@@ -94,7 +95,7 @@ export function watchRoot(
         note(kind, child);
         if (kind === "rename") {
           stat(path.join(root, child)).then(
-            (st) => (st.isDirectory() ? watchTree(child) : undefined),
+            (st) => (st.isDirectory() ? watchTree(child, true) : undefined),
             () => unwatch(child),
           );
         }
@@ -111,7 +112,10 @@ export function watchRoot(
       return;
     }
     for (const e of entries) {
-      if (e.isDirectory() && !HIDDEN.has(e.name)) await watchTree(rel ? `${rel}/${e.name}` : e.name);
+      const child = rel ? `${rel}/${e.name}` : e.name;
+      if (e.isDirectory()) {
+        if (!HIDDEN.has(e.name)) await watchTree(child, announce);
+      } else if (announce && !isHidden(child)) note("rename", child);
     }
   };
   void watchTree("");
