@@ -11,6 +11,7 @@ import { editRoutes } from "./edits.js";
 import { confine, PathError } from "./paths.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
+import { todayRoutes } from "./today.js";
 
 const exec = promisify(execFile);
 export const COOKIE = "mn_ui_token";
@@ -31,6 +32,8 @@ const MIME: Record<string, string> = {
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".webmanifest": "application/manifest+json",
   ".json": "application/json",
   ".map": "application/json",
 };
@@ -98,6 +101,7 @@ export function createApp(opts: AppOptions): Hono {
   });
 
   editRoutes(app, root);
+  todayRoutes(app, root);
 
   app.get("/api/events", (c) =>
     streamSSE(c, async (stream) => {
