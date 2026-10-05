@@ -8,6 +8,7 @@ import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
 import { metaNotes, parseFrontmatter } from "../../client/src/markdown.js";
 import { stripFrontmatter } from "../../client/src/notes.js";
+import { parseHash } from "../../shared/links.js";
 import { createApp } from "../../server/app.js";
 import { makeFixtureRoot } from "../../server/fixture.js";
 
@@ -64,6 +65,11 @@ export function renderingSteps(steps: Steps) {
     expect(html).not.toContain("<a ");
   });
 
+  steps.when(/^the address is "([^"]*)"$/, (w, hash) => void (w.hash = hash));
+  steps.then(/^it opens the note "([^"]+)" at the heading "([^"]+)"$/, (w, p, heading) => {
+    expect(parseHash(w.hash)).toEqual({ path: p, heading });
+  });
+
   steps.then(/^its properties are "(.*)"$/, (w, props) => {
     expect(parseFrontmatter(w.md).map(([k, v]) => `${k}=${v}`).join("; ")).toBe(props);
   });
@@ -76,10 +82,11 @@ export function renderingSteps(steps: Steps) {
   });
   steps.then(/^the page marks no tags$/, (w) => expect(page(w)).not.toContain("data-tag"));
 
-  steps.then(/^the task "([^"]+)" is (open|done|rescheduled|canceled|partial)( and (?:not )?overdue)?$/, (w, text, status, overdue) => {
+  steps.then(/^the (task|checklist item) "([^"]+)" is (open|done|rescheduled|canceled|partial)( and (?:not )?overdue)?$/, (w, kind, text, status, overdue) => {
     const li = [...page(w).matchAll(/<li class='(task-item [^']*)'[^>]*>(.*?)<\/li>/g)].find((m) => m[2].includes(text));
-    expect(li, `task "${text}"`).toBeDefined();
+    expect(li, `${kind} "${text}"`).toBeDefined();
     const classes = li![1].split(" ");
+    expect(classes.includes("checklist")).toBe(kind === "checklist item");
     expect(classes).toContain(`status-${status === "rescheduled" ? "moved" : status}`);
     if (overdue) expect(classes.includes("overdue")).toBe(!overdue.includes("not"));
   });
