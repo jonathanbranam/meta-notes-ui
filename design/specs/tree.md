@@ -112,10 +112,10 @@ itself, including directories created later, and stop watching those removed.
 
 #### Scenario: A folder moved into the root is watched  {#s-ca02}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** a folder with notes is moved or cloned into the root in one step
-- **THEN** its notes are watched and report events, not only the folder
+- **WHEN** a folder with notes is moved into a watched root in one step
+- **THEN** "added" events arrive for its notes, and the folder is watched
 
 #### Scenario: Other platforms use one recursive watch  {#s-32c0}
 
@@ -186,3 +186,14 @@ over the draft.
 
 - **WHEN** the phone sleeps or the connection drops, then comes back
 - **THEN** the client reconnects and re-fetches what it shows, so it does not stay stale
+
+(Non-executable: it needs a browser; vitest-bridle has no browser steps yet.)
+
+#### Scenario: Backlinks follow notes only  {#s-4388}
+
+*Verification*: **non-executable**
+
+- **WHEN** a ".md" file is added, removed or changed on disk
+- **THEN** the client re-fetches the open note's backlinks
+- **WHEN** another kind of file changes
+- **THEN** it does not

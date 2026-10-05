@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.4.0, v1 in development.
+Status: v0.4.3, v1 in development.
 
 ## How it fits
 
@@ -14,7 +14,7 @@ Status: v0.4.0, v1 in development.
 - The server reads notes from disk and changes them only through the
   `meta-notes` CLI, the way agents do, so edits are race-safe against Vim
   and agents.
-- It watches the notes root and pushes changes to the browser.
+- It watches the notes root and pushes changes to the browser; open views, including an open editor (as a conflict), update at once, and a reconnecting phone re-fetches what it shows.
 
 ## Install
 

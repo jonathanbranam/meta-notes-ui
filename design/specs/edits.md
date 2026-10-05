@@ -108,7 +108,9 @@ SHALL show that text and keep the human's draft.
 *Verification*: **non-executable**
 
 - **WHEN** the note changes on disk while the human has an editor open on it
-- **THEN** the editor shows the conflict at once instead of waiting for a save
+- **THEN** the editor shows the conflict at once instead of waiting for a save, and the draft stays
+
+(Non-executable: it needs a browser; vitest-bridle has no browser steps yet.)
 
 ### Requirement: A new note is made by the CLI  {#r-d5f4}
 
