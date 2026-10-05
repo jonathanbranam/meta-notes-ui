@@ -24,6 +24,13 @@ Tests and `npm run dev:example` copy it to a temp dir first
 - `resource/files/`: a PNG, a text file and a tiny PDF, to check that every file is listed and served; `area/Home Care.md` embeds the PNG both ways (`![[dot.png]]` and `![](../resource/files/dot.png)`).
 - `resource/template/`: the templates `meta-notes init` installs.
 
+## Calendar
+
+There is no calendar export or `.venv` here. The Today agenda scenario
+(`specs/steps/today.ts`) adds a one-event `.meta-notes-cache/ics/fixture.ics`
+dated today and runs `meta-notes init` for the `.venv`, in a temp copy only;
+it skips if the `.venv` can't be built.
+
 ## Extending it
 
 When a feature needs content to verify, add it here (and a line above),

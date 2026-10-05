@@ -33,10 +33,13 @@ the meta-notes CLI.
 
 #### Scenario: Agenda from the calendar  {#s-89e3}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** `meta-notes calendar --json` succeeds (it needs a calendar export in the root's `.meta-notes-cache/ics/` and the root's `.venv`)
-- **THEN** the Today view lists today's calendar events, and none when it fails
+Skipped, with the reason, when the root's `.venv` cannot be built (`meta-notes
+calendar` needs it). `meta-notes calendar --json` failing gives no agenda.
+
+- **WHEN** the Today view is requested for a root with a calendar export holding an event today
+- **THEN** the Today view lists the event "Fixture standup" today
 
 ### Requirement: The Today view never writes  {#r-c42c}
 
