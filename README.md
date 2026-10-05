@@ -105,9 +105,9 @@ content to verify, extend the example** and its README.
 
 - **Today** (header button; `#!today`): today's Time Block with the current
   row and the next planned row marked, open tasks due today or overdue, and
-  the day's calendar agenda when `meta-notes calendar` is set up (otherwise
+  the day's calendar agenda when `meta-notes calendar` is set up (a calendar export in `.meta-notes-cache/ics/` and the root's `.venv`) (otherwise
   the section is absent). `GET /api/today` gathers it: `meta-notes tasks
-  --overdue --due`, `calendar` and `note daily` (all `execFile`, argument
+  --overdue --due`, `calendar` and `note daily --render` (never creates the note; all `execFile`, argument
   arrays) plus a read of the daily note. The view refetches (debounced 1 s)
   when the watcher reports a change.
 - **Alerts**: browser notifications at the time of a timed task due today

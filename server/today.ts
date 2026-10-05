@@ -8,14 +8,15 @@ import { confine } from "./paths.js";
 export function todayRoutes(app: Hono, root: string): void {
   app.get("/api/today", async (c) => {
     const [daily, tasks, calendar] = await Promise.all([
-      runMetaNotes(root, ["note", "daily"]),
+      runMetaNotes(root, ["note", "daily", "--render"]),
       runMetaNotes(root, ["tasks", "--overdue", "--due"]),
       runMetaNotes(root, ["calendar"]),
     ]);
     if (!tasks.ok) return c.json({ error: tasks.error ?? "meta-notes failed" }, 502);
 
     let note: TodayResponse["daily"] = null;
-    if (daily.ok && typeof daily.path === "string") {
+    // --render names the note without creating it; read it only if it exists
+    if (daily.ok && typeof daily.path === "string" && daily.exists === true) {
       try {
         note = { path: daily.path, text: await readFile(await confine(root, daily.path), "utf8") };
       } catch {

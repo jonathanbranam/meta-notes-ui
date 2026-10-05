@@ -35,8 +35,8 @@ the meta-notes CLI.
 
 *Verification*: **non-executable**
 
-- **WHEN** the meta-notes CLI has a calendar command
-- **THEN** the Today view lists today's calendar events, and none when it has not
+- **WHEN** `meta-notes calendar --json` succeeds (it needs a calendar export in the root's `.meta-notes-cache/ics/` and the root's `.venv`)
+- **THEN** the Today view lists today's calendar events, and none when it fails
 
 ### Requirement: The Today view never writes  {#r-c42c}
 
@@ -45,13 +45,10 @@ does not exist it shows that, and the human creates it on purpose.
 
 #### Scenario: No daily note yet  {#s-2dca}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** a client requests the Today view and today's daily note does not exist
-- **THEN** no note is created and the view says there is no daily note yet
-
-Gap: `GET /api/today` runs `meta-notes note daily`, which creates the note
-(ticket mu-jxnw).
+- **WHEN** the Today view is requested for a root with no daily note
+- **THEN** no note is created and the Today view has no daily note
 
 ### Requirement: The Time Block is read from the daily note  {#r-0fbe}
 
@@ -87,8 +84,9 @@ current time.
 
 The client SHALL build an alert for each task due today with a time (⏰) and
 for each planned Time Block row, in time order. It SHALL NOT alert for
-overdue tasks, tasks without a time, or rows that are empty, "no plan" or
-struck out.
+overdue tasks, tasks without a time, rows that are empty, "no plan" or
+struck out, or rows whose plan is the same as the row before (one alert
+when a plan starts, not one per quarter hour).
 
 #### Scenario: Alerts in time order  {#s-5789}
 
@@ -96,6 +94,13 @@ struck out.
 
 - **WHEN** alerts are built for 2026-10-04 from the sample tasks and the sample daily note
 - **THEN** the alerts are "08:30 start work, 09:30 Call the dentist, 12:15 lunch"
+
+#### Scenario: A plan that continues alerts once  {#s-66c0}
+
+*Verification*: **executable**
+
+- **WHEN** alerts are built for 2026-10-04 from a daily note planning "focus" from 9:00am to 10:00am
+- **THEN** the alerts are "09:00 focus"
 
 #### Scenario: Each alert fires once a day, and can be snoozed  {#s-cf95}
 
