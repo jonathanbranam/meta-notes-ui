@@ -55,3 +55,9 @@ what happened, where it came from, the bridle ID.
 - **2026-10-05: `bridle spec id` duplicated hand-written IDs.** On a spec file
   already holding IDs written by hand, it added duplicate `.ids` entries; the
   worker reset `.ids` and re-ran. From mu-pfgp. Bridle: br-dbvd.
+- **2026-10-05: a step can't skip its scenario at runtime.** The agenda
+  scenario runs `meta-notes init` for a `.venv` and must skip with a reason
+  when that fails; vitest-bridle had no way, so the vendored
+  `tools/vitest-bridle` was patched (an error with `skipScenario: true`
+  calls `ctx.skip(reason)`) and now differs from bridle's. The slow setup
+  also needed the spec timeout raised to 60s. From mu-hxvt. Bridle: br-s4ve.
