@@ -80,10 +80,26 @@ SHALL accept it as a bearer header or a cookie set by one `?token=` visit.
 
 #### Scenario: The built client is behind the token too  {#s-c815}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** a client requests a static client file such as "/index.html" without a token
-- **THEN** the response status is 401, and with the token the file is served only from inside the client build directory
+- **WHEN** a client requests the client file "/index.html" without a token
+- **THEN** the response status is 401
+- **WHEN** a client requests the client file "/index.html" with the right token
+- **THEN** the client file is served
+
+#### Scenario: The built client is confined to its directory  {#s-fddb}
+*Verification*: **executable**
+
+- **WHEN** a client requests the client file "\<url\>" with the right token
+- **THEN** no file outside the client directory is served
+
+*Examples*:
+
+| url                    |
+| ---------------------- |
+| /../outside.txt        |
+| /%2e%2e/outside.txt    |
+| /..%2foutside.txt      |
 
 ### Requirement: Paths are confined to the notes root  {#r-abbc}
 
@@ -155,17 +171,17 @@ it is. The token is required either way.
 
 #### Scenario: Default host  {#s-0c5f}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** the server is started without `--host`
-- **THEN** it listens on 127.0.0.1 only, and its `server.json` host is "127.0.0.1"
+- **WHEN** the server is started without a host
+- **THEN** it listens on 127.0.0.1 and the info file host is "127.0.0.1"
 
 #### Scenario: A host for the phone  {#s-a8d6}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** the server is started with `--host 100.64.0.7`
-- **THEN** it listens on that address, and its `server.json` url is `http://100.64.0.7:<port>`
+- **WHEN** the server is started with host "127.0.0.2"
+- **THEN** it listens on that address and the info file url starts with "http://127.0.0.2:"
 
 ### Requirement: The start contract and server.json  {#r-4f13}
 
@@ -178,21 +194,21 @@ and `version`, and SHALL remove it on exit, including SIGINT and SIGTERM.
 
 #### Scenario: Missing arguments  {#s-d2e9}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** the server is started without `--token-file`
-- **THEN** it prints a usage line and exits with status 2
+- **WHEN** the server is started without a token file
+- **THEN** it fails with a usage error, which the entry point prints before exiting with status 2
 
 #### Scenario: Listening writes server.json  {#s-58b7}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
 - **WHEN** the server is started on a notes root with port 0
-- **THEN** `.meta-notes-cache/ui/server.json` holds the pid, host, the chosen port, the url and the version
+- **THEN** the info file holds the pid, host, the chosen port, the url and the version
 
 #### Scenario: Stopping removes server.json  {#s-e013}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** the running server receives SIGTERM
-- **THEN** it exits and `server.json` is gone
+- **WHEN** the running server is stopped, as SIGINT and SIGTERM do
+- **THEN** the info file is gone
