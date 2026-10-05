@@ -48,3 +48,6 @@ tasks = [
     "mu-49zd",
     "mu-hxvt",
 ]
+
+[[tier]]
+tasks = ["mu-n8w6"]
