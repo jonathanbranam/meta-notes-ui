@@ -10,7 +10,8 @@
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json --noEmit",
     "test": "vitest run",
     "check": "npm run typecheck && npm test && npm run build",
-    "start": "node dist/server/index.js"
+    "start": "node dist/server/index.js",
+    "dev:example": "node scripts/dev-example.mjs"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
