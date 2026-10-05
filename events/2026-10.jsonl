@@ -74,3 +74,4 @@
 {"actor":"external:orchestrator","at":"2026-10-05T03:04:46.602053851Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-10-05T03:04:46.654561498Z","queue":"reprioritized"}
 {"actor":"human","at":"2026-10-05T03:11:06.920Z","from":"","task":"mu-n8w6","to":"pending"}
+{"actor":"agent:manager-1","at":"2026-10-05T03:13:26.058883496Z","from":"planned","task":"mu-ruun","to":"integrated"}
