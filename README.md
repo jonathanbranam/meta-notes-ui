@@ -83,7 +83,9 @@ CLI errors are shown inline.
 
 ## Develop
 
-`npm run check` runs tsc, vitest and the build (what CI runs). The code is
+`npm run check` runs tsc, vitest, the bridle specs (`design/specs/`, executable
+under vitest via `tools/vitest-bridle`; skipped without the `bridle` binary, as in
+CI) and the build. The code is
 `server/` (Hono on Node), `client/` (Vite + React) and `shared/` (types).
 For client work, start the server by hand and run `npm run build:client -- --watch`,
 or `npx vite` with `MN_UI_SERVER=<server url>` (the token cookie is per origin,
