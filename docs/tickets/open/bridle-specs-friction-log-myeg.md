@@ -44,3 +44,7 @@ what happened, where it came from, the bridle ID.
 - **2026-10-05: no rule for unit tests a scenario duplicates.** mu-943b left
   the duplicated access unit tests; mu-hzf9 removed them. From mu-943b,
   mu-hzf9. Bridle: br-m5kf.
+- **2026-10-05: browser scenarios can't be executable.** Tree spec: live
+  refresh of the open note and tree, the editor's conflict view, and the
+  browser reconnecting after a phone sleeps are all non-executable;
+  vitest-bridle has no DOM or browser harness. From mu-9dv8. Bridle: br-ekfw.
