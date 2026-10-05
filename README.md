@@ -71,3 +71,13 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
 For client work, start the server by hand and run `npm run build:client -- --watch`,
 or `npx vite` with `MN_UI_SERVER=<server url>` (the token cookie is per origin,
 so open the server URL once with `?token=`).
+
+## Example notes root
+
+`examples/notes/` is a small real meta-notes root used as test data (see its
+README). Tests copy it to a temp dir with `makeExampleRoot()`
+(`server/example.ts`) and never touch the committed files. `npm run
+dev:example [-- --port N]` builds, copies it to a temp root and runs the
+server there (port `0` unless given; `bridle port allocate` is used if the
+binary exists), printing the URL with token. **Whenever a feature needs
+content to verify, extend the example** and its README.
