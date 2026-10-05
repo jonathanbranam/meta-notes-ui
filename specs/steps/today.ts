@@ -1,5 +1,7 @@
-import { cp, mkdtemp, readdir, realpath, readFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { cp, mkdir, mkdtemp, readdir, realpath, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
 import type { TodayResponse, TodayTask } from "../../shared/types.js";
@@ -8,6 +10,7 @@ import { createApp } from "../../server/app.js";
 import { EXAMPLE_ROOT, makeExampleRoot } from "../../server/example.js";
 import { buildAlerts, currentRow, isPlanned, parseTimeBlock } from "../../client/src/today";
 
+const run = promisify(execFile);
 const TOKEN = "today-token";
 type World = Record<string, any>;
 const APP_FILES = ["/manifest.webmanifest", "/sw.js", "/icon-192.png", "/icon-512.png"];
@@ -38,6 +41,7 @@ const SAMPLE_TASKS: TodayTask[] = [
 async function appFor(w: World) {
   if (!w.app) {
     const { root, daily } = await makeExampleRoot();
+    w.root = root;
     w.daily = daily;
     w.app = createApp({
       root,
@@ -54,6 +58,32 @@ async function getAll(w: World, urls: string[], token?: string) {
   const app = await appFor(w);
   const headers: Record<string, string> = token ? { authorization: `Bearer ${token}` } : {};
   w.responses = await Promise.all(urls.map((u) => app.request(u, { headers })));
+}
+
+/** A one-event calendar export dated today (local time), so the scenario never goes stale. */
+function fixtureIcs(now = new Date()): string {
+  const d = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
+  return [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//mnui//fixture//EN", "X-WR-CALNAME:Fixture",
+    "BEGIN:VEVENT", "UID:fixture-1@mnui", `DTSTAMP:${d}T000000Z`,
+    `DTSTART:${d}T140000`, `DTEND:${d}T150000`, "SUMMARY:Fixture standup", "END:VEVENT",
+    "END:VCALENDAR", "",
+  ].join("\r\n");
+}
+
+/** Build the temp root's .venv (`meta-notes init`) and add the fixture export; skip the scenario if that fails. */
+async function addCalendar(w: World) {
+  await appFor(w);
+  try {
+    await run("meta-notes", ["init", "--root", w.root]);
+    await run(path.join(w.root, ".venv/bin/python3"), ["-c", "import icalendar, recurring_ical_events"]);
+  } catch (e) {
+    const err = new Error(`calendar skipped: cannot build the root's .venv (${(e as Error).message.split("\n")[0]})`);
+    (err as any).skipScenario = true;
+    throw err;
+  }
+  await mkdir(path.join(w.root, ".meta-notes-cache/ics"), { recursive: true });
+  await writeFile(path.join(w.root, ".meta-notes-cache/ics/fixture.ics"), fixtureIcs());
 }
 
 const listing = async (root: string) => (await readdir(root, { recursive: true })).sort().join("\n");
@@ -88,6 +118,15 @@ export function todaySteps(steps: Steps) {
   });
   steps.then(/^the Today view lists the task "([^"]+)" at "([^"]+)"$/, (w, text, time) => {
     expect(w.today.tasks.some((t: TodayTask) => t.text.includes(text) && t.time === time)).toBe(true);
+  });
+
+  steps.when(/^the Today view is requested for a root with a calendar export holding an event today$/, async (w) => {
+    await addCalendar(w);
+    await getAll(w, ["/api/today"], TOKEN);
+    w.today = (await w.responses[0].json()) as TodayResponse;
+  });
+  steps.then(/^the Today view lists the event "([^"]+)" today$/, (w, title) => {
+    expect(w.today.agenda?.map((e: any) => e.title)).toContain(title);
   });
 
   steps.when(/^the Time Block of the sample daily note is read$/, (w) => {

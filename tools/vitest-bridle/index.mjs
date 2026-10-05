@@ -39,7 +39,8 @@ function fill(text, header, row) {
   });
 }
 
-async function runSteps(sc, header, row, defs) {
+/** A step throws an error with `skipScenario: true` to skip the scenario with the error's message. */
+async function runSteps(sc, header, row, defs, ctx) {
   const world = {};
   let kind = null;
   for (const step of sc.steps) {
@@ -59,7 +60,12 @@ async function runSteps(sc, header, row, defs) {
         `no step definition for ${step.keyword} "${text}" (scenario ${sc.id}, line ${step.line})`,
       );
     }
-    await hit.d.fn(world, ...hit.m.slice(1));
+    try {
+      await hit.d.fn(world, ...hit.m.slice(1));
+    } catch (e) {
+      if (e && e.skipScenario && ctx) ctx.skip(e.message);
+      throw e;
+    }
   }
 }
 
@@ -96,11 +102,11 @@ export async function registerBridleSpecs({
           if (sc.examples) {
             const { header, rows } = sc.examples;
             for (const row of rows) {
-              it(`${name} (${header.map((h, i) => `${h}=${row[i]}`).join(", ")})`, () =>
-                runSteps(sc, header, row, steps.defs));
+              it(`${name} (${header.map((h, i) => `${h}=${row[i]}`).join(", ")})`, (ctx) =>
+                runSteps(sc, header, row, steps.defs, ctx));
             }
           } else {
-            it(name, () => runSteps(sc, null, null, steps.defs));
+            it(name, (ctx) => runSteps(sc, null, null, steps.defs, ctx));
           }
         }
       });
