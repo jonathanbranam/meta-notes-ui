@@ -2,9 +2,9 @@
 id = "mu-fxcp"
 title = "Render the Time Log and nested frontmatter"
 kind = "feature"
-state = "pending"
+state = "planned"
 created_at = "2026-10-05T03:04:42.401Z"
-updated_at = "2026-10-05T03:04:42.401Z"
+updated_at = "2026-10-05T03:04:45.524029971Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++

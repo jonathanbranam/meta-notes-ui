@@ -30,3 +30,21 @@ tasks = ["mu-h848"]
 
 [[tier]]
 tasks = ["mu-jxnw"]
+
+[[tier]]
+tasks = [
+    "mu-ruun",
+    "mu-m3k9",
+]
+
+[[tier]]
+tasks = [
+    "mu-fxcp",
+    "mu-qcn9",
+]
+
+[[tier]]
+tasks = [
+    "mu-49zd",
+    "mu-hxvt",
+]
