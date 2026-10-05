@@ -46,3 +46,4 @@
 {"actor":"external:orchestrator","at":"2026-10-05T02:47:50.138531749Z","from":"open","task":"mu-jxnw","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-05T02:47:50.272034848Z","queue":"reprioritized"}
 {"actor":"agent:manager-1","at":"2026-10-05T02:48:14.399557489Z","from":"planned","task":"mu-943b","to":"integrated"}
+{"actor":"agent:manager-1","at":"2026-10-05T02:49:53.674233864Z","from":"planned","task":"mu-hzf9","to":"integrated"}
