@@ -1,3 +1,13 @@
+---
+owner:
+  name: Jo
+  roles:
+    - cook
+    - planner
+related:
+  - "[[area/health]]"
+  - "[[project/make-bread]]"
+---
 # Home Care
 
 ## Gutters

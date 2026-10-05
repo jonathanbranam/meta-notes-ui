@@ -87,8 +87,9 @@ anchor. Links inside code stay text.
 
 The UI SHALL show a note's leading `---` frontmatter block as a list of
 properties above the note and SHALL NOT render the block as note text.
-Values given as `[a, b]` or as a `- item` list are shown as one
-comma-separated value.
+Values given as `[a, b]` or as a `- item` list SHALL show as a list, and a
+nested map as nested properties; a `[[link]]` in a value SHALL show as a
+link, resolved like one in the note.
 
 #### Scenario: Properties  {#s-31d0}
 
@@ -115,10 +116,18 @@ comma-separated value.
 
 #### Scenario: Nested and list values keep their shape  {#s-89e0}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** a note's frontmatter holds a nested map or a list of links
-- **THEN** the properties show them as structure and links, as Obsidian does, not as flat text
+- **WHEN** a note holds "---\nowner:\n  name: Jo\n  roles:\n    - cook\n    - dad\nrelated:\n  - \"[[area/health]]\"\n  - \"[[project/nope]]\"\n---\n# Hi"
+- **THEN** its properties are "owner={name: Jo, roles: cook, dad}; related=[[area/health]], [[project/nope]]"
+
+#### Scenario: Links in values  {#s-5f3a}
+
+*Verification*: **executable**
+
+- **WHEN** a property holds "see [[area/health|my health]] and [[project/nope]]"
+- **THEN** the value shows a link to "area/health.md" labelled "my health"
+- **AND** the value shows "project/nope" as a missing link
 
 ### Requirement: Tags are marked  {#r-d686}
 
@@ -270,10 +279,20 @@ its tags marked.
 
 #### Scenario: A closed and an open entry  {#s-a581}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** a daily note's Log holds "- Work", started 09:45 and ended 11:00, and "- Packed #trip", started 13:00 with no end
-- **THEN** the first shows 09:45 to 11:00 and 1h 15m, and the second shows 13:00 and open, with "trip" marked as a tag
+- **WHEN** a note holds "### Log\n\n- Work\n  * start: 09:45\n  * end:   11:00\n- Packed #trip\n  * start: 13:00\n  * end:\n  * a note\n"
+- **THEN** the Log shows "09:45 – 11:00 · 1h 15m, 13:00 – open"
+- **AND** the page marks the tags "trip"
+- **AND** the page contains "a note"
+- **AND** the page does not contain "start:"
+
+#### Scenario: Approximate and short times  {#s-0c4d}
+
+*Verification*: **executable**
+
+- **WHEN** a note holds "### Log\n\n- Bake\n  * start: 9:45\n  * end:   ~11:00\n- Quick\n  * start: 11:00\n  * end: 11:20\n- Hour\n  * start: 12:00\n  * end: 13:00\n"
+- **THEN** the Log shows "09:45 – 11:00 · 1h 15m, 11:00 – 11:20 · 20m, 12:00 – 13:00 · 1h"
 
 ### Requirement: Backlinks list the notes linking here  {#r-6cdd}
 

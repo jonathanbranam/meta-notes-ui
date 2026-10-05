@@ -48,6 +48,9 @@ main { overflow: auto; padding: 1rem 1.5rem; }
 .props div { display: flex; gap: .35rem; }
 .props dt { color: #888; }
 .props dd { margin: 0; }
+.props ul, .props dl { margin: 0; padding: 0; list-style: none; }
+.props .prop-map { padding-left: .5rem; border-left: 2px solid #ddd; }
+.logtime { color: #666; font-size: .85em; background: #f4f4f6; border-radius: 4px; padding: 0 .35rem; }
 .task-item { list-style: none; }
 .task-item::before { content: "☐"; margin: 0 .4rem 0 -1.4rem; }
 .task-item.status-done::before { content: "☑"; }

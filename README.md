@@ -58,13 +58,16 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
   root (`.md` added), else relative to the note; `[[x]]` also finds the
   folder note `x/Home.md` (`shared/links.ts`). Missing targets are red.
   `[[path#heading]]` opens the note and scrolls to the heading.
-- Frontmatter shows as a property panel; `#tags` are highlighted.
+- Frontmatter shows as a property panel: lists as lists, nested maps as
+  nested properties, `[[links]]` in values as links. `#tags` are highlighted.
 - Checkbox lines (`- [c]`) with a `📅` or `🛫` date are tasks; without one
   they are checklist items (class `checklist`) and show the same status.
   Both show their status and chips for `📅 ⏳ 🛫 ✅ ⏰ 🔁`
   and times; an open task due before today is red.
 - The Time Block table: single-tilde plans struck out, `no plan` rows
   dimmed, and on today's note the row holding the current time highlighted.
+- The Time Log (`### Log`): each entry shows `start – end · duration`
+  (or `start – open`; `~` times count as exact) after its header line.
 - Backlinks list under the note.
 
 ## Editing

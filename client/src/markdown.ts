@@ -139,6 +139,7 @@ function timeBlock(table: Node, ctx: RenderContext): void {
 }
 
 function walk(node: Node, ctx: RenderContext): void {
+  if (node.type === "root") timeLog(node);
   if (node.type === "table") {
     const head = (node.children?.[0]?.children ?? []).map((c) => plain(c).trim().toLowerCase());
     if (head[0] === "time" && head[1] === "plan") timeBlock(node, ctx);
@@ -189,19 +190,138 @@ export function metaNotes(ctx: RenderContext) {
   return () => (tree: Node) => walk(tree, ctx);
 }
 
-/** Frontmatter as key/value pairs; handles `k: v`, `k: [a, b]` and `- item` lists. */
-export function parseFrontmatter(text: string): [string, string][] {
-  const m = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/.exec(text);
-  if (!m) return [];
-  const props: [string, string][] = [];
-  for (const line of m[1].split(/\r?\n/)) {
-    const kv = /^([\w-][\w .-]*):\s*(.*)$/.exec(line);
-    const item = /^\s+-\s+(.*)$/.exec(line);
-    if (kv) props.push([kv[1], kv[2].replace(/^\[(.*)\]$/, "$1").replace(/^["']|["']$/g, "")]);
-    else if (item && props.length) {
-      const last = props[props.length - 1];
-      last[1] = last[1] ? `${last[1]}, ${item[1]}` : item[1];
+/** `9:45`, `~11:00` (the tilde means approximately) as minutes since midnight. */
+function logClock(s: string): number | null {
+  const m = /^~?\s*(\d{1,2}):(\d{2})$/.exec(s.trim());
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+const hhmm = (s: string) => s.trim().replace(/^~\s*/, "").replace(/^(\d):/, "0$1:");
+
+/**
+ * Entries under a `### Log` heading: each `* start:` / `* end:` line becomes
+ * a "start – end · duration" span after the entry's header line; other
+ * nested lines stay as notes.
+ */
+function timeLog(root: Node): void {
+  const kids = root.children ?? [];
+  const at = kids.findIndex((n) => n.type === "heading" && n.depth === 3 && plain(n).trim().toLowerCase() === "log");
+  if (at < 0) return;
+  for (const list of kids.slice(at + 1)) {
+    if (list.type === "heading") break;
+    if (list.type !== "list") continue;
+    for (const item of list.children ?? []) {
+      const [head, ...rest] = item.children ?? [];
+      const sub = rest.find((n) => n.type === "list");
+      if (head?.type !== "paragraph" || !sub) continue;
+      let start: string | undefined;
+      let end = "";
+      sub.children = (sub.children ?? []).filter((li) => {
+        const m = /^(start|end):[ \t]*(.*)$/.exec(plain(li).trim());
+        if (!m) return true;
+        if (m[1] === "start") start = m[2];
+        else end = m[2];
+        return false;
+      });
+      if (start === undefined) continue;
+      const a = logClock(start);
+      const b = logClock(end);
+      let text = `${hhmm(start)} – ${end.trim() ? hhmm(end) : "open"}`;
+      if (a !== null && b !== null && b >= a) {
+        const d = b - a;
+        text += ` · ${d >= 60 ? `${Math.floor(d / 60)}h ` : ""}${d % 60}m`.replace(/ 0m$/, "");
+      }
+      head.children = [...(head.children ?? []), { type: "text", value: " " }, span("logtime", text)];
+      if (!sub.children.length) item.children = (item.children ?? []).filter((n) => n !== sub);
     }
   }
-  return props;
+}
+
+/** A frontmatter value: text, a list, or a map keeping its order. */
+export type PropValue = string | PropValue[] | { [key: string]: PropValue };
+
+const unquote = (s: string) => s.trim().replace(/^(["'])(.*)\1$/, "$2");
+
+/** `a, b` inside `[...]`; a value that starts `[[` is a wiki link, not a list. */
+function scalar(raw: string): PropValue {
+  const t = raw.trim();
+  if (/^\[(?!\[)(.*)\]$/.test(t)) {
+    const inner = t.slice(1, -1).trim();
+    return inner ? inner.split(",").map((x) => unquote(x)) : [];
+  }
+  return unquote(t);
+}
+
+/** Frontmatter as a map; handles `k: v`, `k: [a, b]`, `- item` lists and maps nested by indentation. */
+export function parseFrontmatter(text: string): [string, PropValue][] {
+  const m = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/.exec(text);
+  if (!m) return [];
+  const lines = m[1].split(/\r?\n/).filter((l) => l.trim() && !l.trim().startsWith("#"));
+  let i = 0;
+  const indentOf = (l: string) => l.length - l.trimStart().length;
+
+  function block(indent: number): PropValue {
+    if (lines[i].trim().startsWith("- ")) {
+      const list: PropValue[] = [];
+      while (i < lines.length && indentOf(lines[i]) === indent && lines[i].trim().startsWith("- ")) {
+        const body = lines[i].trim().slice(2);
+        if (/^[\w-][\w .-]*:(\s|$)/.test(body)) {
+          // A map starting on the dash line: its other keys are indented past the dash.
+          lines[i] = `${" ".repeat(indent + 2)}${body}`;
+          list.push(block(indent + 2));
+        } else {
+          i++;
+          list.push(scalar(body));
+        }
+      }
+      return list;
+    }
+    const map: { [key: string]: PropValue } = {};
+    while (i < lines.length && indentOf(lines[i]) === indent) {
+      const kv = /^([\w-][\w .-]*):\s*(.*)$/.exec(lines[i].trim());
+      if (!kv) {
+        i++;
+        continue;
+      }
+      i++;
+      if (kv[2]) map[kv[1]] = scalar(kv[2]);
+      else if (i < lines.length && (indentOf(lines[i]) > indent || (indentOf(lines[i]) === indent && lines[i].trim().startsWith("- ")))) map[kv[1]] = block(indentOf(lines[i]));
+      else map[kv[1]] = "";
+    }
+    return map;
+  }
+
+  if (!lines.length) return [];
+  const top = block(indentOf(lines[0]));
+  return typeof top === "object" && !Array.isArray(top) ? Object.entries(top) : [];
+}
+
+/** A value as flat text: lists `a, b`, maps `{k: v, k2: v2}`. */
+export function propText(v: PropValue): string {
+  if (typeof v === "string") return v;
+  if (Array.isArray(v)) return v.map(propText).join(", ");
+  return `{${Object.entries(v).map(([k, x]) => `${k}: ${propText(x)}`).join(", ")}}`;
+}
+
+export interface Segment {
+  text: string;
+  /** Hash for a link to an existing note; undefined for plain text. */
+  href?: string;
+  missing?: boolean;
+}
+
+/** Split value text into plain text and `[[wiki links]]`, resolved like those in the note. */
+export function valueSegments(text: string, ctx: RenderContext): Segment[] {
+  const out: Segment[] = [];
+  let last = 0;
+  for (const m of text.matchAll(new RegExp(WIKI_LINK.source, "gu"))) {
+    if (m.index > last) out.push({ text: text.slice(last, m.index) });
+    const { target, alias, heading } = parseWikiLink(m[1]);
+    const found = resolveLink(target, ctx.path, ctx.files);
+    const label = alias ?? target;
+    out.push(found ? { text: label, href: `#${encodeURIComponent(found).replace(/%2F/g, "/")}${heading ? `#${encodeURIComponent(headingSlug(heading))}` : ""}` } : { text: label, missing: true });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push({ text: text.slice(last) });
+  return out;
 }
