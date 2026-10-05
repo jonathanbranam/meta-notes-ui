@@ -18,7 +18,8 @@ integration = "main"
 check = "npm run check"
 
 [worktrees]
-setup = "npm ci"
+# No package.json until the v1.1 skeleton lands.
+setup = "test ! -f package-lock.json || npm ci"
 
 [ci]
 github = true
