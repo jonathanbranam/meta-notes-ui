@@ -5,7 +5,8 @@ import { promisify } from "node:util";
 import { Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { streamSSE } from "hono/streaming";
-import type { ChangeEvent, NoteResponse } from "../shared/types.js";
+import type { BacklinksResponse, ChangeEvent, NoteResponse } from "../shared/types.js";
+import { createBacklinks } from "./backlinks.js";
 import { confine, PathError } from "./paths.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
@@ -36,6 +37,7 @@ const MIME: Record<string, string> = {
 export function createApp(opts: AppOptions): Hono {
   const { root, token } = opts;
   const app = new Hono();
+  const backlinks = createBacklinks(root);
 
   // Token on every request: cookie, or `Authorization: Bearer`. `GET /?token=` trades it for the cookie.
   app.use("*", async (c, next) => {
@@ -74,6 +76,13 @@ export function createApp(opts: AppOptions): Hono {
       if (e instanceof PathError) return c.json({ error: e.message }, e.message === "not found" ? 404 : 403);
       return c.json({ error: "cannot read" }, 404);
     }
+  });
+
+  app.get("/api/backlinks", async (c) => {
+    const rel = c.req.query("path") ?? "";
+    if (!rel.endsWith(".md")) return c.json({ error: "not a note" }, 400);
+    const body: BacklinksResponse = { backlinks: await backlinks(rel, await listTree(root)) };
+    return c.json(body);
   });
 
   // Today's daily note path, from the meta-notes CLI.

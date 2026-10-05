@@ -33,7 +33,7 @@ describe("tokenMatches", () => {
 });
 
 describe("access", () => {
-  it.each(["/", "/api/version", "/api/tree", "/api/note?path=root.md", "/api/events", "/api/daily"])(
+  it.each(["/", "/api/version", "/api/tree", "/api/note?path=root.md", "/api/events", "/api/daily", "/api/backlinks?path=root.md"])(
     "refuses %s without a token",
     async (p) => {
       expect((await app.request(p)).status).toBe(401);
@@ -70,6 +70,13 @@ describe("api", () => {
     const body = (await res.json()) as { text: string; mtime: number };
     expect(body.text).toBe("# Health\n");
     expect(body.mtime).toBeGreaterThan(0);
+  });
+  it("lists backlinks, folder notes included", async () => {
+    const get = async (p: string) =>
+      ((await (await app.request(`/api/backlinks?path=${p}`, { headers: auth })).json()) as { backlinks: string[] }).backlinks;
+    expect(await get("area/health.md")).toEqual(["root.md"]);
+    expect(await get("project/make-bread/Home.md")).toEqual(["root.md"]);
+    expect(await get("zeta/z.md")).toEqual([]);
   });
   it("refuses escapes and hidden files", async () => {
     for (const p of ["../secret.md", ".git/config.md", "link.md", "%2e%2e/secret.md"]) {
