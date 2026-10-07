@@ -66,6 +66,10 @@ export function editsSteps(steps: Steps) {
   steps.when(/^the client writes line (\d+) to line (\d+) of "([^"]+)" believing it reads "([^"]*)" with "(.*)"$/, async (w, a, b, p, shown, text) => {
     await post(w, "/api/write", { path: p, from: Number(a), to: Number(b), expect: shown, text });
   });
+  steps.when(/^the client adds the task "([^"]*)" due "([^"]*)" to "([^"]+)"$/, async (w, text, due, p) => {
+    await before(w, p);
+    await post(w, "/api/task/add", { path: p, text, due });
+  });
   steps.when(/^the client creates the note "([^"]+)"$/, async (w, p) => {
     await before(w, "area/health.md");
     await post(w, "/api/new", { path: p });
