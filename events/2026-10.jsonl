@@ -111,3 +111,5 @@
 {"actor":"external:orchestrator","at":"2026-10-07T23:38:46.061892092Z","from":"open","task":"mu-rkrz","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-07T23:38:46.150811964Z","from":"open","task":"mu-xng2","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-07T23:38:46.202631965Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-10-07T23:42:35.597741260Z","from":"open","task":"mu-sf7r","to":"planned"}
+{"actor":"external:orchestrator","at":"2026-10-07T23:42:40.008974492Z","queue":"reprioritized"}

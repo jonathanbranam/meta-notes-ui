@@ -4,7 +4,7 @@ title = "Task statuses from the UI: reopen, rescheduled, canceled, partial"
 kind = "feature"
 state = "planned"
 created_at = "2026-10-07T23:26:53.796Z"
-updated_at = "2026-10-07T23:38:45.883950866Z"
+updated_at = "2026-10-07T23:42:47.083250530Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"
@@ -26,3 +26,8 @@ Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses
 - Rule human-server: never touch port 7480 or the meta-notes-ui unit; test with `npm run dev:example` or port 0.
 - Verify: `npm run check` green once.
 - Out of scope: move, rename, archive and whole-note edit (later, per the ticket).
+
+## Thread
+
+### note · agent:statuses · 2026-10-07T23:42:47.083Z
+done in ca849af: control = a native select beside each task (Open/Done/Rescheduled/Canceled/Partial; works by touch); the box click still toggles. Server unchanged (POST /api/task already took any status char). Spec: s-8048 and s-4d43 now executable, new non-executable s-2b5e. npm run check green: 22 + 110 tests (specs 110), spec check ok, build ok. v0.8.0, README updated, main already merged.

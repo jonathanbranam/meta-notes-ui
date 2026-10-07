@@ -2,9 +2,9 @@
 id = "mu-sf7r"
 title = "Always-on deploy: install sed breaks PATH, mid-build main moves are dropped"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-10-07T23:32:01.334Z"
-updated_at = "2026-10-07T23:39:35.845045543Z"
+updated_at = "2026-10-07T23:42:35.597741260Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"
