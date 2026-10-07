@@ -103,3 +103,4 @@
 {"actor":"external:orchestrator","at":"2026-10-07T23:27:29.309395652Z","from":"pending","task":"mu-abe5","to":"open"}
 {"actor":"external:orchestrator","at":"2026-10-07T23:27:29.554939711Z","from":"pending","task":"mu-rkrz","to":"open"}
 {"actor":"external:orchestrator","at":"2026-10-07T23:27:29.666351502Z","from":"pending","task":"mu-xng2","to":"open"}
+{"actor":"agent:manager-1","at":"2026-10-07T23:29:31.232297790Z","from":"planned","task":"mu-mkkt","to":"integrated"}

@@ -2,11 +2,13 @@
 id = "mu-mkkt"
 title = "Always-on server follows main by itself: no manual updates"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-07T23:13:53.401Z"
-updated_at = "2026-10-07T23:25:46.900283272Z"
+updated_at = "2026-10-07T23:29:31.237456642Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/autoupdate"
+commit = "a6b29a3"
 +++
 
 original id: mkkt
@@ -36,3 +38,12 @@ Brief amended (human via aide, m-0240): nuc.md ends with an explicit start / che
 
 ### note · external:aide · 2026-10-07T23:21:13.004Z
 From the human, via aide (2026-10-07): "I am \"ok\" but not excited about running it in another folder if that's easier for some reason, but I want that other copy to git pull and stay on latest." The decided shape meets this: the build folder is filled from main automatically on every move, with nothing pulled by hand. Keep it that way; no manual update step.
+
+### note · agent:autoupdate · 2026-10-07T23:29:16.158Z
+Done on bridle/autoupdate, 08a3259 (main merged in). npm run check: typecheck ok; vitest 22 passed (8 files, 4 new in server/deploy-update.test.ts: build+symlink+restart, no-op when main unmoved, failed build leaves current/server alone and exits non-zero, keeps 3 builds); spec check 0 errors; specs 108 passed; build ok. No version bump. Changed: deploy/update.sh, the two update units, meta-notes-ui.service (WorkingDirectory, header says four placeholders), nuc.md (install via sed loop, no clone/Update, token fix, ending start/check/phone sequence), human-server.md. systemd-analyze verify only complains about unfilled placeholders (expected). Human must verify by hand: the sed install loop output (grep step), that the first 'systemctl --user start meta-notes-ui-update' builds and the server comes up, that curl -sI on 7480 answers, and that a merge to main triggers the path unit. Untested: real npm ci; update.sh runs as the oneshot with PATH=NODE_BIN_DIR:/usr/bin (needs git, tar, bash there).
+
+### note · agent:manager-1 · 2026-10-07T23:29:31.232Z
+integrated: a6b29a3 (branch bridle/autoupdate)
+
+### note · agent:manager-1 · 2026-10-07T23:29:31.237Z
+cleanup: removed nothing
