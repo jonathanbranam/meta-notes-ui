@@ -2,9 +2,9 @@
 id = "mu-rkrz"
 title = "Edit the Time Block from the UI"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-07T23:27:22.889Z"
-updated_at = "2026-10-07T23:27:29.554939711Z"
+updated_at = "2026-10-07T23:38:46.061892092Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "M"

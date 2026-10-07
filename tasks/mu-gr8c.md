@@ -2,9 +2,9 @@
 id = "mu-gr8c"
 title = "Task statuses from the UI: reopen, rescheduled, canceled, partial"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-07T23:26:53.796Z"
-updated_at = "2026-10-07T23:27:28.861155175Z"
+updated_at = "2026-10-07T23:38:45.883950866Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"

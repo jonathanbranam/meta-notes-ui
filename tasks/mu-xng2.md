@@ -2,9 +2,9 @@
 id = "mu-xng2"
 title = "Append to and edit the Time Log from the UI"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-07T23:27:23.013Z"
-updated_at = "2026-10-07T23:27:29.666351502Z"
+updated_at = "2026-10-07T23:38:46.150811964Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "M"

@@ -2,9 +2,9 @@
 id = "mu-abe5"
 title = "Add a task to a note from the UI"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-07T23:27:22.765Z"
-updated_at = "2026-10-07T23:27:29.309395652Z"
+updated_at = "2026-10-07T23:38:45.972985679Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"
