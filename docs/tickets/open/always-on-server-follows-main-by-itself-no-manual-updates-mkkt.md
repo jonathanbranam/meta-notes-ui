@@ -62,3 +62,7 @@ failed build would break it, and bridle merges land in this checkout mid-build.
 Rejected: a manager step after merge (needs an agent near the human's server,
 against `human-server`); building in this checkout (above); a timer polling git
 (the path unit is immediate and free when idle).
+
+## Also fix in deploy/nuc.md
+
+The human hit this on 2026-10-07: `meta-notes ui url` before the first start fails with "The UI is not running: run `meta-notes ui start`". It does not create the token file, and it doesn't need to: the server's `loadToken` (server/token.ts) creates the file (mode 0600) on first start. Drop "The token file must exist before the first start" and the step that goes with it; the token is read from the file after the first start.
