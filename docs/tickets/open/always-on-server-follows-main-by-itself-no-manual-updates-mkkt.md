@@ -35,3 +35,30 @@ So "from here" means this checkout (`/srv/shared/work/meta-notes-ui-work/meta-no
 - A failed build leaves the running server as it was (build into a temp dir and swap, or restart only on success).
 - `deploy/nuc.md` and the unit template: drop the separate checkout and the Update section.
 - The human's one-time steps (linger, tailscale serve, token) stay.
+
+## Decision (orchestrator, 2026-10-07)
+
+The aide's shape, with one change: build out of tree, never in this checkout.
+Building here would let `vite build` empty `dist/` under the live server, so a
+failed build would break it, and bridle merges land in this checkout mid-build.
+
+- **Trigger**: a systemd user `meta-notes-ui-update.path` with `PathChanged=`
+  on this checkout's `.git/logs/refs/heads/main` (the reflog is appended on
+  every move of `main` and survives `git pack-refs`, unlike the loose ref).
+  It starts `meta-notes-ui-update.service` (oneshot).
+- **Update script** (`deploy/update.sh`, run by that oneshot): if `main`'s sha
+  equals the one `current` was built from, exit. Otherwise `git -C <checkout>
+  archive <sha>` into `~/.local/share/meta-notes-ui/builds/<sha>`, `npm ci &&
+  npm run build` there, then swap the `current` symlink atomically and
+  `systemctl --user restart meta-notes-ui`. On any failure: leave `current` and
+  the server alone, log to the journal, exit non-zero. Keep the last 3 builds.
+- **Server unit**: `WorkingDirectory=%h/.local/share/meta-notes-ui/current`.
+  The checkout itself stays a clean bridle checkout: no `node_modules`, no `dist`.
+- **Rule**: the restart is done by systemd, not by an agent. `human-server.md`
+  gains one line saying so; agents still never run, stop or restart either unit.
+- **deploy/nuc.md**: install is "copy three units, fill placeholders, enable
+  the server and the path unit, run the update once". No clone, no Update section.
+
+Rejected: a manager step after merge (needs an agent near the human's server,
+against `human-server`); building in this checkout (above); a timer polling git
+(the path unit is immediate and free when idle).
