@@ -3,7 +3,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
-import { isOpen, metaNotes, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
+import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 
@@ -46,6 +46,7 @@ interface EditApi {
   save: (draft: string) => void;
   cancel: () => void;
   toggleTask: (line: number, status: string) => void;
+  setStatus: (line: number, status: string) => void;
 }
 const EditCtx = createContext<EditApi | null>(null);
 
@@ -105,6 +106,10 @@ function PropView({ value, ctx }: { value: PropValue; ctx: RenderContext }) {
 
 type BlockProps = { node?: { position?: { start: { line: number }; end: { line: number } } }; children?: ReactNode } & Record<string, unknown>;
 
+/** The statuses the picker offers: the character `meta-notes task update --status` takes, and its label. */
+const STATUS_OPTIONS: [string, string][] = [[" ", "Open"], ["x", "Done"], [">", "Rescheduled"], ["-", "Canceled"], ["o", "Partial"]];
+const STATUS_CHAR: Record<string, string> = { open: " ", done: "x", moved: ">", canceled: "-", partial: "o" };
+
 /** A paragraph, list item or table: double-click opens its raw lines for editing; clicking a task's box toggles it. */
 function block(Tag: "p" | "li" | "table") {
   return function Block({ node, children, ...rest }: BlockProps) {
@@ -132,6 +137,18 @@ function block(Tag: "p" | "li" | "table") {
         }
       >
         {children}
+        {Tag === "li" && status !== undefined && (
+          <select
+            className="status-pick"
+            aria-label="Task status"
+            value={STATUS_CHAR[statusName(status)]}
+            onChange={(e) => api.setStatus(from, e.target.value)}
+          >
+            {STATUS_OPTIONS.map(([c, label]) => (
+              <option key={c} value={c}>{label}</option>
+            ))}
+          </select>
+        )}
       </Tag>
     );
   };
@@ -338,6 +355,11 @@ export function App() {
   const editApi = useMemo<EditApi>(() => {
     const lines = note ? note.text.split("\n") : [];
     const text = (from: number, to: number) => lines.slice(from - 1, to).join("\n");
+    const setTaskStatus = async (line: number, status: string) => {
+      const r = await postJson("/api/task", { path, line, expect: lines[line - 1], status });
+      if (!r.ok) setError(r.error ?? "Cannot update the task");
+      loadNote();
+    };
     return {
       lineOffset: note ? frontmatterLines(note.text) : 0,
       edit,
@@ -355,11 +377,8 @@ export function App() {
           setEdit({ ...edit, expect: current, current, error: undefined });
         } else setEdit({ ...edit, error: r.error ?? "Save failed" });
       },
-      toggleTask: async (line, status) => {
-        const r = await postJson("/api/task", { path, line, expect: lines[line - 1], status: isOpen(status) ? "x" : " " });
-        if (!r.ok) setError(r.error ?? "Cannot update the task");
-        loadNote();
-      },
+      toggleTask: (line, status) => setTaskStatus(line, isOpen(status) ? "x" : " "),
+      setStatus: (line, status) => setTaskStatus(line, status),
     };
   }, [note, edit, path, loadNote]);
 
