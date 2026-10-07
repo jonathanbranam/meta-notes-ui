@@ -8,7 +8,7 @@ changes: []
 specs: []
 needs: []
 see: [hzf9]
-tasks: [[mu-gr8c, mu-abe5, mu-rkrz, mu-xng2]]
+tasks: [mu-gr8c, mu-abe5, mu-rkrz, mu-xng2]
 ---
 
 ## The ask
