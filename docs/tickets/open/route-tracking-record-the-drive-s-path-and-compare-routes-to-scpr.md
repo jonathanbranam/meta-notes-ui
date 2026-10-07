@@ -28,3 +28,7 @@ From the human, via advisor (notes project, message m-0097, 2026-10-06), verbati
 - Where the path data lives (the notes root or the app's own store).
 
 Pending: idea only, no task until the human approves it.
+
+## The human's answer
+
+From the human, via aide, 2026-10-07, verbatim: "scpr can wait, yes." On hold; no task.

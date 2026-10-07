@@ -26,3 +26,9 @@ Context from the advisor: today's drive was 8:43-8:56 with a detour; the taps wo
 - Each tap writes a Time Log entry through the CLI (`meta-notes time-log append`), so the trip's duration is recorded.
 
 Pending: idea only, no task until the human approves it.
+
+## The human's answer
+
+From the human, via aide, 2026-10-07, verbatim: "ma6v - yes where would the button live? I need to probably look at the UI first before approving a design."
+
+Yes to the idea; the design (where the button lives, how it appears near leaving time) is not approved. The human wants to see the UI first, once the always-on server (mkkt) is up. Builds after gr8c's Time Log edits.

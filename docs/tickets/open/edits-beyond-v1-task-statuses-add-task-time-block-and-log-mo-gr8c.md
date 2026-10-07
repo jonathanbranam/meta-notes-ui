@@ -20,3 +20,7 @@ Not in the v1 order (v1 edits were task check-off and raw block edit); the propo
 - Move, rename, archive. Orchestrator: later; Vim and agents cover it.
 - Edit a whole note as raw markdown (note write over all lines). Orchestrator: later; block edit covers most.
 The spec (design/specs/edits.md) already holds these as non-executable requirements.
+
+## The human's answer
+
+From the human, via aide, 2026-10-07, verbatim: "gr8c yes". Asked against the aide's framing: yes to task statuses, add task, and Time Block / Time Log edits (in that order); move/rename/archive and whole-note edit stay later.
