@@ -13,6 +13,8 @@ tasks: []
 
 ## The ask
 
+The always-on server's install guide and updater work as written: the guide's install loop yields a working PATH, and every move of `main` ends up built and served.
+
 ## The bug
 
 Two faults in the always-on deploy merged with mu-mkkt (a6b29a3):
