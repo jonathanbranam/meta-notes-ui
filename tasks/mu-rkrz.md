@@ -1,22 +1,22 @@
 +++
-id = "mu-gr8c"
-title = "Task statuses from the UI: reopen, rescheduled, canceled, partial"
+id = "mu-rkrz"
+title = "Edit the Time Block from the UI"
 kind = "feature"
 state = "open"
-created_at = "2026-10-07T23:26:53.796Z"
-updated_at = "2026-10-07T23:27:28.861155175Z"
+created_at = "2026-10-07T23:27:22.889Z"
+updated_at = "2026-10-07T23:27:29.554939711Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
-size = "S"
+size = "M"
 +++
 
 original id: gr8c
 
-Task statuses from the UI (gr8c part 1 of 4).
+Edit the Time Block from the UI (gr8c part 3 of 4).
 
-Goal: the human can reopen a done task (click its box) and set rescheduled, canceled or partial on a task, through `meta-notes task update --status <s> --expect <line>`. Scenarios r-67eb s-8048 (reopen) and s-4d43 (other statuses). A small control per task (e.g. a long-press or a small menu next to the checkbox) offers the statuses; pick something simple and say what you chose. Check `meta-notes conventions` for the status characters and which statuses the CLI accepts.
+Goal: in the Today view and the daily note, the human can edit a Time Block row's Plan or Actual cell through `meta-notes time-block update <path> --time <t> --plan|--actual <text>` (with `--create` where the CLI needs it) and replace a range of rows through `time-block replace ... --expect`. Scenario s-6f86, Time Block half. Tapping a cell opens it for editing; saving runs the command. Read `meta-notes time-block --help` and the shipped daily template for the table shape.
 
-Model: Sonnet (small, but UI plus spec steps). Size: s.
+Model: Sonnet. Size: m.
 
 Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses-add-task-time-block-and-log-mo-gr8c.md; approved, the human via aide 2026-10-07: "gr8c yes"):
 - Every write is a `meta-notes ... --json` command with `--expect` (rule writes-through-the-cli), run through `runMetaNotes` in server/edits.ts; a stale write is a 409 with the current text, shown beside the kept draft (r-3e6d), CLI errors inline (r-3c48). Reuse the existing conflict and error handling; don't build a second one.

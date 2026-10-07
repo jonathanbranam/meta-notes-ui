@@ -1,22 +1,24 @@
 +++
-id = "mu-gr8c"
-title = "Task statuses from the UI: reopen, rescheduled, canceled, partial"
+id = "mu-xng2"
+title = "Append to and edit the Time Log from the UI"
 kind = "feature"
 state = "open"
-created_at = "2026-10-07T23:26:53.796Z"
-updated_at = "2026-10-07T23:27:28.861155175Z"
+created_at = "2026-10-07T23:27:23.013Z"
+updated_at = "2026-10-07T23:27:29.666351502Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
-size = "S"
+size = "M"
 +++
 
 original id: gr8c
 
-Task statuses from the UI (gr8c part 1 of 4).
+Append to and edit the Time Log from the UI (gr8c part 4 of 4).
 
-Goal: the human can reopen a done task (click its box) and set rescheduled, canceled or partial on a task, through `meta-notes task update --status <s> --expect <line>`. Scenarios r-67eb s-8048 (reopen) and s-4d43 (other statuses). A small control per task (e.g. a long-press or a small menu next to the checkbox) offers the statuses; pick something simple and say what you chose. Check `meta-notes conventions` for the status characters and which statuses the CLI accepts.
+Goal: in the Today view and the daily note, the human can add a Time Log entry (`meta-notes time-log append <path> --text '- <what>' --start <HH:MM> [--prev ... --close-prev]`) and edit an entry (`time-log update --expect ... --text ...`). Scenario s-6f86, Time Log half. "Start now" should be one tap with the current time filled in, closing the previous open entry; tilde times (~HH:MM) are accepted by the CLI. Read `meta-notes time-log append --help`. Known CLI snag (meta-notes orchestrator, unconfirmed): a fresh daily note's placeholder Log entry (`- start work:` / `HH:MM`) may make `append` refuse both with and without `--first`; if you hit it, report it on this task with the exact command and error, don't work around it in the UI.
 
-Model: Sonnet (small, but UI plus spec steps). Size: s.
+This is what the trip timer (ticket ma6v) will build on, so keep the append call a small reusable client function.
+
+Model: Sonnet. Size: m.
 
 Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses-add-task-time-block-and-log-mo-gr8c.md; approved, the human via aide 2026-10-07: "gr8c yes"):
 - Every write is a `meta-notes ... --json` command with `--expect` (rule writes-through-the-cli), run through `runMetaNotes` in server/edits.ts; a stale write is a 409 with the current text, shown beside the kept draft (r-3e6d), CLI errors inline (r-3c48). Reuse the existing conflict and error handling; don't build a second one.
