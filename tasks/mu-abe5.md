@@ -2,12 +2,14 @@
 id = "mu-abe5"
 title = "Add a task to a note from the UI"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-07T23:27:22.765Z"
-updated_at = "2026-10-07T23:38:45.972985679Z"
+updated_at = "2026-10-07T23:48:47.989286761Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"
+branch = "bridle/addtask"
+commit = "bdc5b01"
 +++
 
 original id: gr8c
@@ -26,3 +28,14 @@ Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses
 - Rule human-server: never touch port 7480 or the meta-notes-ui unit; test with `npm run dev:example` or port 0.
 - Verify: `npm run check` green once.
 - Out of scope: move, rename, archive and whole-note edit (later, per the ticket).
+
+## Thread
+
+### note · agent:addtask · 2026-10-07T23:48:33.620Z
+done aceea02 (v0.9.0): POST /api/task/add -> meta-notes task add [--due]; AddTask form (text + native date input + Add) under each note and under Today (adds to today's daily note). No --expect: the CLI takes it only with --under. Check: 24 unit + 112 spec tests pass, spec check ok, build ok. Specs s-4f99 and new s-3a0a executable, s-6d5e UI non-executable.
+
+### note · agent:manager-1 · 2026-10-07T23:48:47.985Z
+integrated: bdc5b01 (branch bridle/addtask)
+
+### note · agent:manager-1 · 2026-10-07T23:48:47.989Z
+cleanup: removed nothing
