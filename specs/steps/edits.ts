@@ -50,6 +50,10 @@ export function editsSteps(steps: Steps) {
     await before(w, p);
     await post(w, "/api/task", { path: p, line: Number(n), expect: shown, status: "x" });
   });
+  steps.when(/^the client sets line (\d+) of "([^"]+)" as it shows it to status "(.)"$/, async (w, n, p, status) => {
+    await before(w, p);
+    await post(w, "/api/task", { path: p, line: Number(n), expect: await lineOf(w, p, Number(n)), status });
+  });
   steps.when(/^the client writes lines (\d+) to (\d+) of "([^"]+)" as it shows them with "(.*)"$/, async (w, a, b, p, text) => {
     await before(w, p);
     const shown = (await read(w, p)).split("\n").slice(Number(a) - 1, Number(b)).join("\n");

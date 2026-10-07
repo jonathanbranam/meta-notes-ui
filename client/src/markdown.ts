@@ -182,7 +182,7 @@ function taskItem(item: Node, ctx: RenderContext): void {
   };
 }
 
-function statusName(s: string): string {
+export function statusName(s: string): string {
   if ("xX".includes(s)) return "done";
   if (s === ">") return "moved";
   if (s === "-") return "canceled";

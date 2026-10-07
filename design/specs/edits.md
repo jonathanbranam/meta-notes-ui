@@ -34,17 +34,31 @@ recurring task gets its next line.
 
 #### Scenario: Reopening a done task  {#s-8048}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** the human clicks the box of a done task
-- **THEN** the task is open again
+- **WHEN** the client sets line 9 of "area/health.md" as it shows it to status "x"
+- **AND** the client sets line 9 of "area/health.md" as it shows it to status " "
+- **THEN** the edit succeeds
+- **AND** the note "area/health.md" holds a line starting "- [ ] Call the dentist"
 
 #### Scenario: Other statuses from the UI  {#s-4d43}
 
+*Verification*: **executable**
+
+- **WHEN** the client sets line 9 of "area/health.md" as it shows it to status ">"
+- **THEN** the edit succeeds
+- **AND** the note "area/health.md" holds a line starting "- [>] Call the dentist"
+- **WHEN** the client sets line 7 of "area/health.md" as it shows it to status "-"
+- **THEN** the note "area/health.md" holds a line starting "- [-] Annual checkup"
+- **WHEN** the client sets line 8 of "area/health.md" as it shows it to status "o"
+- **THEN** the note "area/health.md" holds a line starting "- [o] Stretch"
+
+#### Scenario: Picking a status  {#s-2b5e}
+
 *Verification*: **non-executable**
 
-- **WHEN** the human picks rescheduled, canceled or partial for a task
-- **THEN** the task takes that status, as the CLI allows
+- **WHEN** the human picks open, done, rescheduled, canceled or partial from the select beside a task, or clicks its box
+- **THEN** the task takes that status; the select is a native control, so it works by touch
 
 ### Requirement: A block is edited as raw markdown  {#r-f2df}
 

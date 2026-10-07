@@ -59,6 +59,7 @@ main { overflow: auto; padding: 1rem 1.5rem; }
 .task-item.status-partial::before { content: "◐"; }
 .task-item.status-done > p, .task-item.status-canceled > p { opacity: .6; }
 .task-item.status-canceled > p { text-decoration: line-through; }
+.status-pick { margin-left: .5rem; min-height: 2rem; font-size: .8em; color: #666; border: 1px solid #ddd; border-radius: 6px; background: #fff; }
 .chip { font-size: .8em; padding: 0 .4em; border-radius: 999px; background: #e8eaee; white-space: nowrap; }
 .chip.overdue { background: #fde2e0; color: #c0392b; font-weight: 600; }
 .task-item.overdue { color: #c0392b; }
