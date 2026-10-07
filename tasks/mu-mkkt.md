@@ -4,7 +4,7 @@ title = "Always-on server follows main by itself: no manual updates"
 kind = "feature"
 state = "open"
 created_at = "2026-10-07T23:13:53.401Z"
-updated_at = "2026-10-07T23:15:22.649283341Z"
+updated_at = "2026-10-07T23:20:10.377961012Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 +++
@@ -26,3 +26,10 @@ Verify: a small test (vitest or a shell test run by `npm test`/`npm run check`, 
 Out of scope: installing or starting any unit on this machine (rule human-server: never touch the `meta-notes-ui` unit, its port 7480 or its processes); rollback commands; notifications on failure beyond the journal.
 
 Model: Sonnet (systemd units and a failure path).
+
+Added (the human, via aide, 2026-10-07: "how do i start the actual server? I don't see that in the setup", then "I'll wait for mkkt if that will fix it."): deploy/nuc.md must end with an explicit, copy-pasteable sequence: start it (enable --now the server and the path unit, run the update once), check it is running (`systemctl --user status meta-notes-ui`, a `curl -sI http://127.0.0.1:7480/` expecting a response, where the update logs are), then get the phone URL with the token (`meta-notes ui url` in the notes root, with the Tailscale origin swapped in). Written for the human to follow top to bottom without guessing.
+
+## Thread
+
+### note · external:orchestrator · 2026-10-07T23:20:10.377Z
+Brief amended (human via aide, m-0240): nuc.md ends with an explicit start / check-running / phone-URL sequence. Quote is in the brief.
