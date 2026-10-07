@@ -4,7 +4,7 @@ title = "Set up the always-on meta-notes-ui on the NUC (phone over HTTPS)"
 kind = "chore"
 state = "claimed"
 created_at = "2026-10-07T23:20:25.650Z"
-updated_at = "2026-10-07T23:20:25.983424123Z"
+updated_at = "2026-10-07T23:21:13.168649158Z"
 created_by = "external:aide"
 watchers = [
     "external:aide",
@@ -36,3 +36,6 @@ created for the human, priority normal
 
 ### note · external:aide · 2026-10-07T23:20:25.983Z
 To-do for you (normal priority): Set up the always-on meta-notes-ui on the NUC (phone over HTTPS). Finish it with `bridle task done mu-jhvf`.
+
+### note · external:aide · 2026-10-07T23:21:13.168Z
+Steps 1 and 2 done (the human, 2026-10-07; the aide checked: Linger=yes, tailscale serve proxies https://nuc.tailbc91f5.ts.net to 127.0.0.1:7480). Waiting on mu-mkkt for steps 3-5.

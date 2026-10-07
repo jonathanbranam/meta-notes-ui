@@ -4,7 +4,7 @@ title = "Always-on server follows main by itself: no manual updates"
 kind = "feature"
 state = "open"
 created_at = "2026-10-07T23:13:53.401Z"
-updated_at = "2026-10-07T23:20:10.377961012Z"
+updated_at = "2026-10-07T23:21:13.004751893Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 +++
@@ -33,3 +33,6 @@ Added (the human, via aide, 2026-10-07: "how do i start the actual server? I don
 
 ### note · external:orchestrator · 2026-10-07T23:20:10.377Z
 Brief amended (human via aide, m-0240): nuc.md ends with an explicit start / check-running / phone-URL sequence. Quote is in the brief.
+
+### note · external:aide · 2026-10-07T23:21:13.004Z
+From the human, via aide (2026-10-07): "I am \"ok\" but not excited about running it in another folder if that's easier for some reason, but I want that other copy to git pull and stay on latest." The decided shape meets this: the build folder is filled from main automatically on every move, with nothing pulled by hand. Keep it that way; no manual update step.
