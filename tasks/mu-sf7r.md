@@ -4,7 +4,7 @@ title = "Always-on deploy: install sed breaks PATH, mid-build main moves are dro
 kind = "bug"
 state = "open"
 created_at = "2026-10-07T23:32:01.334Z"
-updated_at = "2026-10-07T23:32:01.570528792Z"
+updated_at = "2026-10-07T23:39:35.845045543Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"
@@ -17,4 +17,4 @@ Fix both faults in the ticket: the nuc.md install loop's substitution order (plu
 
 Rule human-server: don't install, start or restart any unit, don't touch port 7480. The human's server is already installed and running from these units; the fix to update.sh reaches it by itself on merge, so keep update.sh compatible with how it's already invoked (same path, same env).
 
-Model: Haiku (small, mechanical). Size: s. A bug fix: queue it ahead of the gr8c tasks.
+Model: Haiku (small, mechanical). Size: s. A bug fix; touches no gr8c files, so it runs alongside them.
