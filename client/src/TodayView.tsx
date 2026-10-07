@@ -1,3 +1,4 @@
+import { AddTask } from "./AddTask";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "./today";
@@ -142,6 +143,7 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
           </a>
         </p>
       )}
+      {data.daily && <AddTask path={data.daily.path} />}
 
       <h3>Due and overdue</h3>
       {data.tasks.length === 0 ? (

@@ -206,10 +206,27 @@ through the CLI with `--expect`.
 
 #### Scenario: Add a task  {#s-4f99}
 
+*Verification*: **executable**
+
+- **WHEN** the client adds the task "Book flights" due "2026-11-01" to "area/health.md"
+- **THEN** the edit succeeds
+- **AND** the note "area/health.md" holds "Book flights"
+- **AND** the note "area/health.md" holds "2026-11-01"
+
+#### Scenario: Adding an empty task  {#s-3a0a}
+
+*Verification*: **executable**
+
+- **WHEN** the client adds the task "" due "" to "area/health.md"
+- **THEN** the edit is refused as a bad request
+- **AND** the note "area/health.md" is unchanged
+
+#### Scenario: The add-task form  {#s-6d5e}
+
 *Verification*: **non-executable**
 
-- **WHEN** the human adds a task to a note
-- **THEN** the UI runs the meta-notes task add command
+- **WHEN** the human fills the text field and optional date under a note, or under the Today view (which adds to today's daily note), and taps Add
+- **THEN** the task is added at the end of that note and a CLI error shows inline
 
 #### Scenario: Move, rename and archive  {#s-8abc}
 

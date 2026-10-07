@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.8.0, v1 in development.
+Status: v0.9.0, v1 in development.
 
 ## How it fits
 
@@ -88,6 +88,9 @@ a file itself. Routes (token required, `.md` paths inside the root only):
 - `POST /api/task` `{path, line, expect, status}`: `task update`. Click a
   task's box to check it off or reopen it (a recurring task spawns its next line).
   The select beside each task sets open, done, rescheduled (`>`), canceled (`-`) or partial (`o`).
+- `POST /api/task/add` `{path, text, due?}`: `task add` (appended at the end of the note;
+  the CLI takes `--expect` only with `--under`, which the UI doesn't use). A text field and
+  date under each note, and under the Today view for today's daily note.
 - `POST /api/write` `{path, from, to, expect, text}`: `note write --lines`.
   Double-click a paragraph, list item or table to edit its raw lines. If the
   lines changed meanwhile the save is refused (409 with `current`); the

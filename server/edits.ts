@@ -61,6 +61,16 @@ export function editRoutes(app: Hono, root: string): void {
     return reply(c, await runMetaNotes(root, ["task", "update", `${rel}:${b.line}`, `--expect=${b.expect}`, `--status=${b.status}`]));
   });
 
+  // Add a task at the end of a note. body: {path, text, due?}. The CLI takes --expect only with --under, which the UI does not use.
+  app.post("/api/task/add", async (c) => {
+    const b = await c.req.json().catch(() => ({}));
+    const rel = await notePath(root, b.path, true);
+    const text = isStr(b.text) ? b.text.trim() : "";
+    const due = b.due === undefined || b.due === "" ? null : b.due;
+    if (!rel || !text || text.includes("\n") || (due !== null && !(isStr(due) && /^\d{4}-\d{2}-\d{2}$/.test(due)))) return c.json({ ok: false, error: "bad request" }, 400);
+    return reply(c, await runMetaNotes(root, ["task", "add", rel, text, ...(due ? [`--due=${due}`] : [])]));
+  });
+
   // Replace lines from..to with text. body: {path, from, to, expect, text}
   app.post("/api/write", async (c) => {
     const b = await c.req.json().catch(() => ({}));
