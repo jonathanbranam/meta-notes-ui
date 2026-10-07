@@ -2,12 +2,14 @@
 id = "mu-gr8c"
 title = "Task statuses from the UI: reopen, rescheduled, canceled, partial"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-07T23:26:53.796Z"
-updated_at = "2026-10-07T23:42:47.083250530Z"
+updated_at = "2026-10-07T23:43:17.519859835Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "S"
+branch = "bridle/statuses"
+commit = "6db5b1d"
 +++
 
 original id: gr8c
@@ -31,3 +33,9 @@ Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses
 
 ### note · agent:statuses · 2026-10-07T23:42:47.083Z
 done in ca849af: control = a native select beside each task (Open/Done/Rescheduled/Canceled/Partial; works by touch); the box click still toggles. Server unchanged (POST /api/task already took any status char). Spec: s-8048 and s-4d43 now executable, new non-executable s-2b5e. npm run check green: 22 + 110 tests (specs 110), spec check ok, build ok. v0.8.0, README updated, main already merged.
+
+### note · agent:manager-1 · 2026-10-07T23:43:17.515Z
+integrated: 6db5b1d (branch bridle/statuses)
+
+### note · agent:manager-1 · 2026-10-07T23:43:17.519Z
+cleanup: removed nothing

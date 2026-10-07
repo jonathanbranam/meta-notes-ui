@@ -113,3 +113,4 @@
 {"actor":"external:orchestrator","at":"2026-10-07T23:38:46.202631965Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-10-07T23:42:35.597741260Z","from":"open","task":"mu-sf7r","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-07T23:42:40.008974492Z","queue":"reprioritized"}
+{"actor":"agent:manager-1","at":"2026-10-07T23:43:17.515689046Z","from":"planned","task":"mu-gr8c","to":"integrated"}
