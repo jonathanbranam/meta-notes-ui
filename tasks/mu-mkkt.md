@@ -2,9 +2,9 @@
 id = "mu-mkkt"
 title = "Always-on server follows main by itself: no manual updates"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-07T23:13:53.401Z"
-updated_at = "2026-10-07T23:21:13.004751893Z"
+updated_at = "2026-10-07T23:25:46.900283272Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 +++

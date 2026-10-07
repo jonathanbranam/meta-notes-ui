@@ -51,3 +51,6 @@ tasks = [
 
 [[tier]]
 tasks = ["mu-n8w6"]
+
+[[tier]]
+tasks = ["mu-mkkt"]
