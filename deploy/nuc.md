@@ -31,14 +31,15 @@ mkdir -p ~/.config/systemd/user
 NODE=$(command -v node)
 MN=$(command -v meta-notes)
 for u in meta-notes-ui.service meta-notes-ui-update.service meta-notes-ui-update.path; do
-  sed -e "s|CHECKOUT|$PWD|g" \
-      -e "s|NOTES|/srv/shared/work/notes-work/notes|g" \
+  sed -e "s|META_NOTES_BIN_DIR|$(dirname "$MN")|g" \
       -e "s|NODE_BIN_DIR|$(dirname "$NODE")|g" \
-      -e "s|META_NOTES_BIN_DIR|$(dirname "$MN")|g" \
+      -e "s|CHECKOUT|$PWD|g" \
+      -e "s|NOTES|/srv/shared/work/notes-work/notes|g" \
       -e "s|^ExecStart=NODE |ExecStart=$NODE |" \
       deploy/$u > ~/.config/systemd/user/$u
 done
 grep -n -E 'CHECKOUT|NOTES|NODE|META_NOTES' ~/.config/systemd/user/meta-notes-ui*   # only comments may match
+grep -F "PATH=$(dirname "$MN")" ~/.config/systemd/user/meta-notes-ui.service          # must print the PATH line with the meta-notes dir
 systemctl --user daemon-reload
 ```
 
