@@ -1,38 +1,45 @@
 # Always-on meta-notes-ui on the NUC
 
 One server, port **7480**, bound to 127.0.0.1, serving the notes root
-`/srv/shared/work/notes-work/notes`, run by a systemd user unit from its own
-checkout. The phone reaches it over HTTPS through `tailscale serve`. Agents
+`/srv/shared/work/notes-work/notes`, run by a systemd user unit from a build of `main`
+that updates itself. The phone reaches it over HTTPS through `tailscale serve`. Agents
 never touch it (`.bridle/rules/human-server.md`).
 
 ## Install
 
+The server runs from `~/.local/share/meta-notes-ui/current`, a build of this
+repo's `main` made out of tree by `deploy/update.sh`. A path unit watches the
+checkout's `main` and rebuilds and restarts the server by itself whenever it
+moves, so there is no update step. A failed build leaves the running server
+alone. The checkout is `/srv/shared/work/meta-notes-ui-work/meta-notes-ui`.
+
+Three units are installed: `meta-notes-ui.service` (the server),
+`meta-notes-ui-update.service` (the build) and `meta-notes-ui-update.path`
+(the trigger). Replace the placeholders in each, from the checkout:
+
+- `CHECKOUT`: `/srv/shared/work/meta-notes-ui-work/meta-notes-ui`
+- `NOTES`: `/srv/shared/work/notes-work/notes`
+- `NODE`: `command -v node`; `NODE_BIN_DIR`: its directory (npm is there too)
+- `META_NOTES_BIN_DIR`: the directory of `command -v meta-notes`
+
+The unit's `PATH` is minimal, and the server runs `meta-notes` for edits, the
+daily note, today and tag aliases; without it on `PATH` they fail with ENOENT.
+
 ```sh
-git clone <repo url> ~/apps/meta-notes-ui
-cd ~/apps/meta-notes-ui
-git checkout v<latest release tag>
-npm ci && npm run build
-```
-
-The token file must exist before the first start. `meta-notes ui url` (run
-in the notes root) creates it, mode 0600, if missing, or create it yourself.
-
-Review `deploy/meta-notes-ui.service`, replace `CHECKOUT`, `NODE`, `NOTES`,
-`NODE_BIN_DIR` and `META_NOTES_BIN_DIR`, and copy it. `META_NOTES_BIN_DIR` is
-the directory of `command -v meta-notes`, `NODE_BIN_DIR` that of `command -v
-node`. The unit's `PATH` is minimal, and the server runs `meta-notes` for
-edits, the daily note, today and tag aliases; without it on `PATH` they fail
-with ENOENT.
-
-```sh
+cd /srv/shared/work/meta-notes-ui-work/meta-notes-ui
 mkdir -p ~/.config/systemd/user
-cp deploy/meta-notes-ui.service ~/.config/systemd/user/
-# edit the placeholders, then:
+NODE=$(command -v node)
+MN=$(command -v meta-notes)
+for u in meta-notes-ui.service meta-notes-ui-update.service meta-notes-ui-update.path; do
+  sed -e "s|CHECKOUT|$PWD|g" \
+      -e "s|NOTES|/srv/shared/work/notes-work/notes|g" \
+      -e "s|NODE_BIN_DIR|$(dirname "$NODE")|g" \
+      -e "s|META_NOTES_BIN_DIR|$(dirname "$MN")|g" \
+      -e "s|^ExecStart=NODE |ExecStart=$NODE |" \
+      deploy/$u > ~/.config/systemd/user/$u
+done
+grep -n -E 'CHECKOUT|NOTES|NODE|META_NOTES' ~/.config/systemd/user/meta-notes-ui*   # only comments may match
 systemctl --user daemon-reload
-systemctl --user enable --now meta-notes-ui
-systemctl --user status meta-notes-ui
-systemctl --user show -p Environment meta-notes-ui   # PATH must list both dirs
-journalctl --user -u meta-notes-ui | grep ENOENT       # nothing expected
 ```
 
 ## One-time steps (need sudo)
@@ -45,24 +52,16 @@ tailscale serve --bg --https=443 http://127.0.0.1:7480
 
 The phone URL is then `https://nuc.<tailnet>.ts.net/`.
 
-## Update
-
-```sh
-cd ~/apps/meta-notes-ui
-git fetch --tags
-git checkout v<new tag>
-npm ci && npm run build
-systemctl --user restart meta-notes-ui
-```
-
 ## Token and phone
 
 In the notes root, `meta-notes ui url` prints `<server.json url>?token=<token>`.
 The server records its own address, `http://127.0.0.1:7480`, so for the phone
 replace that origin with the Tailscale one:
 `https://nuc.<tailnet>.ts.net/?token=<token>`. Open it once; the server
-trades the token for a cookie. The token is kept in
-`<notes>/.meta-notes-cache/ui/token`.
+trades the token for a cookie. The server creates the token file
+(`<notes>/.meta-notes-cache/ui/token`, mode 0600) on its first start; run
+`meta-notes ui url` only after that, since before it the command fails with
+"The UI is not running".
 
 HTTPS: `tailscale serve` terminates TLS and forwards plain HTTP. The server
 sets no `Secure` flag on the cookie, which browsers still keep and send on an
@@ -82,3 +81,31 @@ status`, `url` and `open` work against the unit's server.
   `Restart=on-failure` leaves it stopped. Use `systemctl --user stop|restart
   meta-notes-ui` instead.
 - Logs: `journalctl --user -u meta-notes-ui`.
+
+## Start it, check it, open it on the phone
+
+Do the install and the one-time steps above first, then top to bottom:
+
+```sh
+# 1. Start: enable the server and the path unit, then build main once.
+systemctl --user enable --now meta-notes-ui-update.path
+systemctl --user enable meta-notes-ui
+systemctl --user start meta-notes-ui-update    # builds main, then starts the server
+
+# 2. Check it is running.
+journalctl --user -u meta-notes-ui-update -n 30   # "built <sha>" and no errors
+systemctl --user status meta-notes-ui             # active (running)
+curl -sI http://127.0.0.1:7480/                   # an HTTP response (401 without the token is fine)
+
+# 3. Phone URL.
+cd /srv/shared/work/notes-work/notes
+meta-notes ui url
+```
+
+`start meta-notes-ui-update` takes a minute (`npm ci` and the build); the
+server comes up when it ends. Step 3 prints
+`http://127.0.0.1:7480/?token=<token>`: swap the origin for
+`https://nuc.<tailnet>.ts.net` and open that once on the phone.
+
+Update logs: `journalctl --user -u meta-notes-ui-update`. Server logs:
+`journalctl --user -u meta-notes-ui`.

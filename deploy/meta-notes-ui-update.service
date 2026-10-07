@@ -1,0 +1,12 @@
+# systemd USER oneshot, started by meta-notes-ui-update.path (and once by hand
+# at install). See deploy/nuc.md. Copy to ~/.config/systemd/user/ and replace
+# the placeholders below (update.sh's CHECKOUT defaults to the same path; git, tar and bash are in /usr/bin).
+#   CHECKOUT     = /srv/shared/work/meta-notes-ui-work/meta-notes-ui
+#   NODE_BIN_DIR = the directory of `command -v node` (npm lives there too)
+[Unit]
+Description=Build main of meta-notes-ui and restart the server
+
+[Service]
+Type=oneshot
+Environment=PATH=NODE_BIN_DIR:/usr/local/bin:/usr/bin:/bin
+ExecStart=CHECKOUT/deploy/update.sh
