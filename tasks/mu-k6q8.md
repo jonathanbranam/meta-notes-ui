@@ -2,13 +2,15 @@
 id = "mu-k6q8"
 title = "Login with expiring, revocable sessions instead of the shared token"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-08T01:51:06.814Z"
-updated_at = "2026-10-08T03:33:02.739408443Z"
+updated_at = "2026-10-08T03:33:15.975017160Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 priority = "low"
 priority_at = "2026-10-08T01:51:06.975097736Z"
+branch = "bridle/login"
+commit = "974612c"
 +++
 
 original id: k6q8
@@ -39,3 +41,9 @@ login: plan - server/login.ts (scrypt login file, hashed-id sessions.json), serv
 
 ### note · agent:login · 2026-10-08T03:33:02.739Z
 done 7a30a45 (v0.13.0). Check: 36 unit + 134 spec tests pass, build ok. Notes: login/sessions use a server-rendered /login form (no client page needed); /?token= in login mode redirects to /login; Bearer dropped with the token path (only tests used it). Server notices a new login file by stat, no restart. Always-on server NOT switched; steps in deploy/nuc.md. No CHANGELOG file exists.
+
+### note · agent:manager-1 · 2026-10-08T03:33:15.969Z
+integrated: 974612c (branch bridle/login)
+
+### note · agent:manager-1 · 2026-10-08T03:33:15.975Z
+cleanup: removed nothing
