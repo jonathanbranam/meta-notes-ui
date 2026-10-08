@@ -71,9 +71,10 @@ the PWA need nothing else from the server.
 
 ## Optional: a login instead of the token
 
-The human's step (agents never do it): in the checkout, after the build,
-`bin/meta-notes-ui create-login <username> --root /srv/shared/work/notes-work/notes`
-(prompts for the password). The running server notices the new file by itself, no restart:
+The human's step (agents never do it): run the CLI from the deployed build (the
+always-on deploy builds out of tree, so the checkout has no `dist/`):
+`~/.local/share/meta-notes-ui/current/bin/meta-notes-ui create-login <username> --root /srv/shared/work/notes-work/notes`
+(prompts for the password; `--help` prints usage). The running server notices the new file by itself, no restart:
 the token URL and cookie stop working, and every device logs in at `/` (redirects to
 `/login`) with the password; the session lasts 30 days unused. Run the command again to change
 the password and log every device out. To go back to the token, delete

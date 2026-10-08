@@ -58,7 +58,15 @@ export async function promptHidden(label: string): Promise<string> {
 
 /** `create-login <username> [<password>]`; returns the exit status. */
 export async function runCli(argv: string[], cwd: string = process.cwd()): Promise<number> {
-  const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: { root: { type: "string" } } });
+  const { values, positionals } = parseArgs({
+    args: argv,
+    allowPositionals: true,
+    options: { root: { type: "string" }, help: { type: "boolean", short: "h" } },
+  });
+  if (values.help) {
+    console.log(CLI_USAGE);
+    return 0;
+  }
   const [cmd, username, given] = positionals;
   if (cmd !== "create-login" || !username || positionals.length > 3) {
     console.error(CLI_USAGE);

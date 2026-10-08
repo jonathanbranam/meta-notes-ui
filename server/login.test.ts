@@ -1,8 +1,8 @@
 import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
-import { findRoot, runCli } from "./cli.js";
+import { describe, expect, it, vi } from "vitest";
+import { CLI_USAGE, findRoot, runCli } from "./cli.js";
 import { createLogin, createLoginStore, loginFile, SESSION_MS, sessionsFile, verifyLogin } from "./login.js";
 
 const newRoot = () => mkdtemp(path.join(tmpdir(), "mnui-login-"));
@@ -71,5 +71,16 @@ describe("create-login", () => {
 
   it("refuses a missing username", async () => {
     expect(await runCli(["create-login"])).toBe(2);
+  });
+
+  it("prints usage and exits 0 for --help and -h", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    try {
+      expect(await runCli(["create-login", "--help"])).toBe(0);
+      expect(await runCli(["-h"])).toBe(0);
+      expect(log).toHaveBeenCalledWith(CLI_USAGE);
+    } finally {
+      log.mockRestore();
+    }
   });
 });
