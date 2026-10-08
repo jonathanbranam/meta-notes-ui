@@ -2,11 +2,13 @@
 id = "mu-sq42"
 title = "Phone UI: folder contrast in dark mode, top bar overflow, back/forward, bigger checkboxes"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-08T22:28:45.010Z"
-updated_at = "2026-10-08T22:30:48.062384665Z"
+updated_at = "2026-10-08T22:34:26.149620275Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/phoneui"
+commit = "8079bc4"
 +++
 
 original id: sq42
@@ -23,3 +25,14 @@ Files likely: client/src/App.tsx, client/src/style.css. Follow the project's spe
 Check: the project's check (tests, typecheck, build) green; a test or spec for the top-bar structure where the project tests UI; describe what you checked at a narrow (360px) width.
 Model: Sonnet.
 Out of scope: the version-reload and refresh button (mu-vn3k), the message button (mu-dusy). Both also touch the top bar, so they run after this.
+
+## Thread
+
+### note · agent:phoneui · 2026-10-08T22:34:10.421Z
+Done in 24b571f (v0.13.2). Not checked in a browser: no headless browser run; CSS reasoning only at 360px: header wraps, title is flex 1 1 100% with min-width 0 + ellipsis on its own row, grid children min-width 0, so no sideways growth. Back/Forward are hidden except in display-mode standalone (hash navigation, so history.back works). Dark mode: folder/file buttons #e6e6e6. Checkboxes 1.25rem. Spec r-74e7 (non-executable, no UI test harness).
+
+### note · agent:manager-1 · 2026-10-08T22:34:26.146Z
+integrated: 8079bc4 (branch bridle/phoneui)
+
+### note · agent:manager-1 · 2026-10-08T22:34:26.149Z
+cleanup: removed nothing
