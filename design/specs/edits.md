@@ -204,7 +204,7 @@ through the CLI with `--expect`.
 - **WHEN** the human edits a Time Block or Time Log row
 - **THEN** the UI runs the meta-notes time-block or time-log command
 
-(The Time Block half is requirement "A Time Block cell is edited through the CLI"; the Time Log half is not built yet.)
+(The Time Block half is requirement "A Time Block cell is edited through the CLI"; the Time Log half is requirement "A Time Log entry is added or edited through the CLI".)
 
 #### Scenario: Add a task  {#s-4f99}
 
@@ -313,3 +313,83 @@ that changed meanwhile are refused as a conflict showing the current text.
 
 - **WHEN** the human taps "Edit rows" under the Time Block in the Today view
 - **THEN** all rows open as `| time | plan | actual |` lines and saving replaces them through `time-block replace`
+
+### Requirement: A Time Log entry is added or edited through the CLI  {#r-887c}
+
+The server SHALL add an entry at the end of a note's Time Log with
+`meta-notes time-log append`, passing the last entry as the client saw it
+(`--prev`, `--prev-start`, `--prev-open`, optionally `--close-prev`) or
+`--first` for an empty log, and SHALL replace whole entries with
+`meta-notes time-log update`, given the entries as the client saw them as
+`--expect`. A log that changed meanwhile is refused as a conflict showing the
+current entry. A start time may be approximate (`~HH:MM`).
+
+#### Scenario: Starting an entry and closing the open one  {#s-5d4c}
+
+*Verification*: **executable**
+
+- **WHEN** the client appends the log entry "- emails" starting "09:00" after the open "- start work:" starting "08:30", closing it
+- **THEN** the edit succeeds
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "- emails"
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "end:   09:00"
+
+#### Scenario: An approximate start  {#s-1f93}
+
+*Verification*: **executable**
+
+- **WHEN** the client appends the log entry "- walk" starting "~09:15" after the open "- start work:" starting "08:30", leaving it open
+- **THEN** the edit succeeds
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "~09:15"
+
+#### Scenario: The log moved on  {#s-dd0b}
+
+*Verification*: **executable**
+
+- **WHEN** the client appends the log entry "- emails" starting "09:00" after the open "- something else:" starting "08:30", closing it
+- **THEN** the edit is refused as a conflict showing "start work"
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" is unchanged
+
+#### Scenario: The log is not empty  {#s-b7bd}
+
+*Verification*: **executable**
+
+- **WHEN** the client appends the first log entry "- emails" starting "09:00"
+- **THEN** the edit is refused as a conflict showing "start work"
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" is unchanged
+
+#### Scenario: A malformed entry  {#s-5b39}
+
+*Verification*: **executable**
+
+- **WHEN** the client appends the log entry "emails" starting "09:00" after the open "- start work:" starting "08:30", leaving it open
+- **THEN** the edit is refused as a bad request
+
+#### Scenario: Editing an entry  {#s-4c38}
+
+*Verification*: **executable**
+
+- **WHEN** the client replaces the log entries "- start work:\n  * start: 08:30\n  * end:" of "plan/daily/26-Q3/2026-10-01 Thu.md" with "- start work #x:\n  * start: 08:30\n  * end: 09:15"
+- **THEN** the edit succeeds
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "#x:"
+
+#### Scenario: A stale entry  {#s-62d8}
+
+*Verification*: **executable**
+
+- **WHEN** the client replaces the log entries "- old:\n  * start: 08:30\n  * end:" of "plan/daily/26-Q3/2026-10-01 Thu.md" with "- mine:\n  * start: 08:30"
+- **THEN** the edit is refused as a conflict showing "start work"
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" is unchanged
+
+#### Scenario: Start now  {#s-3e8f}
+
+*Verification*: **non-executable**
+
+- **WHEN** the human types what they are doing under the Time Log in the Today view or the daily note and taps "Start now"
+- **THEN** the entry is added with the current time, closing the previous entry if it is open, and a conflict or CLI error shows inline with the text kept
+
+#### Scenario: Editing an entry in the UI  {#s-4e21}
+
+*Verification*: **non-executable**
+
+- **WHEN** the human taps "Edit" on a Time Log entry
+- **THEN** its lines open in a text box; saving runs `time-log update`, and a conflict or CLI error shows beside it with the draft kept

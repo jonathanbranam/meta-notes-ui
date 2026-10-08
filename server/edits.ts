@@ -25,6 +25,9 @@ const isLine = (v: unknown): v is number => Number.isInteger(v) && (v as number)
 /** A Time Block row's time as the CLI takes it: `HH:MM` or `9:30am`. */
 const isTime = (v: unknown): v is string => isStr(v) && /^\d{1,2}:\d{2}\s*([ap]m)?$/i.test(v.trim());
 
+/** A Time Log time: `HH:MM` or `9:30am`, `~` first for approximately. */
+const isClock = (s: string) => /^~?\s*\d{1,2}:\d{2}\s*([ap]m)?$/i.test(s.trim());
+
 /** A root-relative `.md` path that is inside the root and not hidden; for notes that may not exist yet. */
 async function notePath(root: string, rel: unknown, mustExist: boolean): Promise<string | null> {
   if (!isStr(rel) || !rel.endsWith(".md")) return null;
@@ -97,6 +100,36 @@ export function editRoutes(app: Hono, root: string): void {
     const rel = await notePath(root, b.path, true);
     if (!rel || !isTime(b.time) || !isTime(b.through) || !isStr(b.expect) || !isStr(b.text) || !b.text.trim()) return c.json({ ok: false, error: "bad request" }, 400);
     return reply(c, await runMetaNotes(root, ["time-block", "replace", rel, `--time=${b.time.trim()}`, `--through=${b.through.trim()}`, `--expect=${b.expect}`, `--text=${b.text}`]));
+  });
+
+  // Append a Time Log entry. body: {path, text, start?, prev?, prevStart?, prevOpen?, closePrev?, first?}; text is the header line `- what`.
+  app.post("/api/timelog/append", async (c) => {
+    const b = await c.req.json().catch(() => ({}));
+    const rel = await notePath(root, b.path, true);
+    const opt = (v: unknown, ok: (s: string) => boolean) => v === undefined || v === "" || (isStr(v) && ok(v));
+    const oneLine = (s: string) => !s.includes("\n");
+    if (
+      !rel || !isStr(b.text) || !/^- \S/.test(b.text) || !oneLine(b.text) ||
+      !opt(b.start, isClock) || !opt(b.prevStart, isClock) || !opt(b.prev, (s) => /^- /.test(s) && oneLine(s)) ||
+      (b.closePrev && !b.prevOpen) || (b.first && (b.prev || b.prevStart || b.prevOpen))
+    )
+      return c.json({ ok: false, error: "bad request" }, 400);
+    const args = ["time-log", "append", rel, `--text=${b.text}`];
+    if (b.start) args.push(`--start=${b.start.trim()}`);
+    if (b.first) args.push("--first");
+    if (b.prev) args.push(`--prev=${b.prev}`);
+    if (b.prevStart) args.push(`--prev-start=${b.prevStart.trim()}`);
+    if (b.prevOpen) args.push("--prev-open");
+    if (b.closePrev) args.push("--close-prev");
+    return reply(c, await runMetaNotes(root, args));
+  });
+
+  // Replace whole Time Log entries. body: {path, expect, text}; expect is the entries as shown, text empty deletes them.
+  app.post("/api/timelog/update", async (c) => {
+    const b = await c.req.json().catch(() => ({}));
+    const rel = await notePath(root, b.path, true);
+    if (!rel || !isStr(b.expect) || !b.expect.trim() || !isStr(b.text)) return c.json({ ok: false, error: "bad request" }, 400);
+    return reply(c, await runMetaNotes(root, ["time-log", "update", rel, `--expect=${b.expect}`, `--text=${b.text}`]));
   });
 
   // New note from the template meta-notes picks. body: {path}

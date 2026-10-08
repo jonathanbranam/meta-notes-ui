@@ -84,6 +84,20 @@ export function editsSteps(steps: Steps) {
     await before(w, p);
     await post(w, "/api/timeblock/replace", { path: p, time, through, expect: unescape(shown), text: unescape(text) });
   });
+  const LOG = "plan/daily/26-Q3/2026-10-01 Thu.md";
+  const append = async (w: World, text: string, start: string, prev?: string, close = false) => {
+    await before(w, LOG);
+    const prevArgs = prev === undefined ? { first: true } : { prev, prevStart: "08:30", prevOpen: true, closePrev: close };
+    await post(w, "/api/timelog/append", { path: LOG, text, start, ...prevArgs });
+  };
+  steps.when(/^the client appends the log entry "([^"]*)" starting "([^"]+)" after the open "([^"]+)" starting "08:30", (closing it|leaving it open)$/, (w, text, start, prev, how) =>
+    append(w, text, start, prev, how === "closing it"),
+  );
+  steps.when(/^the client appends the first log entry "([^"]*)" starting "([^"]+)"$/, (w, text, start) => append(w, text, start));
+  steps.when(/^the client replaces the log entries "(.*)" of "([^"]+)" with "(.*)"$/, async (w, shown, p, text) => {
+    await before(w, p);
+    await post(w, "/api/timelog/update", { path: p, expect: unescape(shown), text: unescape(text) });
+  });
   steps.when(/^the client creates the note "([^"]+)"$/, async (w, p) => {
     await before(w, "area/health.md");
     await post(w, "/api/new", { path: p });

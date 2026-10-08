@@ -5,6 +5,7 @@ import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { AddTask } from "./AddTask";
+import { TimeLogPanel } from "./TimeLog";
 import { EditableCell, rowCells } from "./TimeCell";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
@@ -482,6 +483,7 @@ export function App() {
                 {embedImages(stripFrontmatter(note.text), path, filePaths)}
               </ReactMarkdown>
             </EditCtx.Provider>
+            <TimeLogPanel path={path} text={note.text} />
             <AddTask path={path} />
             {backlinks.length > 0 && (
               <section className="backlinks">
