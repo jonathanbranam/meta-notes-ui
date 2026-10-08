@@ -2,9 +2,9 @@
 id = "mu-ask3"
 title = "create-login: the nuc.md path and --help"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-10-08T03:34:14.540Z"
-updated_at = "2026-10-08T03:34:14.710063438Z"
+updated_at = "2026-10-08T03:45:05.045334335Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++

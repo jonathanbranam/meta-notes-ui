@@ -133,3 +133,5 @@
 {"actor":"external:orchestrator","at":"2026-10-08T03:34:05.144358463Z","from":"open","task":"mu-q8f8","to":"planned"}
 {"actor":"human","at":"2026-10-08T03:34:14.540Z","from":"","task":"mu-ask3","to":"pending"}
 {"actor":"external:orchestrator","at":"2026-10-08T03:34:14.710063438Z","from":"pending","task":"mu-ask3","to":"open"}
+{"actor":"external:orchestrator","at":"2026-10-08T03:45:05.045334335Z","from":"open","task":"mu-ask3","to":"planned"}
+{"actor":"external:orchestrator","at":"2026-10-08T03:45:05.153098336Z","queue":"reprioritized"}
