@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.13.0, v1 in development.
+Status: v0.14.0, v1 in development.
 
 ## How it fits
 
@@ -30,11 +30,14 @@ Needs Node and `meta-notes` on PATH.
 `meta-notes ui` starts the server with exactly this:
 
 ```bash
-node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --token-file <path>
+node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --token-file <path> [--bridle-url U --bridle-token-file F [--bridle-to T]]
 ```
 
 - `--host` defaults to `127.0.0.1` (bind a LAN or Tailscale address for the
   phone); `--port` defaults to `0` (a free port).
+- `--bridle-url`, `--bridle-token-file` (and `--bridle-to`, default `external:advisor`), all
+  or none, turn on a Message button: `POST /api/message {body}` sends the text to a bridle
+  daemon as the human (`design/specs/message.md`). `/api/version` reports `message: true|false`.
 - `--token-file` holds the secret (created, mode 0600, if missing). Every
   request needs it: open `<url>/?token=<token>` once and the server sets an
   httpOnly cookie and redirects; API clients may send `Authorization: Bearer`.

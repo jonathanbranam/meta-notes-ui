@@ -34,6 +34,7 @@ main { overflow: auto; padding: 1rem 1.5rem; }
 .hint { color: #888; }
 .overlay { position: fixed; inset: 0; background: #0006; display: flex; justify-content: center; align-items: flex-start; padding-top: 10vh; }
 .quick { background: #fff; width: min(36rem, 94vw); border-radius: 8px; padding: .5rem; max-height: 70vh; overflow: auto; }
+.quick textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .5rem; }
 .quick input { width: 100%; font: inherit; padding: .5rem; }
 .quick ul { list-style: none; margin: .5rem 0 0; padding: 0; }
 .quick li button { width: 100%; }

@@ -229,6 +229,38 @@ function Folder({ node, current, onOpen }: { node: TreeNode; current: string; on
   );
 }
 
+/** A sheet that sends one message to the notes advisor; keeps the text and shows the error on failure. */
+function MessageSheet({ onClose, onSent }: { onClose: () => void; onSent: () => void }) {
+  const [text, setText] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const send = async () => {
+    setBusy(true);
+    const r = await postJson("/api/message", { body: text });
+    setBusy(false);
+    if (r.ok) onSent();
+    else setErr(r.error ?? "Cannot send the message");
+  };
+  return (
+    <div className="overlay" onClick={onClose}>
+      <div className="quick" onClick={(e) => e.stopPropagation()}>
+        <textarea
+          autoFocus
+          rows={6}
+          placeholder="Message to the advisor"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === "Escape" && onClose()}
+        />
+        {err && <p className="error">{err}</p>}
+        <button disabled={busy || !text.trim()} onClick={send}>
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function QuickOpen({ files, onOpen, onClose }: { files: TreeNode[]; onOpen: (p: string) => void; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const hits = useMemo(() => quickOpen(files, query), [files, query]);
@@ -265,8 +297,17 @@ export function App() {
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [canMessage, setCanMessage] = useState(false);
+  const [composing, setComposing] = useState(false);
+  const [sentNote, setSentNote] = useState(false);
   useEffect(() => {
-    getJson<{ login?: boolean }>("/api/version").then((v) => setLoggedIn(v.login === true), () => {});
+    getJson<{ login?: boolean; message?: boolean }>("/api/version").then(
+      (v) => {
+        setLoggedIn(v.login === true);
+        setCanMessage(v.message === true);
+      },
+      () => {},
+    );
   }, []);
   const [quick, setQuick] = useState(false);
   const [backlinks, setBacklinks] = useState<string[]>([]);
@@ -461,6 +502,8 @@ export function App() {
         <button onClick={openDaily}>Daily</button>
         <button onClick={newNote}>New</button>
         <button onClick={() => setQuick(true)}>Open…</button>
+        {canMessage && <button onClick={() => setComposing(true)}>Message</button>}
+        {sentNote && <span className="hint">Message sent</span>}
         {loggedIn && (
           <form method="post" action="/logout">
             <button type="submit">Log out</button>
@@ -517,6 +560,16 @@ export function App() {
           !error && <p className="hint">Pick a note from the tree, or press Ctrl+K.</p>
         )}
       </main>
+      {composing && (
+        <MessageSheet
+          onClose={() => setComposing(false)}
+          onSent={() => {
+            setComposing(false);
+            setSentNote(true);
+            setTimeout(() => setSentNote(false), 3000);
+          }}
+        />
+      )}
       {quick && <QuickOpen files={files} onOpen={open} onClose={() => setQuick(false)} />}
     </div>
   );
