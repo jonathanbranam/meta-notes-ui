@@ -22,6 +22,9 @@ export function runMetaNotes(root: string, args: string[]): Promise<CliResult> {
 const isStr = (v: unknown): v is string => typeof v === "string";
 const isLine = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 1;
 
+/** A Time Block row's time as the CLI takes it: `HH:MM` or `9:30am`. */
+const isTime = (v: unknown): v is string => isStr(v) && /^\d{1,2}:\d{2}\s*([ap]m)?$/i.test(v.trim());
+
 /** A root-relative `.md` path that is inside the root and not hidden; for notes that may not exist yet. */
 async function notePath(root: string, rel: unknown, mustExist: boolean): Promise<string | null> {
   if (!isStr(rel) || !rel.endsWith(".md")) return null;
@@ -77,6 +80,23 @@ export function editRoutes(app: Hono, root: string): void {
     const rel = await notePath(root, b.path, true);
     if (!rel || !isLine(b.from) || !isLine(b.to) || b.to < b.from || !isStr(b.expect) || !isStr(b.text)) return c.json({ ok: false, error: "bad request" }, 400);
     return reply(c, await runMetaNotes(root, ["note", "write", rel, `--lines=${b.from}..${b.to}`, `--expect=${b.expect}`, `--text=${b.text}`]));
+  });
+
+  // Set one Time Block cell. body: {path, time, column: "plan"|"actual", expect, text}; expect is the cell as shown ("" for empty).
+  app.post("/api/timeblock", async (c) => {
+    const b = await c.req.json().catch(() => ({}));
+    const rel = await notePath(root, b.path, true);
+    if (!rel || !isTime(b.time) || (b.column !== "plan" && b.column !== "actual") || !isStr(b.expect) || !isStr(b.text) || b.text.includes("\n") || b.text.includes("|"))
+      return c.json({ ok: false, error: "bad request" }, 400);
+    return reply(c, await runMetaNotes(root, ["time-block", "update", rel, `--time=${b.time.trim()}`, `--${b.column}=${b.text}`, `--expect=${b.expect}`]));
+  });
+
+  // Replace the rows from..through. body: {path, time, through, expect, text}; expect and text are `| time | plan | actual |` lines.
+  app.post("/api/timeblock/replace", async (c) => {
+    const b = await c.req.json().catch(() => ({}));
+    const rel = await notePath(root, b.path, true);
+    if (!rel || !isTime(b.time) || !isTime(b.through) || !isStr(b.expect) || !isStr(b.text) || !b.text.trim()) return c.json({ ok: false, error: "bad request" }, 400);
+    return reply(c, await runMetaNotes(root, ["time-block", "replace", rel, `--time=${b.time.trim()}`, `--through=${b.through.trim()}`, `--expect=${b.expect}`, `--text=${b.text}`]));
   });
 
   // New note from the template meta-notes picks. body: {path}

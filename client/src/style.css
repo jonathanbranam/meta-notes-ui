@@ -90,3 +90,10 @@ main { overflow: auto; padding: 1rem 1.5rem; }
 .add-task input { font: inherit; min-height: 2.5rem; padding: 0 .5rem; }
 .add-task input:first-child { flex: 1 1 14rem; }
 .add-task button { min-height: 2.5rem; }
+
+.timeblock td.editable { cursor: pointer; min-height: 2.5rem; }
+.timeblock td.editable .empty { display: inline-block; min-width: 3rem; min-height: 2rem; }
+.cell-editor { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; font-style: normal; font-weight: normal; }
+.cell-editor input { flex: 1 1 10rem; min-height: 2.5rem; font: inherit; box-sizing: border-box; }
+.cell-editor button { min-height: 2.5rem; }
+.cell-editor .conflict { flex-basis: 100%; white-space: pre-wrap; background: rgba(192, 57, 43, .12); padding: .4rem; }

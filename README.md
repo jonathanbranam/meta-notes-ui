@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.9.0, v1 in development.
+Status: v0.10.0, v1 in development.
 
 ## How it fits
 
@@ -95,6 +95,12 @@ a file itself. Routes (token required, `.md` paths inside the root only):
   Double-click a paragraph, list item or table to edit its raw lines. If the
   lines changed meanwhile the save is refused (409 with `current`); the
   editor keeps your draft, shows the current text and offers "Save over it".
+- `POST /api/timeblock` `{path, time, column, expect, text}`: `time-block update`
+  for one Plan or Actual cell (`expect` is the cell as shown, `""` if empty). Tap a cell in a
+  note's Time Block or in the Today view to edit it; a stale cell is a 409 with the current text.
+- `POST /api/timeblock/replace` `{path, time, through, expect, text}`: `time-block replace`
+  for a range of rows (`| time | plan | actual |` lines). "Edit rows" under the Today view's
+  Time Block opens all rows in a text box.
 - `POST /api/new` `{path}`: `note new`, from the template meta-notes picks
   (the **New** button asks for a path; an existing note is refused).
 

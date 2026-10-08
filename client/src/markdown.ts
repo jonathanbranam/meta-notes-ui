@@ -139,6 +139,8 @@ function timeBlock(table: Node, ctx: RenderContext): void {
     if (/^no plan$/i.test(plain(r.children?.[1] ?? { type: "text" }).trim())) cls.push("noplan");
     if (i === current) cls.push("now");
     if (cls.length) r.data = { hProperties: { className: cls.join(" ") } };
+    // Plan and Actual cells say which they are, so the client can make them editable.
+    (r.children ?? []).slice(1, 3).forEach((cell, j) => (cell.data = { hProperties: { "data-col": j === 0 ? "plan" : "actual" } }));
   });
   table.data = { hProperties: { className: "timeblock" } };
 }

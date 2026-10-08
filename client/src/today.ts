@@ -6,6 +6,10 @@ export interface BlockRow {
   minutes: number;
   /** The Plan cell, as written. */
   plan: string;
+  /** The time and Actual cells, as written, and the whole row line. */
+  time: string;
+  actual: string;
+  line: string;
 }
 
 export interface Alert {
@@ -26,9 +30,9 @@ export function parseTimeBlock(text: string): BlockRow[] {
   for (const line of lines.slice(start + 1)) {
     if (/^#/.test(line)) break;
     if (!line.trim().startsWith("|")) continue;
-    const [time, plan = ""] = cells(line);
+    const [time, plan = "", actual = ""] = cells(line);
     const minutes = parseClock(time ?? "");
-    if (minutes !== null) rows.push({ minutes, plan });
+    if (minutes !== null) rows.push({ minutes, plan, time, actual, line });
   }
   return rows;
 }

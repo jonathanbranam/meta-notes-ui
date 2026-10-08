@@ -70,6 +70,20 @@ export function editsSteps(steps: Steps) {
     await before(w, p);
     await post(w, "/api/task/add", { path: p, text, due });
   });
+  steps.when(/^the client sets the (plan|actual) of the "([^"]+)" row of "([^"]+)" to "([^"]*)", seeing it as "([^"]*)"$/, async (w, column, time, p, text, shown) => {
+    await before(w, p);
+    await post(w, "/api/timeblock", { path: p, time, column, expect: shown, text });
+  });
+  steps.when(/^the client replaces the rows "([^"]+)" to "([^"]+)" of "([^"]+)" as it shows them with "(.*)"$/, async (w, time, through, p, text) => {
+    await before(w, p);
+    const rows = (await read(w, p)).split("\n").filter((l) => /^\|\s*\d/.test(l));
+    const shown = rows.map((l) => l.replace(/\s+/g, " ").replace(/ \|$/, " |")).slice(0, 2).join("\n");
+    await post(w, "/api/timeblock/replace", { path: p, time, through, expect: shown, text: unescape(text) });
+  });
+  steps.when(/^the client replaces the rows "([^"]+)" to "([^"]+)" of "([^"]+)" believing they read "(.*)" with "(.*)"$/, async (w, time, through, p, shown, text) => {
+    await before(w, p);
+    await post(w, "/api/timeblock/replace", { path: p, time, through, expect: unescape(shown), text: unescape(text) });
+  });
   steps.when(/^the client creates the note "([^"]+)"$/, async (w, p) => {
     await before(w, "area/health.md");
     await post(w, "/api/new", { path: p });
