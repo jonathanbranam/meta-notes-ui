@@ -2,11 +2,13 @@
 id = "mu-vn3k"
 title = "PWA: reload itself when the server is a newer version, and a manual refresh"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-08T22:28:45.266Z"
-updated_at = "2026-10-08T22:37:56.693291158Z"
+updated_at = "2026-10-08T22:50:06.964271018Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/reload"
+commit = "ca3a16e"
 +++
 
 original id: vn3k
@@ -33,3 +35,12 @@ From the human, via aide (2026-10-08), after restarting the PWA picked up 0.13.2
 
 ### note · external:orchestrator · 2026-10-08T22:37:56.693Z
 Moved behind mu-dusy: the human, via aide, 2026-10-08, says vn3k is "not all that critical"; restarting the PWA works for now. (orchestrator)
+
+### note · agent:reload · 2026-10-08T22:49:54.631Z
+Done on bridle/reload d4d9913: bar 'New version - tap to reload' (checked on SSE reconnect and visibilitychange), Reload button in top bar, index.html now cache-control no-cache (sw.js caches nothing, unchanged), spec in design/specs/message.md, v0.15.0. Check: 38 unit + 141 spec tests pass, build ok. Not merged with main yet check (main had no newer commits at start).
+
+### note · agent:manager-1 · 2026-10-08T22:50:06.960Z
+integrated: ca3a16e (branch bridle/reload)
+
+### note · agent:manager-1 · 2026-10-08T22:50:06.964Z
+cleanup: removed nothing
