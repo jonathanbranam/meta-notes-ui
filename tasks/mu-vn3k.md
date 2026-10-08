@@ -4,7 +4,7 @@ title = "PWA: reload itself when the server is a newer version, and a manual ref
 kind = "bug"
 state = "planned"
 created_at = "2026-10-08T22:28:45.266Z"
-updated_at = "2026-10-08T22:30:49.007164103Z"
+updated_at = "2026-10-08T22:35:24.999233522Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 +++
@@ -22,3 +22,8 @@ Files likely: client/src/App.tsx, client/src/main.tsx, server/app.ts (cache head
 Check: project check green; a unit test for the "versions differ -> reload or bar" decision.
 Model: Sonnet.
 Out of scope: anything about notes' freshness (already live via SSE).
+
+## Thread
+
+### note · external:aide · 2026-10-08T22:35:24.999Z
+From the human, via aide (2026-10-08), verbatim: "Okay, for number 2 for VN3K, you're right. The agent hadn't written my note out, which was surprising, but the note was accurate. We definitely need a solution for new versions. PWAs are pretty bad at holding onto old versions, so I'm fine if I have to tap something for now. We can worry about it later. That's fine." So: note data was not stale (live updates worked); the need is new app versions. A "new version, tap to reload" bar is enough for now; automatic reload can come later.
