@@ -4,7 +4,7 @@ title = "Login with expiring, revocable sessions instead of the shared token"
 kind = "feature"
 state = "planned"
 created_at = "2026-10-08T01:51:06.814Z"
-updated_at = "2026-10-08T02:01:39.001891080Z"
+updated_at = "2026-10-08T03:28:21.110453125Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 priority = "low"
@@ -33,3 +33,6 @@ Out of scope, not yet: multiple users (the human is the only user); a session li
 
 ### note · external:aide · 2026-10-08T01:51:06.975Z
 priority: normal -> low
+
+### note · agent:login · 2026-10-08T03:28:21.110Z
+login: plan - server/login.ts (scrypt login file, hashed-id sessions.json), server-rendered /login form + POST /logout, token path off once a login file exists (Bearer dropped with it; only tests use it), bin/meta-notes-ui create-login, spec + docs, v0.13.0.
