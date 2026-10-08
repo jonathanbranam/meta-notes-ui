@@ -10,9 +10,9 @@ watchers = ["external:orchestrator"]
 size = "S"
 branch = "bridle/statuses"
 commit = "6db5b1d"
+ticket = "gr8c"
 +++
 
-original id: gr8c
 
 Task statuses from the UI (gr8c part 1 of 4).
 

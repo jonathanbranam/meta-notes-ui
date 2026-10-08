@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/timelog"
 commit = "df5f90d"
+ticket = "fxcp"
 +++
 
-original id: fxcp
 docs/tickets/open/render-the-time-log-and-nested-frontmatter-fxcp.md
 
 ## Thread

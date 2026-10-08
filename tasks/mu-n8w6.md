@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/aliases"
 commit = "f442179"
+ticket = "n8w6"
 +++
 
-original id: n8w6
 docs/tickets/open/fold-tag-aliases-from-meta-notes-conventions-json-n8w6.md
 
 ## Thread

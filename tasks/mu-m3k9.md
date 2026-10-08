@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/live-fix"
 commit = "7424243"
+ticket = "m3k9"
 +++
 
-original id: m3k9
 docs/tickets/open/live-updates-stale-phone-after-sleep-folders-moved-in-open-e-m3k9.md
 
 ## Thread

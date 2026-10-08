@@ -10,9 +10,9 @@ watchers = ["external:orchestrator"]
 size = "S"
 branch = "bridle/deployfix"
 commit = "497cf1e"
+ticket = "sf7r"
 +++
 
-original id: sf7r
 docs/tickets/open/always-on-deploy-install-sed-breaks-path-mid-build-main-move-sf7r.md
 
 Fix both faults in the ticket: the nuc.md install loop's substitution order (plus a PATH check line), and update.sh rebuilding when main moved during a build. Files: deploy/nuc.md, deploy/update.sh, the three deploy/*.service|.path templates only if you rename placeholders, server/deploy-update.test.ts. Tests as the ticket says. `npm run check` green once.

@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/edits"
 commit = "a548475"
+ticket = "eqqv"
 +++
 
-original id: eqqv
 docs/tickets/open/v1-3-edits-through-the-cli-task-check-off-and-raw-markdown-e-eqqv.md
 
 ## Thread

@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/startserver"
 commit = "0f8980e"
+ticket = "49zd"
 +++
 
-original id: 49zd
 docs/tickets/open/split-startserver-out-of-server-index-ts-so-start-scenarios-49zd.md
 
 ## Thread

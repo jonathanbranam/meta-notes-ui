@@ -10,9 +10,9 @@ watchers = ["external:orchestrator"]
 size = "S"
 branch = "bridle/addtask"
 commit = "bdc5b01"
+ticket = "gr8c"
 +++
 
-original id: gr8c
 
 Add a task to a note from the UI (gr8c part 2 of 4).
 

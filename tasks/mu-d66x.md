@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/example"
 commit = "97e0b13"
+ticket = "d66x"
 +++
 
-original id: d66x
 docs/tickets/open/example-notes-root-as-test-data-and-agent-test-servers-on-th-d66x.md
 
 ## Thread

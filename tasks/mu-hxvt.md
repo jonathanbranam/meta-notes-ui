@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/agenda"
 commit = "857dcf5"
+ticket = "hxvt"
 +++
 
-original id: hxvt
 docs/tickets/open/make-the-today-agenda-scenario-executable-hxvt.md
 
 ## Thread

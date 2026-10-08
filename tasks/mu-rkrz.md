@@ -10,9 +10,9 @@ watchers = ["external:orchestrator"]
 size = "M"
 branch = "bridle/timeblock"
 commit = "56a43d3"
+ticket = "gr8c"
 +++
 
-original id: gr8c
 
 Edit the Time Block from the UI (gr8c part 3 of 4).
 

@@ -9,9 +9,9 @@ created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/links"
 commit = "68992b6"
+ticket = "t7k8"
 +++
 
-original id: t7k8
 
 Today view: wiki links and URLs in due tasks and Time Block plans are clickable (ticket docs/tickets/open/today-view-wiki-links-and-urls-in-tasks-and-time-block-plans-t7k8.md).
 

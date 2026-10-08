@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/today-fix"
 commit = "2bbb670"
+ticket = "jxnw"
 +++
 
-original id: jxnw
 docs/tickets/open/today-view-must-not-create-today-s-daily-note-jxnw.md
 
 ## Thread

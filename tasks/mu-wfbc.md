@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/rendering"
 commit = "c71c580"
+ticket = "wfbc"
 +++
 
-original id: wfbc
 docs/tickets/open/v1-2-meta-notes-rendering-wiki-links-frontmatter-tags-tasks-wfbc.md
 
 ## Thread

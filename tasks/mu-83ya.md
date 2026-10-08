@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/skeleton"
 commit = "9f3e8b7"
+ticket = "83ya"
 +++
 
-original id: 83ya
 docs/tickets/open/v1-1-skeleton-server-token-file-tree-rendered-notes-live-upd-83ya.md
 
 ## Thread

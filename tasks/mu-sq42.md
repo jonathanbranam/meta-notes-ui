@@ -9,9 +9,9 @@ created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/phoneui"
 commit = "8079bc4"
+ticket = "sq42"
 +++
 
-original id: sq42
 docs/tickets/open/phone-ui-folder-contrast-in-dark-mode-top-bar-overflow-back-sq42.md
 
 Goal: the human uses the always-on UI as a PWA on the phone; fix the four things in the ticket (the human's words are there).

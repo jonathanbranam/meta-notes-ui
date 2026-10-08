@@ -9,9 +9,9 @@ created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/reload"
 commit = "ca3a16e"
+ticket = "vn3k"
 +++
 
-original id: vn3k
 docs/tickets/open/pwa-reload-itself-when-the-server-is-a-newer-version-and-a-m-vn3k.md
 
 Goal: an open PWA never runs stale JavaScript after the always-on server rebuilds and restarts.

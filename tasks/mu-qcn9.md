@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/allfiles"
 commit = "dc45078"
+ticket = "qcn9"
 +++
 
-original id: qcn9
 docs/tickets/open/serve-and-list-every-file-in-the-notes-root-not-only-markdow-qcn9.md
 
 ## Thread

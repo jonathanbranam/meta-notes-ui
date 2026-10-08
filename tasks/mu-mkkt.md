@@ -9,9 +9,9 @@ created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/autoupdate"
 commit = "a6b29a3"
+ticket = "mkkt"
 +++
 
-original id: mkkt
 docs/tickets/open/always-on-server-follows-main-by-itself-no-manual-updates-mkkt.md
 
 Goal: the human's always-on server serves the latest `main` with no manual update step. The ticket's "Decision" section is the design; follow it.

@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/spec-access"
 commit = "3a3fecf"
+ticket = "hzf9"
 +++
 
-original id: hzf9
 docs/tickets/open/specs-for-all-of-v1-from-the-human-s-description-driving-the-hzf9.md
 
 ## Thread

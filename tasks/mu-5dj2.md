@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/watcher"
 commit = "a5bb1df"
+ticket = "5dj2"
 +++
 
-original id: 5dj2
 docs/tickets/open/watcher-don-t-watch-git-venv-and-other-hidden-trees-on-linux-5dj2.md
 
 ## Thread

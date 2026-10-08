@@ -9,9 +9,9 @@ created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/render-fix"
 commit = "7298627"
+ticket = "ruun"
 +++
 
-original id: ruun
 docs/tickets/open/render-checklist-items-heading-links-and-tag-aliases-as-meta-ruun.md
 
 ## Thread

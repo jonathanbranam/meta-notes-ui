@@ -11,9 +11,9 @@ priority = "low"
 priority_at = "2026-10-08T01:51:06.975097736Z"
 branch = "bridle/login"
 commit = "974612c"
+ticket = "k6q8"
 +++
 
-original id: k6q8
 
 Login with expiring, revocable sessions instead of the shared token (ticket docs/tickets/open/login-*-k6q8.md; read it, including "The human's answer").
 

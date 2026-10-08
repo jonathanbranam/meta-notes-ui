@@ -10,9 +10,9 @@ watchers = ["external:orchestrator"]
 size = "M"
 branch = "bridle/timelog"
 commit = "ff4c141"
+ticket = "gr8c"
 +++
 
-original id: gr8c
 
 Append to and edit the Time Log from the UI (gr8c part 4 of 4).
 

@@ -9,9 +9,9 @@ created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/message"
 commit = "a81a857"
+ticket = "dusy"
 +++
 
-original id: dusy
 docs/tickets/open/send-a-message-to-the-notes-advisor-from-the-ui-as-the-human-dusy.md
 
 Goal: a button in the UI sends a message, as the human, to the notes project's advisor. Send only.
