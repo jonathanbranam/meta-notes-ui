@@ -2,12 +2,14 @@
 id = "mu-xng2"
 title = "Append to and edit the Time Log from the UI"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-07T23:27:23.013Z"
-updated_at = "2026-10-08T01:51:44.162358662Z"
+updated_at = "2026-10-08T01:52:07.208625232Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "M"
+branch = "bridle/timelog"
+commit = "ff4c141"
 +++
 
 original id: gr8c
@@ -33,3 +35,9 @@ Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses
 
 ### note · agent:timelog · 2026-10-08T01:51:44.162Z
 Done e1f49d3 (v0.11.0). Routes POST /api/timelog/append and /update; TimeLogPanel (Start now, per-entry Edit) in Today view and any note with ### Log; appendTimeLog() in client/src/timelog.ts is the reusable call. CLI notes: (1) no placeholder snag seen on the fixture note; append with --prev/--close-prev and --first-on-nonempty (409 with current) work. (2) time-log update rejects an empty '* end:' line in --text ('invalid end'), though --expect must include it; the UI drops an empty end line from the replacement (dropEmptyEnd). Suggest meta-notes accept an empty end in update. Check: typecheck, 27 unit tests, 126 spec tests, build green.
+
+### note · agent:manager-1 · 2026-10-08T01:52:07.205Z
+integrated: ff4c141 (branch bridle/timelog)
+
+### note · agent:manager-1 · 2026-10-08T01:52:07.208Z
+cleanup: removed nothing
