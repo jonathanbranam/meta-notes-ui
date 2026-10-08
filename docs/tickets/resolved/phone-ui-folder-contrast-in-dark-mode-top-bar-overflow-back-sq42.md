@@ -9,6 +9,7 @@ specs: []
 needs: []
 see: []
 tasks: [mu-sq42]
+closed: 2026-10-08T22:50:28Z
 ---
 
 ## The ask
