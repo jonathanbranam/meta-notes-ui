@@ -2,11 +2,13 @@
 id = "mu-dusy"
 title = "Send a message to the notes advisor from the UI, as the human"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-08T22:28:45.144Z"
-updated_at = "2026-10-08T22:30:49.562903309Z"
+updated_at = "2026-10-08T22:45:37.004158152Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/message"
+commit = "a81a857"
 +++
 
 original id: dusy
@@ -25,3 +27,14 @@ The daemon's message API is in the bridle repo (/srv/shared/work/bridle-work/bri
 Check: project check green; server tests with a fake daemon (a local HTTP listener) for success, daemon error, missing flags (no route / message:false), and empty body. Do not send a real message to the live notes daemon.
 Model: Sonnet.
 Out of scope: replies, chat, choosing recipients.
+
+## Thread
+
+### note · agent:message · 2026-10-08T22:45:22.603Z
+Built per the ticket design: server flags (all or none), POST /api/message, message:bool in /api/version, top-bar Message sheet, spec design/specs/message.md (7 executable scenarios, fake daemon on port 0, temp token file), deploy/nuc.md + unit + README. Check: server 37 tests, specs 141 (7 new), build ok. Two existing tests updated for the new version field and unit ExecStart.
+
+### note · agent:manager-1 · 2026-10-08T22:45:37.000Z
+integrated: a81a857 (branch bridle/message)
+
+### note · agent:manager-1 · 2026-10-08T22:45:37.004Z
+cleanup: removed nothing
