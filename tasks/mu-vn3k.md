@@ -4,7 +4,7 @@ title = "PWA: reload itself when the server is a newer version, and a manual ref
 kind = "bug"
 state = "planned"
 created_at = "2026-10-08T22:28:45.266Z"
-updated_at = "2026-10-08T22:35:24.999233522Z"
+updated_at = "2026-10-08T22:37:56.693291158Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 +++
@@ -27,3 +27,9 @@ Out of scope: anything about notes' freshness (already live via SSE).
 
 ### note · external:aide · 2026-10-08T22:35:24.999Z
 From the human, via aide (2026-10-08), verbatim: "Okay, for number 2 for VN3K, you're right. The agent hadn't written my note out, which was surprising, but the note was accurate. We definitely need a solution for new versions. PWAs are pretty bad at holding onto old versions, so I'm fine if I have to tap something for now. We can worry about it later. That's fine." So: note data was not stale (live updates worked); the need is new app versions. A "new version, tap to reload" bar is enough for now; automatic reload can come later.
+
+### note · external:aide · 2026-10-08T22:37:38.032Z
+From the human, via aide (2026-10-08), after restarting the PWA picked up 0.13.2: "Okay, if restarting the PWA actually works, which it looks like it does, then I'm okay with that for now. This isn't all that critical, but thanks." Not critical: restarting the app is an acceptable workaround meanwhile.
+
+### note · external:orchestrator · 2026-10-08T22:37:56.693Z
+Moved behind mu-dusy: the human, via aide, 2026-10-08, says vn3k is "not all that critical"; restarting the PWA works for now. (orchestrator)
