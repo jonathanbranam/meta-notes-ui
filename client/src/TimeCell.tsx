@@ -58,7 +58,7 @@ export function CellEditor({ path, time, column, text, onClose }: { path: string
 export function EditableCell({ path, time, column, text, children }: { path: string; time: string; column: "plan" | "actual"; text: string; children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <td className="editable" onClick={() => setOpen(true)} onDoubleClick={(e) => e.stopPropagation()}>
+    <td className="editable" onClick={(e) => (e.target instanceof Element && e.target.closest("a") ? undefined : setOpen(true))} onDoubleClick={(e) => e.stopPropagation()}>
       {open ? <CellEditor path={path} time={time} column={column} text={text} onClose={() => setOpen(false)} /> : (children ?? "") || <span className="empty">&nbsp;</span>}
     </td>
   );

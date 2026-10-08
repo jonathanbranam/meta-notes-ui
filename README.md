@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.11.0, v1 in development.
+Status: v0.12.0, v1 in development.
 
 ## How it fits
 

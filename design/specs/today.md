@@ -130,6 +130,21 @@ when a plan starts, not one per quarter hour).
 Gap: alerts fire only from timers in an open page; the human asked for a
 bridge that sends pushes, alerts and alarms to the device.
 
+### Requirement: Links in Today view text are clickable  {#r-6275}
+
+The Today view SHALL show `[[wiki links]]` and bare http(s) URLs in due task
+text and in Time Block Plan and Actual cells as links.
+
+#### Scenario: Links in tasks and plan cells  {#s-84bc}
+
+*Verification*: **non-executable**
+
+- **WHEN** a due task or a Plan cell holds a wiki link, a missing wiki link and a URL
+- **THEN** the wiki link opens its note in the app
+- **AND** the missing one shows in the "wikilink missing" style
+- **AND** the URL opens in a new tab
+- **AND** tapping a link in a Plan cell opens the link and does not start editing
+
 ### Requirement: The app installs as a PWA  {#r-4e99}
 
 The server SHALL serve the manifest, the service worker and the icons, and

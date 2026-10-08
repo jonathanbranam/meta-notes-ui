@@ -3,6 +3,7 @@ import { TimeLogPanel } from "./TimeLog";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { EditableCell, RowsEditor } from "./TimeCell";
+import { inlineSegments, type RenderContext } from "./markdown";
 import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "./today";
 
 export const TODAY_PATH = "!today";
@@ -99,7 +100,26 @@ export function FiredAlerts({ fired, dismiss, snooze }: Pick<ReturnType<typeof u
   );
 }
 
-export function TodayView({ today, now, open }: { today: ReturnType<typeof useToday>; now: Date; open: (p: string) => void }) {
+/** One line of text with its wiki links and URLs as links; a wiki link opens its note in the app. */
+export function Inline({ text, ctx, open }: { text: string; ctx: RenderContext; open: (p: string) => void }) {
+  return (
+    <>
+      {inlineSegments(text, ctx).map((s, i) =>
+        s.url ? (
+          <a key={i} href={s.url} target="_blank" rel="noopener noreferrer">{s.text}</a>
+        ) : s.href ? (
+          <a key={i} href={s.href} className="wikilink" onClick={() => open(decodeURIComponent(s.href!.slice(1).split("#")[0]))}>{s.text}</a>
+        ) : s.missing ? (
+          <span key={i} className="wikilink missing" title="No such note">{s.text}</span>
+        ) : (
+          s.text
+        ),
+      )}
+    </>
+  );
+}
+
+export function TodayView({ today, now, open, files }: { today: ReturnType<typeof useToday>; now: Date; open: (p: string) => void; files: ReadonlySet<string> }) {
   const { data, error } = today;
   const [editRows, setEditRows] = useState(false);
   const [perm, setPerm] = useState(() => (typeof Notification === "undefined" ? "unsupported" : Notification.permission));
@@ -110,6 +130,7 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
   const nowMin = now.getHours() * 60 + now.getMinutes();
   const next = rows.findIndex((r, i) => i > cur && r.minutes > nowMin && r.plan.trim() !== "" && !/^no plan$/i.test(r.plan.trim()));
   const day = isoDay(now);
+  const ctxFor = (path: string): RenderContext => ({ path, files, today: day, nowMinutes: nowMin });
   return (
     <article className="note today">
       <h2>Today, {day}</h2>
@@ -132,8 +153,8 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
             {rows.map((r, i) => (
               <tr key={r.minutes} className={[i === cur ? "now" : "", /^no plan$/i.test(r.plan.trim()) ? "noplan" : "", i === next ? "next" : ""].join(" ").trim()}>
                 <td>{hm(r.minutes)}</td>
-                <EditableCell path={data.daily!.path} time={r.time} column="plan" text={r.plan}>{r.plan}</EditableCell>
-                <EditableCell path={data.daily!.path} time={r.time} column="actual" text={r.actual}>{r.actual}</EditableCell>
+                <EditableCell path={data.daily!.path} time={r.time} column="plan" text={r.plan}><Inline text={r.plan} ctx={ctxFor(data.daily!.path)} open={open} /></EditableCell>
+                <EditableCell path={data.daily!.path} time={r.time} column="actual" text={r.actual}><Inline text={r.actual} ctx={ctxFor(data.daily!.path)} open={open} /></EditableCell>
               </tr>
             ))}
           </tbody>
@@ -162,7 +183,7 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
         <ul className="duetasks">
           {data.tasks.map((t) => (
             <li key={`${t.file}:${t.line}`} className={t.due && t.due < day ? "overdue" : ""}>
-              {t.text.replace(/^\s*- \[.\]\s*/, "")} <a href={`#${encodeURIComponent(t.file).replace(/%2F/g, "/")}`} onClick={() => open(t.file)}>{t.file.replace(/\.md$/, "")}</a>
+              <Inline text={t.text.replace(/^\s*- \[.\]\s*/, "")} ctx={ctxFor(t.file)} open={open} /> <a href={`#${encodeURIComponent(t.file).replace(/%2F/g, "/")}`} onClick={() => open(t.file)}>{t.file.replace(/\.md$/, "")}</a>
             </li>
           ))}
         </ul>
