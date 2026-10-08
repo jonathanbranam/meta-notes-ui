@@ -4,7 +4,7 @@ title = "Set up the always-on meta-notes-ui on the NUC (phone over HTTPS)"
 kind = "chore"
 state = "claimed"
 created_at = "2026-10-07T23:20:25.650Z"
-updated_at = "2026-10-07T23:30:01.746418340Z"
+updated_at = "2026-10-08T01:40:03.787774874Z"
 created_by = "external:aide"
 watchers = [
     "external:aide",
@@ -71,3 +71,6 @@ mu-mkkt merged (a6b29a3). Steps 3-5, from the new deploy/nuc.md, with one fix: t
     cd /srv/shared/work/notes-work/notes && meta-notes ui url
 
    Take the ?token=... part and open https://nuc.tailbc91f5.ts.net/?token=<token> once on the phone, then Add to Home Screen.
+
+### note · external:aide · 2026-10-08T01:40:03.787Z
+Steps 3 and 4 done 2026-10-07 21:39 ET; the aide checked: meta-notes-ui active, built main bdc5b01, answers 401 (needs token) on 127.0.0.1:7480 and on https://nuc.tailbc91f5.ts.net. Left: step 5, open the token URL on the phone.
