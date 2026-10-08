@@ -9,12 +9,26 @@ import type { BacklinksResponse, ChangeEvent, NoteResponse, TagAliasesResponse }
 import { createBacklinks } from "./backlinks.js";
 import { editRoutes, runMetaNotes } from "./edits.js";
 import { confine, PathError } from "./paths.js";
+import { createLoginStore, SESSION_MS, verifyLogin, type LoginStore } from "./login.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
 import { todayRoutes } from "./today.js";
 
 const exec = promisify(execFile);
 export const COOKIE = "mn_ui_token";
+export const SESSION_COOKIE = "mn_ui_session";
+
+const loginPage = (error: string) => `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>meta-notes login</title>
+<style>body{font:16px system-ui,sans-serif;max-width:20rem;margin:20vh auto;padding:0 1rem}
+input,button{display:block;width:100%;box-sizing:border-box;margin:.5rem 0;padding:.6rem;font:inherit}
+.error{color:#b00020}</style></head><body>
+<h1>meta-notes</h1>${error ? `<p class="error">${error}</p>` : ""}
+<form method="post" action="/login">
+<input name="username" autocomplete="username" placeholder="Username" autofocus required>
+<input name="password" type="password" autocomplete="current-password" placeholder="Password" required>
+<button type="submit">Log in</button></form></body></html>`;
 
 export interface AppOptions {
   /** Real path of the notes root. */
@@ -23,6 +37,8 @@ export interface AppOptions {
   version: string;
   /** Static client build; omitted in tests. */
   clientDir?: string;
+  /** Wait this long (ms) after a failed login; default 1000. */
+  failDelayMs?: number;
   /** Subscribe to change batches; returns an unsubscribe function. */
   subscribe: (fn: (events: ChangeEvent[]) => void) => () => void;
 }
@@ -64,14 +80,50 @@ const SCRIPTABLE = new Set([".html", ".htm", ".svg"]);
 export function createApp(opts: AppOptions): Hono {
   const { root, token } = opts;
   const app = new Hono();
+  const logins: LoginStore = createLoginStore(root);
+  const failDelay = opts.failDelayMs ?? 1000;
   const backlinks = createBacklinks(root);
 
   // Tag aliases come from the CLI, read lazily and kept while .meta-notes is unchanged. A failure is not kept.
   let aliases: { mtime: number; value: Promise<TagAliasesResponse> } | null = null;
 
-  // Token on every request: cookie, or `Authorization: Bearer`. `GET /?token=` trades it for the cookie.
+  // With no login file: the token on every request (cookie, or `Authorization: Bearer`; `GET /?token=`
+  // trades it for the cookie). Once a login file exists the token stops working and a session cookie
+  // from /login is needed instead.
   app.use("*", async (c, next) => {
     const url = new URL(c.req.url);
+    const login = await logins.current();
+    if (login) {
+      const secure = url.protocol === "https:" || c.req.header("x-forwarded-proto") === "https";
+      if (url.pathname === "/login" && c.req.method === "GET") return c.html(loginPage(""));
+      if (url.pathname === "/login" && c.req.method === "POST") {
+        const form = await c.req.parseBody().catch(() => ({}) as Record<string, unknown>);
+        const user = typeof form.username === "string" ? form.username : "";
+        const pass = typeof form.password === "string" ? form.password : "";
+        if (!(await verifyLogin(login, user, pass))) {
+          await new Promise((r) => setTimeout(r, failDelay));
+          return c.html(loginPage("Wrong username or password."), 401);
+        }
+        setCookie(c, SESSION_COOKIE, await logins.start(), {
+          httpOnly: true,
+          secure,
+          sameSite: "Lax",
+          path: "/",
+          maxAge: SESSION_MS / 1000,
+        });
+        return c.redirect("/", 303);
+      }
+      if (url.pathname === "/logout" && c.req.method === "POST") {
+        await logins.revoke(getCookie(c, SESSION_COOKIE));
+        deleteCookie(c, SESSION_COOKIE, { path: "/" });
+        return c.redirect("/login", 303);
+      }
+      if (!(await logins.valid(getCookie(c, SESSION_COOKIE)))) {
+        deleteCookie(c, SESSION_COOKIE, { path: "/" });
+        return c.req.method === "GET" && url.pathname === "/" ? c.redirect("/login") : c.text("unauthorized", 401);
+      }
+      return next();
+    }
     const bearer = c.req.header("authorization")?.replace(/^Bearer /i, "");
     if (c.req.method === "GET" && url.pathname === "/" && url.searchParams.has("token")) {
       if (!tokenMatches(token, url.searchParams.get("token") ?? "")) return c.text("unauthorized", 401);
@@ -90,7 +142,7 @@ export function createApp(opts: AppOptions): Hono {
     await next();
   });
 
-  app.get("/api/version", (c) => c.json({ version: opts.version }));
+  app.get("/api/version", async (c) => c.json({ version: opts.version, login: (await logins.current()) !== null }));
 
   app.get("/api/tag-aliases", async (c) => {
     const mtime = await stat(path.join(root, ".meta-notes")).then((st) => st.mtimeMs, () => 0);

@@ -6,6 +6,7 @@ import type { Steps } from "vitest-bridle";
 import { createApp } from "../../server/app.js";
 import { makeFixtureRoot } from "../../server/fixture.js";
 import { startServer, UsageError, type RunningServer } from "../../server/start.js";
+import { createLogin, loginFile } from "../../server/login.js";
 import { loadToken } from "../../server/token.js";
 
 const TOKEN = "s3cret-token";
@@ -26,7 +27,9 @@ async function makeClientDir(): Promise<string> {
 async function appFor(world: Record<string, any>) {
   if (!world.app) {
     const { root } = await makeFixtureRoot();
+    world.root = root;
     world.app = createApp({
+      failDelayMs: 0,
       root,
       token: TOKEN,
       version: "0.0.0",
@@ -68,7 +71,7 @@ export function accessSteps(steps: Steps) {
     w.res = await app.request(url);
   });
   steps.then(/^the response redirects to "([^"]+)"$/, (w, loc) => {
-    expect(w.res.status).toBe(302);
+    expect([302, 303]).toContain(w.res.status);
     expect(w.res.headers.get("location")).toBe(loc);
   });
   steps.then(/^it sets an httpOnly cookie$/, (w) => {
@@ -94,6 +97,43 @@ export function accessSteps(steps: Steps) {
   });
   steps.then(/^loading again returns the same token$/, async (w) => {
     expect(await loadToken(w.tokenFile)).toBe(w.token);
+  });
+  steps.given(/^a login "([^"]+)" with password "([^"]+)"$/, async (w, user, pass) => {
+    await appFor(w);
+    await createLogin(w.root, user, pass);
+  });
+  steps.when(/^a client logs in as "([^"]+)" with password "([^"]+)"$/, async (w, user, pass) => {
+    const app = await appFor(w);
+    w.res = await app.request("/login", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ username: user, password: pass }),
+    });
+    const m = /mn_ui_session=([^;]+)/.exec(w.res.headers.get("set-cookie") ?? "");
+    if (m) w.session = `mn_ui_session=${m[1]}`;
+  });
+  steps.then(/^the session cookie is HttpOnly and SameSite=Lax$/, (w) => {
+    const cookie = w.res.headers.get("set-cookie") ?? "";
+    expect(cookie).toContain("HttpOnly");
+    expect(cookie).toContain("SameSite=Lax");
+  });
+  steps.then(/^it sets no session cookie$/, (w) => {
+    expect(w.res.headers.get("set-cookie") ?? "").not.toContain("mn_ui_session=");
+  });
+  steps.then(/^a request carrying only that session gets status (\d+)$/, async (w, n) => {
+    const res = await w.app.request("/api/version", { headers: { cookie: w.session } });
+    expect(res.status).toBe(Number(n));
+  });
+  steps.when(/^the client logs out$/, async (w) => {
+    w.res = await w.app.request("/logout", { method: "POST", headers: { cookie: w.session } });
+  });
+  steps.when(/^the login is set again as "([^"]+)" with password "([^"]+)"$/, (w, user, pass) =>
+    createLogin(w.root, user, pass),
+  );
+  steps.then(/^the login file is mode 0600 and does not contain "([^"]+)"$/, async (w, pass) => {
+    const file = loginFile(w.root);
+    expect((await stat(file)).mode & 0o777).toBe(0o600);
+    expect(await readFile(file, "utf8")).not.toContain(pass);
   });
   steps.then(/^the response status is (\d+)$/, (w, n) => expect(w.res.status).toBe(Number(n)));
   steps.then(/^the note is served$/, (w) => expect(w.res.status).toBe(200));

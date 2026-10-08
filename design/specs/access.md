@@ -101,6 +101,88 @@ SHALL accept it as a bearer header or a cookie set by one `?token=` visit.
 | /%2e%2e/outside.txt    |
 | /..%2foutside.txt      |
 
+### Requirement: A login replaces the token  {#r-7014}
+
+The server SHALL, while the notes root has no login file, work as the
+requirements above say. Once `<root>/.meta-notes-cache/ui/login` exists it
+SHALL refuse the token (cookie, bearer and `?token=` visit alike) and
+require a session from `/login`: a random id in an HttpOnly, SameSite=Lax
+cookie (Secure over HTTPS), kept server-side only as a hash, expiring after
+30 days unused and revocable. `meta-notes-ui create-login <username>
+[<password>]` SHALL write the login (scrypt with a random salt, never the
+password, mode 0600) and revoke every session. A failed login SHALL be
+answered after a delay.
+
+#### Scenario: Token refused once a login exists  {#s-4701}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **WHEN** a client requests "/api/tree" with the right token
+- **THEN** the response status is 401
+- **WHEN** a client visits "/?token=s3cret-token"
+- **THEN** the response redirects to "/login"
+- **AND** it sets no cookie
+
+#### Scenario: Logging in gives a session  {#s-4739}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **WHEN** a client logs in as "me" with password "pw-123"
+- **THEN** the response redirects to "/"
+- **AND** the session cookie is HttpOnly and SameSite=Lax
+- **AND** a request carrying only that session gets status 200
+
+#### Scenario: Wrong password  {#s-bd1c}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **WHEN** a client logs in as "me" with password "wrong"
+- **THEN** the response status is 401
+- **AND** it sets no session cookie
+
+#### Scenario: No session  {#s-312d}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **WHEN** a client requests "/api/tree" without a token
+- **THEN** the response status is 401
+
+#### Scenario: Logging out revokes the session  {#s-e832}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **WHEN** a client logs in as "me" with password "pw-123"
+- **AND** the client logs out
+- **THEN** a request carrying only that session gets status 401
+
+#### Scenario: Setting the login again revokes every session  {#s-59bf}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **WHEN** a client logs in as "me" with password "pw-123"
+- **AND** the login is set again as "me" with password "new-pw"
+- **THEN** a request carrying only that session gets status 401
+
+#### Scenario: The login file holds a hash  {#s-7a10}
+
+*Verification*: **executable**
+
+- **GIVEN** a login "me" with password "pw-123"
+- **THEN** the login file is mode 0600 and does not contain "pw-123"
+
+#### Scenario: The token works with no login file  {#s-4eaa}
+
+*Verification*: **executable**
+
+- **WHEN** a client requests "/api/tree" with the right token
+- **THEN** the response status is 200
+
 ### Requirement: Paths are confined to the notes root  {#r-abbc}
 
 The server SHALL serve only visible files under the notes root, never

@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+// Runs the built CLI: `bin/meta-notes-ui create-login <username> [<password>]`.
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const { runCli } = await import(path.join(path.dirname(fileURLToPath(import.meta.url)), "../dist/server/cli.js"));
+process.exitCode = await runCli(process.argv.slice(2)).catch((err) => {
+  console.error(err instanceof Error ? err.message : err);
+  return 1;
+});

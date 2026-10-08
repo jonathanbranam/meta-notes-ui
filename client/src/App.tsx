@@ -264,6 +264,10 @@ export function App() {
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    getJson<{ login?: boolean }>("/api/version").then((v) => setLoggedIn(v.login === true), () => {});
+  }, []);
   const [quick, setQuick] = useState(false);
   const [backlinks, setBacklinks] = useState<string[]>([]);
   const [now, setNow] = useState(() => new Date());
@@ -452,6 +456,11 @@ export function App() {
         <button onClick={openDaily}>Daily</button>
         <button onClick={newNote}>New</button>
         <button onClick={() => setQuick(true)}>Open…</button>
+        {loggedIn && (
+          <form method="post" action="/logout">
+            <button type="submit">Log out</button>
+          </form>
+        )}
       </header>
       <nav className={drawer ? "drawer open" : "drawer"}>
         <TreeView nodes={tree} current={path} onOpen={open} />
