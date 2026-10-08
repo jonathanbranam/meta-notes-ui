@@ -69,6 +69,17 @@ sets no `Secure` flag on the cookie, which browsers still keep and send on an
 HTTPS page, and uses only relative URLs, so the cookie, the service worker and
 the PWA need nothing else from the server.
 
+## Optional: a login instead of the token
+
+The human's step (agents never do it): in the checkout, after the build,
+`bin/meta-notes-ui create-login <username> --root /srv/shared/work/notes-work/notes`
+(prompts for the password). The running server notices the new file by itself, no restart:
+the token URL and cookie stop working, and every device logs in at `/` (redirects to
+`/login`) with the password; the session lasts 30 days unused. Run the command again to change
+the password and log every device out. To go back to the token, delete
+`<notes>/.meta-notes-cache/ui/login` (and `sessions.json`). `tailscale serve` sends
+`X-Forwarded-Proto: https`, so the session cookie is marked Secure.
+
 ## Relation to `meta-notes ui`
 
 The server writes `.meta-notes-cache/ui/server.json` itself, so `meta-notes ui
