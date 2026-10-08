@@ -39,7 +39,7 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
   request needs it: open `<url>/?token=<token>` once and the server sets an
   httpOnly cookie and redirects; API clients may send `Authorization: Bearer`.
 - **Login (optional).** `bin/meta-notes-ui create-login <username> [<password>] [--root <notes root>]`
-  (after `npm run build`) hashes the password with scrypt (random salt) and writes
+  (after `npm run build`; from a deployed build, `~/.local/share/meta-notes-ui/current/bin/meta-notes-ui`, see `deploy/nuc.md`) hashes the password with scrypt (random salt) and writes
   `<root>/.meta-notes-cache/ui/login` (mode 0600; with no password argument it prompts twice
   without echo; the root is `--root` or the nearest directory upward with `.meta-notes`).
   Running it again replaces the login and revokes every session. While that file exists the
