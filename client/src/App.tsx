@@ -461,7 +461,7 @@ export function App() {
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
         {path === TODAY_PATH ? (
-          <TodayView today={todayState} now={now} open={open} />
+          <TodayView today={todayState} now={now} open={open} files={filePaths} />
         ) : path && !isNote(path) ? (
           <FileView path={path} />
         ) : note ? (

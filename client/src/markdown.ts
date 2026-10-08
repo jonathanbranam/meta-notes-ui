@@ -332,3 +332,27 @@ export function valueSegments(text: string, ctx: RenderContext): Segment[] {
   if (last < text.length) out.push({ text: text.slice(last) });
   return out;
 }
+
+export interface InlineSegment extends Segment {
+  /** An http(s) URL, opened in a new tab. */
+  url?: string;
+}
+
+const URL_RE = /https?:\/\/[^\s<>\]]+/gu;
+
+/** One line of text as plain text, `[[wiki links]]` and bare http(s) URLs (trailing punctuation left out). */
+export function inlineSegments(text: string, ctx: RenderContext): InlineSegment[] {
+  return valueSegments(text, ctx).flatMap((s): InlineSegment[] => {
+    if (s.href || s.missing) return [s];
+    const out: InlineSegment[] = [];
+    let last = 0;
+    for (const m of s.text.matchAll(URL_RE)) {
+      const url = m[0].replace(/[.,;:!?)'"]+$/, "");
+      if (m.index > last) out.push({ text: s.text.slice(last, m.index) });
+      out.push({ text: url, url });
+      last = m.index + url.length;
+    }
+    if (last < s.text.length) out.push({ text: s.text.slice(last) });
+    return out;
+  });
+}
