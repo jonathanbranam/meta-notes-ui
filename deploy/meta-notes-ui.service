@@ -14,7 +14,9 @@ After=network.target
 WorkingDirectory=%h/.local/share/meta-notes-ui/current
 # A user unit has a minimal PATH; the server runs `meta-notes` and needs it here.
 Environment=PATH=META_NOTES_BIN_DIR:NODE_BIN_DIR:/usr/local/bin:/usr/bin:/bin
-ExecStart=NODE dist/server/index.js --root NOTES --port 7480 --host 127.0.0.1 --token-file NOTES/.meta-notes-cache/ui/token
+# The last three flags enable the Message button (send to the notes advisor as the human);
+# drop them to run without bridle (all or none of --bridle-url and --bridle-token-file).
+ExecStart=NODE dist/server/index.js --root NOTES --port 7480 --host 127.0.0.1 --token-file NOTES/.meta-notes-cache/ui/token --bridle-url http://127.0.0.1:7404 --bridle-token-file /srv/shared/work/notes-work/.bridle/tokens/human --bridle-to external:advisor
 Restart=on-failure
 RestartSec=5
 

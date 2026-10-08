@@ -30,6 +30,6 @@ describe("tokenMatches", () => {
 describe("api", () => {
   it("returns the version", async () => {
     const res = await app.request("/api/version", { headers: auth });
-    expect(await res.json()).toEqual({ version: "9.9.9", login: false });
+    expect(await res.json()).toEqual({ version: "9.9.9", login: false, message: false });
   });
 });

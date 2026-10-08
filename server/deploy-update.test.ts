@@ -145,7 +145,7 @@ describe("deploy/nuc.md install loop", () => {
 
     expect(server).toContain(`Environment=PATH=${bin}:${nodeDir}:/usr/local/bin:/usr/bin:/bin`);
     expect(server).toContain(
-      `ExecStart=${node} dist/server/index.js --root /srv/shared/work/notes-work/notes --port 7480 --host 127.0.0.1 --token-file /srv/shared/work/notes-work/notes/.meta-notes-cache/ui/token`,
+      `ExecStart=${node} dist/server/index.js --root /srv/shared/work/notes-work/notes --port 7480 --host 127.0.0.1 --token-file /srv/shared/work/notes-work/notes/.meta-notes-cache/ui/token --bridle-url http://127.0.0.1:7404 --bridle-token-file /srv/shared/work/notes-work/.bridle/tokens/human --bridle-to external:advisor`,
     );
 
     for (const u of ["meta-notes-ui.service", "meta-notes-ui-update.service", "meta-notes-ui-update.path"]) {

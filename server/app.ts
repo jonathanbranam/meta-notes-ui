@@ -8,6 +8,7 @@ import { streamSSE } from "hono/streaming";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TagAliasesResponse } from "../shared/types.js";
 import { createBacklinks } from "./backlinks.js";
 import { editRoutes, runMetaNotes } from "./edits.js";
+import { messageRoutes, type MessageConfig } from "./message.js";
 import { confine, PathError } from "./paths.js";
 import { createLoginStore, SESSION_MS, verifyLogin, type LoginStore } from "./login.js";
 import { tokenMatches } from "./token.js";
@@ -39,6 +40,8 @@ export interface AppOptions {
   clientDir?: string;
   /** Wait this long (ms) after a failed login; default 1000. */
   failDelayMs?: number;
+  /** Send-to-advisor settings; without them there is no /api/message. */
+  message?: MessageConfig;
   /** Subscribe to change batches; returns an unsubscribe function. */
   subscribe: (fn: (events: ChangeEvent[]) => void) => () => void;
 }
@@ -142,7 +145,7 @@ export function createApp(opts: AppOptions): Hono {
     await next();
   });
 
-  app.get("/api/version", async (c) => c.json({ version: opts.version, login: (await logins.current()) !== null }));
+  app.get("/api/version", async (c) => c.json({ version: opts.version, login: (await logins.current()) !== null, message: !!opts.message }));
 
   app.get("/api/tag-aliases", async (c) => {
     const mtime = await stat(path.join(root, ".meta-notes")).then((st) => st.mtimeMs, () => 0);
@@ -216,6 +219,7 @@ export function createApp(opts: AppOptions): Hono {
   });
 
   editRoutes(app, root);
+  if (opts.message) messageRoutes(app, opts.message);
   todayRoutes(app, root);
 
   app.get("/api/events", (c) =>
