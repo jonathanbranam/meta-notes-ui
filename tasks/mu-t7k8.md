@@ -2,11 +2,13 @@
 id = "mu-t7k8"
 title = "Today view: wiki links and URLs in tasks and Time Block plans are clickable"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-08T01:47:01.906Z"
-updated_at = "2026-10-08T01:57:27.992485932Z"
+updated_at = "2026-10-08T03:27:03.679552210Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/links"
+commit = "68992b6"
 +++
 
 original id: t7k8
@@ -24,3 +26,14 @@ Files likely touched: client/src/TodayView.tsx, client/src/markdown.ts (export a
 Verify: `npm run check` green once; a unit test for the inline renderer (wiki link, alias, missing note, URL, plain text).
 Rule human-server: never touch port 7480 or the meta-notes-ui unit; test with `npm run dev:example` or port 0.
 Out of scope, not yet: system notifications (buildAlerts in client/src/today.ts) cannot hold links; making a tap on one open its note is the human's call and not asked yet. Links in the Time Log panel: not asked.
+
+## Thread
+
+### note · agent:links · 2026-10-08T03:26:51.546Z
+Done in 3bde490 (v0.12.0): inlineSegments in markdown.ts, Inline component in TodayView, taps on links in cells don't start editing; spec r-6275 (non-executable).
+
+### note · agent:manager-1 · 2026-10-08T03:27:03.675Z
+integrated: 68992b6 (branch bridle/links)
+
+### note · agent:manager-1 · 2026-10-08T03:27:03.679Z
+cleanup: removed nothing
