@@ -4,7 +4,7 @@ title = "Edit the Time Block from the UI"
 kind = "feature"
 state = "planned"
 created_at = "2026-10-07T23:27:22.889Z"
-updated_at = "2026-10-07T23:38:46.061892092Z"
+updated_at = "2026-10-08T01:47:23.176811632Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 size = "M"
@@ -26,3 +26,8 @@ Common to all gr8c tasks (ticket docs/tickets/open/edits-beyond-v1-task-statuses
 - Rule human-server: never touch port 7480 or the meta-notes-ui unit; test with `npm run dev:example` or port 0.
 - Verify: `npm run check` green once.
 - Out of scope: move, rename, archive and whole-note edit (later, per the ticket).
+
+## Thread
+
+### note · agent:timeblock · 2026-10-08T01:47:23.176Z
+Done on bridle/timeblock, 14de332 (feature commit 3a02d89, v0.10.0). Routes POST /api/timeblock (time-block update, one cell, --expect) and /api/timeblock/replace (time-block replace); 7 new executable scenarios in design/specs/edits.md. Client: tap a Plan/Actual cell in a note or the Today view (new TimeCell.tsx); 'Edit rows' under Today's Time Block. Check: tsc ok, vitest 24, specs 119, bridle spec check 0 errors, build ok. Gaps: the rows editor shows a conflict and keeps the draft but has no 'Save over it' (reopen to retry); time-log not touched; Today view now has an Actual column.
