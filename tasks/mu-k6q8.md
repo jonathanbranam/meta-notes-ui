@@ -2,9 +2,9 @@
 id = "mu-k6q8"
 title = "Login with expiring, revocable sessions instead of the shared token"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-10-08T01:51:06.814Z"
-updated_at = "2026-10-08T01:54:11.594813031Z"
+updated_at = "2026-10-08T02:01:39.001891080Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 priority = "low"
