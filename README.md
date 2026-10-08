@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.10.0, v1 in development.
+Status: v0.11.0, v1 in development.
 
 ## How it fits
 
@@ -101,6 +101,11 @@ a file itself. Routes (token required, `.md` paths inside the root only):
 - `POST /api/timeblock/replace` `{path, time, through, expect, text}`: `time-block replace`
   for a range of rows (`| time | plan | actual |` lines). "Edit rows" under the Today view's
   Time Block opens all rows in a text box.
+- `POST /api/timelog/append` `{path, text, start?, prev?, prevStart?, prevOpen?, closePrev?, first?}`:
+  `time-log append`. The Time Log panel (Today view and any note with a `### Log`) sends the last entry
+  as `--prev`, so a changed log is a 409; "Start now" fills the current time and closes an open entry.
+- `POST /api/timelog/update` `{path, expect, text}`: `time-log update` for whole entries; each
+  entry has an Edit button.
 - `POST /api/new` `{path}`: `note new`, from the template meta-notes picks
   (the **New** button asks for a path; an existing note is refused).
 

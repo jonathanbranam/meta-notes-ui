@@ -97,3 +97,8 @@ main { overflow: auto; padding: 1rem 1.5rem; }
 .cell-editor input { flex: 1 1 10rem; min-height: 2.5rem; font: inherit; box-sizing: border-box; }
 .cell-editor button { min-height: 2.5rem; }
 .cell-editor .conflict { flex-basis: 100%; white-space: pre-wrap; background: rgba(192, 57, 43, .12); padding: .4rem; }
+
+.timelog-edit ul { list-style: none; padding: 0; }
+.timelog-edit li { margin: .4rem 0; }
+.timelog-edit button { min-height: 2.5rem; }
+.timelog-edit .conflict { white-space: pre-wrap; background: rgba(192, 57, 43, .12); padding: .4rem; flex-basis: 100%; }

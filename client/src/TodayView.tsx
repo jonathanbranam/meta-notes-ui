@@ -1,4 +1,5 @@
 import { AddTask } from "./AddTask";
+import { TimeLogPanel } from "./TimeLog";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { EditableCell, RowsEditor } from "./TimeCell";
@@ -143,6 +144,7 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
       ) : (
         <p><button onClick={() => setEditRows(true)}>Edit rows</button></p>
       ))}
+      {data.daily && <TimeLogPanel path={data.daily.path} text={data.daily.text} />}
       {!data.daily && <p className="hint">No daily note for today yet.</p>}
       {data.daily && (
         <p>
