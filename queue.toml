@@ -12,3 +12,6 @@ tasks = ["mu-rkrz"]
 
 [[tier]]
 tasks = ["mu-xng2"]
+
+[[tier]]
+tasks = ["mu-t7k8"]
