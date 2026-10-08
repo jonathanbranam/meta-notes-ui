@@ -451,7 +451,12 @@ export function App() {
         <button className="menu" onClick={() => setDrawer(!drawer)} aria-label="Files">
           ☰
         </button>
-        <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
+        <button className="nav" onClick={() => history.back()} aria-label="Back">
+          &lt;
+        </button>
+        <button className="nav" onClick={() => history.forward()} aria-label="Forward">
+          &gt;
+        </button>
         <button onClick={openToday}>Today</button>
         <button onClick={openDaily}>Daily</button>
         <button onClick={newNote}>New</button>
@@ -461,6 +466,7 @@ export function App() {
             <button type="submit">Log out</button>
           </form>
         )}
+        <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
       </header>
       <nav className={drawer ? "drawer open" : "drawer"}>
         <TreeView nodes={tree} current={path} onOpen={open} />

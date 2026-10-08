@@ -257,3 +257,21 @@ over the draft.
 - **THEN** the client re-fetches the open note's backlinks
 - **WHEN** another kind of file changes
 - **THEN** it does not
+
+### Requirement: The top bar fits a phone  {#r-74e7}
+
+The client SHALL keep the top bar's buttons on one fixed-size row and show the open file's name on its own row below, clipped with an ellipsis, so a long name never widens the page. In an installed app (display-mode standalone) the bar SHALL also have Back and Forward buttons that move through the browser history. The tree's folder and file names SHALL be readable in dark mode, and checkboxes SHALL be at least 1.25rem.
+
+#### Scenario: A long file name does not widen the page  {#s-1b06}
+
+*Verification*: **non-executable**
+
+- **WHEN** a note with a very long name is open on a 360px wide screen
+- **THEN** the name is clipped with an ellipsis on its own row and the page does not scroll sideways
+
+#### Scenario: Back and Forward in the installed app  {#s-2a3e}
+
+*Verification*: **non-executable**
+
+- **WHEN** the app runs in standalone display mode
+- **THEN** Back and Forward buttons are shown and move through history

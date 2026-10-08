@@ -8,9 +8,13 @@ body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1c1c1e; backgrou
   button { color: inherit; }
 }
 .app { display: grid; grid-template-columns: 280px 1fr; grid-template-rows: auto 1fr; height: 100dvh; }
-header { grid-column: 1 / 3; display: flex; gap: .5rem; align-items: center; padding: .5rem .75rem; background: #f4f4f6; border-bottom: 1px solid #ddd; }
-header .title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+header { grid-column: 1 / 3; display: flex; flex-wrap: wrap; min-width: 0; gap: .5rem; align-items: center; padding: .5rem .75rem; background: #f4f4f6; border-bottom: 1px solid #ddd; }
+header .title { order: 99; flex: 1 1 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 header .menu { display: none; }
+header .nav { display: none; }
+@media (display-mode: standalone) { header .nav { display: inline-block; } }
+.app > * { min-width: 0; }
+input[type=checkbox] { width: 1.25rem; height: 1.25rem; vertical-align: middle; }
 button { font: inherit; background: none; border: 0; cursor: pointer; padding: .25rem .5rem; text-align: left; }
 header button { border: 1px solid #bbb; border-radius: 6px; }
 .drawer { overflow: auto; padding: .5rem; background: #f4f4f6; border-right: 1px solid #ddd; }
@@ -19,6 +23,7 @@ header button { border: 1px solid #bbb; border-radius: 6px; }
 .tree button { width: 100%; }
 .file.current { font-weight: 700; }
 .folder { color: #666; }
+@media (prefers-color-scheme: dark) { .folder, .tree button { color: #e6e6e6; } }
 main { overflow: auto; padding: 1rem 1.5rem; }
 .note { max-width: 50rem; }
 .note table { border-collapse: collapse; }
