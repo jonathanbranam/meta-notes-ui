@@ -136,3 +136,6 @@
 {"actor":"external:orchestrator","at":"2026-10-08T03:45:05.045334335Z","from":"open","task":"mu-ask3","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-08T03:45:05.153098336Z","queue":"reprioritized"}
 {"actor":"agent:manager-1","at":"2026-10-08T03:47:30.970056397Z","from":"planned","task":"mu-ask3","to":"integrated"}
+{"actor":"human","at":"2026-10-08T22:28:45.010Z","from":"","task":"mu-sq42","to":"pending"}
+{"actor":"human","at":"2026-10-08T22:28:45.144Z","from":"","task":"mu-dusy","to":"pending"}
+{"actor":"human","at":"2026-10-08T22:28:45.266Z","from":"","task":"mu-vn3k","to":"pending"}
