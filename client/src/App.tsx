@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
+import { isNewVersion } from "./version";
 import { AddTask } from "./AddTask";
 import { TimeLogPanel } from "./TimeLog";
 import { EditableCell, rowCells } from "./TimeCell";
@@ -300,6 +301,16 @@ export function App() {
   const [canMessage, setCanMessage] = useState(false);
   const [composing, setComposing] = useState(false);
   const [sentNote, setSentNote] = useState(false);
+  const [stale, setStale] = useState(false);
+  const checkVersion = useCallback(
+    () => getJson<{ version?: string }>("/api/version").then((v) => setStale(isNewVersion(__APP_VERSION__, v.version)), () => {}),
+    [],
+  );
+  useEffect(() => {
+    const onVisible = () => document.visibilityState === "visible" && void checkVersion();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [checkVersion]);
   useEffect(() => {
     getJson<{ login?: boolean; message?: boolean }>("/api/version").then(
       (v) => {
@@ -376,6 +387,7 @@ export function App() {
     let opened = false;
     es.onopen = () => {
       if (opened) {
+        void checkVersion();
         void loadTree();
         loadNote();
         loadBacklinks();
@@ -391,7 +403,7 @@ export function App() {
       if (e.path.endsWith(".md")) loadBacklinks();
     };
     return () => es.close();
-  }, [loadTree, loadNote, loadBacklinks]);
+  }, [loadTree, loadNote, loadBacklinks, checkVersion]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -509,8 +521,16 @@ export function App() {
             <button type="submit">Log out</button>
           </form>
         )}
+        <button onClick={() => location.reload()} aria-label="Reload">
+          Reload
+        </button>
         <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
       </header>
+      {stale && (
+        <button className="update-bar" onClick={() => location.reload()}>
+          New version - tap to reload
+        </button>
+      )}
       <nav className={drawer ? "drawer open" : "drawer"}>
         <TreeView nodes={tree} current={path} onOpen={open} />
       </nav>

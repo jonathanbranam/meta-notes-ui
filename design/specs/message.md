@@ -97,3 +97,18 @@ short "sent" note on success and keeps the text and shows the error on failure.
 
 - **WHEN** the human taps the message button, types text and taps Send
 - **THEN** on success the sheet closes and "Message sent" shows briefly; on failure the text stays and the error shows in the sheet
+
+### Requirement: A stale client offers a reload  {#r-b140}
+
+The client SHALL know the version it was built with and, when the event stream
+reconnects or the app becomes visible, compare it with `/api/version`; when they
+differ it SHALL show a "New version - tap to reload" bar that reloads on tap. The top
+bar SHALL have a Reload button. The server SHALL serve `index.html` with
+`cache-control: no-cache`.
+
+#### Scenario: New version bar  {#s-fbce}
+
+*Verification*: **non-executable**
+
+- **WHEN** the server restarts with a newer version while the app is open, or the app returns to the foreground
+- **THEN** a bar "New version - tap to reload" shows, and tapping it reloads the page

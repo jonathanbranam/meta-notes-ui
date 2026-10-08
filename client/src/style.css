@@ -108,3 +108,16 @@ main { overflow: auto; padding: 1rem 1.5rem; }
 .timelog-edit li { margin: .4rem 0; }
 .timelog-edit button { min-height: 2.5rem; }
 .timelog-edit .conflict { white-space: pre-wrap; background: rgba(192, 57, 43, .12); padding: .4rem; flex-basis: 100%; }
+
+.update-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding: 0.8rem;
+  background: #fde68a;
+  color: #000;
+  border: 0;
+  font-size: 1rem;
+}

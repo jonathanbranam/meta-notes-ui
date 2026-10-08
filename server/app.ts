@@ -247,6 +247,8 @@ export function createApp(opts: AppOptions): Hono {
         const data = await readFile(file);
         return c.body(new Uint8Array(data), 200, {
           "content-type": MIME[path.extname(file)] ?? "application/octet-stream",
+          // The shell must always be revalidated so a reload picks up a new bundle.
+          ...(path.extname(file) === ".html" ? { "cache-control": "no-cache" } : {}),
         });
       } catch {
         // try the fallback
