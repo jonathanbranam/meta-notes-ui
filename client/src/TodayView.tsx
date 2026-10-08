@@ -1,6 +1,7 @@
 import { AddTask } from "./AddTask";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
+import { EditableCell, RowsEditor } from "./TimeCell";
 import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "./today";
 
 export const TODAY_PATH = "!today";
@@ -99,6 +100,7 @@ export function FiredAlerts({ fired, dismiss, snooze }: Pick<ReturnType<typeof u
 
 export function TodayView({ today, now, open }: { today: ReturnType<typeof useToday>; now: Date; open: (p: string) => void }) {
   const { data, error } = today;
+  const [editRows, setEditRows] = useState(false);
   const [perm, setPerm] = useState(() => (typeof Notification === "undefined" ? "unsupported" : Notification.permission));
   if (error) return <p className="error">{error}</p>;
   if (!data) return <p className="hint">Loading…</p>;
@@ -129,12 +131,18 @@ export function TodayView({ today, now, open }: { today: ReturnType<typeof useTo
             {rows.map((r, i) => (
               <tr key={r.minutes} className={[i === cur ? "now" : "", /^no plan$/i.test(r.plan.trim()) ? "noplan" : "", i === next ? "next" : ""].join(" ").trim()}>
                 <td>{hm(r.minutes)}</td>
-                <td>{r.plan}</td>
+                <EditableCell path={data.daily!.path} time={r.time} column="plan" text={r.plan}>{r.plan}</EditableCell>
+                <EditableCell path={data.daily!.path} time={r.time} column="actual" text={r.actual}>{r.actual}</EditableCell>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+      {data.daily && rows.length > 0 && (editRows ? (
+        <RowsEditor path={data.daily.path} rows={rows.map((r) => r.line)} onClose={() => setEditRows(false)} />
+      ) : (
+        <p><button onClick={() => setEditRows(true)}>Edit rows</button></p>
+      ))}
       {!data.daily && <p className="hint">No daily note for today yet.</p>}
       {data.daily && (
         <p>

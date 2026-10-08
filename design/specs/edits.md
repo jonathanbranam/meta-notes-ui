@@ -204,6 +204,8 @@ through the CLI with `--expect`.
 - **WHEN** the human edits a Time Block or Time Log row
 - **THEN** the UI runs the meta-notes time-block or time-log command
 
+(The Time Block half is requirement "A Time Block cell is edited through the CLI"; the Time Log half is not built yet.)
+
 #### Scenario: Add a task  {#s-4f99}
 
 *Verification*: **executable**
@@ -234,3 +236,80 @@ through the CLI with `--expect`.
 
 - **WHEN** the human moves, renames or archives a note
 - **THEN** the UI runs the matching meta-notes command and links to it keep working
+
+### Requirement: A Time Block cell is edited through the CLI  {#r-fb22}
+
+The server SHALL set a Time Block row's Plan or Actual cell with
+`meta-notes time-block update`, given the cell as the client saw it as
+`--expect`, and SHALL replace a range of rows with `meta-notes time-block
+replace`, given the rows as the client saw them as `--expect`. A cell or rows
+that changed meanwhile are refused as a conflict showing the current text.
+
+#### Scenario: Editing a Plan cell  {#s-0cf3}
+
+*Verification*: **executable**
+
+- **WHEN** the client sets the plan of the "8:00am" row of "plan/daily/26-Q3/2026-10-01 Thu.md" to "Deep work", seeing it as ""
+- **THEN** the edit succeeds
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "Deep work"
+
+#### Scenario: Editing an Actual cell  {#s-2997}
+
+*Verification*: **executable**
+
+- **WHEN** the client sets the actual of the "8:30am" row of "plan/daily/26-Q3/2026-10-01 Thu.md" to "emails first", seeing it as ""
+- **THEN** the edit succeeds
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "emails first"
+
+#### Scenario: A stale cell  {#s-f2be}
+
+*Verification*: **executable**
+
+- **WHEN** the client sets the plan of the "8:30am" row of "plan/daily/26-Q3/2026-10-01 Thu.md" to "mine", seeing it as "something else"
+- **THEN** the edit is refused as a conflict showing "start work"
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" is unchanged
+
+#### Scenario: A row that is not there  {#s-47d3}
+
+*Verification*: **executable**
+
+- **WHEN** the client sets the plan of the "3:00am" row of "plan/daily/26-Q3/2026-10-01 Thu.md" to "x", seeing it as ""
+- **THEN** the edit is refused as a bad request
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" is unchanged
+
+#### Scenario: A malformed cell edit  {#s-3219}
+
+*Verification*: **executable**
+
+- **WHEN** the client sets the plan of the "lunch" row of "plan/daily/26-Q3/2026-10-01 Thu.md" to "x", seeing it as ""
+- **THEN** the edit is refused as a bad request
+
+#### Scenario: Replacing rows  {#s-a613}
+
+*Verification*: **executable**
+
+- **WHEN** the client replaces the rows "8:00am" to "8:30am" of "plan/daily/26-Q3/2026-10-01 Thu.md" as it shows them with "| 8:00am | gym | |\n| 8:30am | start work | done |"
+- **THEN** the edit succeeds
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "gym"
+
+#### Scenario: Stale rows  {#s-40ae}
+
+*Verification*: **executable**
+
+- **WHEN** the client replaces the rows "8:00am" to "8:30am" of "plan/daily/26-Q3/2026-10-01 Thu.md" believing they read "| 8:00am | old | |\n| 8:30am | old | |" with "| 8:00am | mine | |\n| 8:30am | mine | |"
+- **THEN** the edit is refused as a conflict showing "start work"
+- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" is unchanged
+
+#### Scenario: Tapping a cell  {#s-d7ea}
+
+*Verification*: **non-executable**
+
+- **WHEN** the human taps a Plan or Actual cell in the Time Block of a note or the Today view
+- **THEN** the cell becomes a text field; saving runs the command, and a conflict or CLI error shows beside it with the draft kept
+
+#### Scenario: Editing all rows  {#s-31c0}
+
+*Verification*: **non-executable**
+
+- **WHEN** the human taps "Edit rows" under the Time Block in the Today view
+- **THEN** all rows open as `| time | plan | actual |` lines and saving replaces them through `time-block replace`

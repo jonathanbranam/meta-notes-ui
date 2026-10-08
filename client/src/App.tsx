@@ -5,6 +5,7 @@ import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { AddTask } from "./AddTask";
+import { EditableCell, rowCells } from "./TimeCell";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 
@@ -41,6 +42,9 @@ interface Edit {
 }
 
 interface EditApi {
+  path: string;
+  /** The note's lines, for the raw text of a Time Block cell. */
+  lines: string[];
   lineOffset: number;
   edit: Edit | null;
   start: (from: number, to: number) => void;
@@ -154,7 +158,20 @@ function block(Tag: "p" | "li" | "table") {
     );
   };
 }
-const COMPONENTS = { p: block("p"), li: block("li"), table: block("table") } as unknown as Components;
+/** A Time Block Plan or Actual cell (marked `data-col` by the renderer): tap to edit it through `time-block update`. */
+function TimeBlockCell({ node, children, ...rest }: BlockProps) {
+  const api = useContext(EditCtx)!;
+  const col = rest["data-col"] as "plan" | "actual" | undefined;
+  const line = node?.position ? node.position.start.line + api.lineOffset : 0;
+  const cells = col && line ? rowCells(api.lines[line - 1] ?? "") : [];
+  if (!col || !cells.length) return <td {...(rest as object)}>{children}</td>;
+  return (
+    <EditableCell path={api.path} time={cells[0]} column={col} text={cells[col === "plan" ? 1 : 2] ?? ""}>
+      {children}
+    </EditableCell>
+  );
+}
+const COMPONENTS = { p: block("p"), li: block("li"), table: block("table"), td: TimeBlockCell } as unknown as Components;
 
 /** A file that is not a note: images inline, text as text, PDFs and the rest as links to the raw file. */
 function FileView({ path }: { path: string }) {
@@ -362,6 +379,8 @@ export function App() {
       loadNote();
     };
     return {
+      path,
+      lines,
       lineOffset: note ? frontmatterLines(note.text) : 0,
       edit,
       start: (from, to) => setEdit({ from, to, expect: text(from, to) }),
