@@ -32,3 +32,13 @@ From the human, via aide, 2026-10-07, verbatim (first day on the always-on serve
 ## Out of scope
 
 Multiple users; the human is the only user.
+
+## The human's answer
+
+From the human, via aide, 2026-10-07, verbatim:
+
+"It's not urgent, but I'd be happy to have a login and then a little CLI to hash the password and set it. I just want to call a CLI command and not have to mess with the files myself, like `create user`, give it a username and a password. I would say `create login username password`, and then the command would just write that to the appropriate place."
+
+- Approved, not urgent (low priority).
+- A CLI command that takes a username and password, hashes the password and writes it where the server reads it; the human never edits the file. Their words for it: `create login username password`. Where the command lives (a meta-notes-ui script, or `meta-notes ui ...` in meta-notes) is the orchestrator's call.
+- The aide's note: a password given as an argument lands in shell history; also accepting it from a prompt when omitted would avoid that, without changing the form the human asked for.
