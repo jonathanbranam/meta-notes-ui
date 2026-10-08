@@ -4,7 +4,7 @@ title = "Login with expiring, revocable sessions instead of the shared token"
 kind = "feature"
 state = "planned"
 created_at = "2026-10-08T01:51:06.814Z"
-updated_at = "2026-10-08T03:28:21.110453125Z"
+updated_at = "2026-10-08T03:33:02.739408443Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 priority = "low"
@@ -36,3 +36,6 @@ priority: normal -> low
 
 ### note · agent:login · 2026-10-08T03:28:21.110Z
 login: plan - server/login.ts (scrypt login file, hashed-id sessions.json), server-rendered /login form + POST /logout, token path off once a login file exists (Bearer dropped with it; only tests use it), bin/meta-notes-ui create-login, spec + docs, v0.13.0.
+
+### note · agent:login · 2026-10-08T03:33:02.739Z
+done 7a30a45 (v0.13.0). Check: 36 unit + 134 spec tests pass, build ok. Notes: login/sessions use a server-rendered /login form (no client page needed); /?token= in login mode redirects to /login; Bearer dropped with the token path (only tests used it). Server notices a new login file by stat, no restart. Always-on server NOT switched; steps in deploy/nuc.md. No CHANGELOG file exists.
