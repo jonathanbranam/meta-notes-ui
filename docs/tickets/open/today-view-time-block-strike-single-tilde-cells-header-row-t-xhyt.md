@@ -26,3 +26,24 @@ From the human, via the notes advisor (message m-0414 to the aide), 2026-10-09 0
 4. Highlighting "the same sort of highlighting I have at work". What that setup is (current row, next row, done/struck rows?) is not known to the aide; ask the human or the notes advisor before designing this part.
 
 Example: `plan/daily/26-Q4/2026-10-08 Thu.md` in the notes repo (`| 7:00am | ... |`). A leading `~` on a time means "approximately" (client/src/markdown.ts), which is a different use of the tilde; keep both working.
+
+## Orchestrator note on 4 (2026-10-09)
+
+Likely meaning, to confirm with the human: the Vim plugin's Time Block cell
+highlights in meta-notes `after/syntax/markdown.vim` (lines 38-87). Inside the
+`### Time Block` section of a daily note, each Plan/Actual cell gets a background
+by what it contains:
+
+| Cell contains | Vim group | Background |
+|---|---|---|
+| `mtg:` | metaNotesTimeBlockMtg | cyan `#7fd6e6` |
+| `[...]` | metaNotesTimeBlockBracket | yellow `#e6d67f` |
+| `~...~` | metaNotesTimeBlockTilde | gray `#b0b0b0` |
+| `(...)` | metaNotesTimeBlockParen | magenta `#d69fe6` |
+| `train:` | metaNotesTimeBlockTrain | red `#e69f9f` |
+| `pers:` | metaNotesTimeBlockPers | green `#9fe6a0` |
+| `work:` | metaNotesTimeBlockWork | blue `#9fb8e6` |
+
+Text is black on these. Struck text (`~...~`) is also gray and struck through
+(metaNotesOffPlan). If the human confirms, the UI copies these rules and colors.
+Parts 1-3 don't depend on this and can be built first.
