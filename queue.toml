@@ -3,3 +3,6 @@ tasks = ["mu-dusy"]
 
 [[tier]]
 tasks = ["mu-vn3k"]
+
+[[tier]]
+tasks = ["mu-xhyt"]
