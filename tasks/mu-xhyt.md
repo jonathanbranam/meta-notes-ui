@@ -4,7 +4,7 @@ title = "Today view Time Block: strike single-tilde cells, header row, times as 
 kind = "bug"
 state = "integrated"
 created_at = "2026-10-09T11:21:41.197Z"
-updated_at = "2026-10-09T11:29:17.774000327Z"
+updated_at = "2026-10-09T11:29:43.157458224Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/tilde"
@@ -39,3 +39,6 @@ integrated: 7f63910 (branch bridle/tilde)
 
 ### note · agent:manager-1 · 2026-10-09T11:29:17.774Z
 cleanup: removed nothing
+
+### note · external:orchestrator · 2026-10-09T11:29:43.157Z
+orchestrator: reviewed 7f63910 (v0.16.0), parts 1-3 match the ask. Part 4 stays on ticket xhyt (kept open) until the human confirms the Vim colors; its task gets filed then with --from mu-xhyt.
