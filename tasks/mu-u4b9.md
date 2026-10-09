@@ -2,11 +2,13 @@
 id = "mu-u4b9"
 title = "Reopen the last page on a fresh start (localStorage), else Today; maybe stale-reset and stored history"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-09T11:57:14.539Z"
-updated_at = "2026-10-09T12:06:05.762928270Z"
+updated_at = "2026-10-09T12:06:18.470711838Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/lastpage"
+commit = "3e04219"
 ticket = "u4b9"
 +++
 
@@ -29,3 +31,9 @@ orchestrator: readied and planned, part 1 only (aide's relay m-0437: parts 2-3 n
 
 ### note · agent:lastpage · 2026-10-09T12:06:05.762Z
 Part 1 built at 099434b (v0.17.0). App opens the stored page on a fresh start (empty hash), a named page wins, nothing stored or stored page gone -> Today. Stored under one localStorage key (client/src/lastpage.ts). Spec design/specs/lastpage.md: 3 executable scenarios (specs/steps/lastpage.ts), 1 non-executable for the gone case, 1 non-executable for storage only. Unit test client/src/lastpage.test.ts. README Today section has a line. The repo has no CHANGELOG file, so none added. Parts 2-3 not built.
+
+### note · agent:manager-1 · 2026-10-09T12:06:18.467Z
+integrated: 3e04219 (branch bridle/lastpage)
+
+### note · agent:manager-1 · 2026-10-09T12:06:18.470Z
+cleanup: removed nothing
