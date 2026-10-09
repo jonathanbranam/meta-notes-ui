@@ -10,6 +10,7 @@ import { TimeLogPanel } from "./TimeLog";
 import { EditableCell, rowCells } from "./TimeCell";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
+import { readLastPage, startHash, writeLastPage } from "./lastpage";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 function clock(d: Date) {
@@ -292,8 +293,10 @@ function QuickOpen({ files, onOpen, onClose }: { files: TreeNode[]; onOpen: (p: 
 
 export function App() {
   const [tree, setTree] = useState<TreeNode[]>([]);
-  const [target, setTarget] = useState(() => parseHash(decodeURIComponent(location.hash.slice(1))));
+  const [target, setTarget] = useState(() => parseHash(startHash(decodeURIComponent(location.hash.slice(1)), readLastPage(), TODAY_PATH)));
   const path = target.path;
+  // The stored page a fresh start opened, until the tree shows whether it still exists.
+  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH ? path : null);
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
@@ -328,7 +331,23 @@ export function App() {
   const pathRef = useRef(path);
   pathRef.current = path;
 
-  const loadTree = useCallback(() => getJson<TreeNode[]>("/api/tree").then(setTree).catch(() => {}), []);
+  const loadTree = useCallback(
+    () =>
+      getJson<TreeNode[]>("/api/tree")
+        .then((t) => {
+          setTree(t);
+          // A stored page that is gone from the root opens Today instead (design/specs/lastpage.md).
+          const stored = unchecked.current;
+          if (stored === null) return;
+          unchecked.current = null;
+          if (flattenFiles(t).some((f) => f.path === stored)) return;
+          history.replaceState(null, "", `#${encodeURIComponent(TODAY_PATH)}`);
+          setTarget({ path: TODAY_PATH });
+          setError("");
+        })
+        .catch(() => {}),
+    [],
+  );
   const loadNote = useCallback(() => {
     const p = pathRef.current;
     if (!p || p === TODAY_PATH || !isNote(p)) return setNote(null);
@@ -339,7 +358,7 @@ export function App() {
       })
       .catch(() => {
         setNote(null);
-        setError(`Cannot open ${p}`);
+        if (pathRef.current === p) setError(`Cannot open ${p}`);
       });
   }, []);
 
@@ -373,6 +392,9 @@ export function App() {
 
   useEffect(loadNote, [path, loadNote]);
   useEffect(loadBacklinks, [path, loadBacklinks]);
+  useEffect(() => {
+    if (path) writeLastPage(path);
+  }, [path]);
   // Keeps the Time Block's current row on the right quarter hour.
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 60_000);

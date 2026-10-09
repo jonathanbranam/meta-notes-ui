@@ -152,6 +152,8 @@ content to verify, extend the example** and its README.
   --overdue --due`, `calendar` and `note daily --render` (never creates the note; all `execFile`, argument
   arrays) plus a read of the daily note. The view refetches (debounced 1 s)
   when the watcher reports a change.
+- **Reopen last page**: the page you were on is kept in the browser's localStorage (never the server);
+  a fresh start with no `#` in the URL opens it, else Today. A stored page that is gone opens Today.
 - **Alerts**: browser notifications at the time of a timed task due today
   (`⏰ HH:MM`) and at each planned Time Block row (not empty, `no plan` or
   struck out), while a tab is open. "Enable alerts" on the Today view asks for
