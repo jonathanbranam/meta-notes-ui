@@ -105,9 +105,9 @@ export function taskChips(nodes: Node[], status: string, today: string): { nodes
 
 export const isOpen = (status: string) => !"xX->".includes(status);
 
-/** Minutes since midnight for `8:15am`, `12:00pm`; null if not a time. */
+/** Minutes since midnight for `8:15am`, `12:00pm`, `~8:15am` (approximately); null if not a time. */
 export function parseClock(s: string): number | null {
-  const m = /^\s*(\d{1,2}):(\d{2})\s*(am|pm)\s*$/i.exec(s);
+  const m = /^\s*~?\s*(\d{1,2}):(\d{2})\s*(am|pm)\s*$/i.exec(s);
   if (!m) return null;
   return (Number(m[1]) % 12) * 60 + Number(m[2]) + (m[3].toLowerCase() === "pm" ? 720 : 0);
 }
@@ -336,12 +336,26 @@ export function valueSegments(text: string, ctx: RenderContext): Segment[] {
 export interface InlineSegment extends Segment {
   /** An http(s) URL, opened in a new tab. */
   url?: string;
+  /** Inside `~...~`: shown struck through. */
+  struck?: boolean;
 }
 
 const URL_RE = /https?:\/\/[^\s<>\]]+/gu;
 
 /** One line of text as plain text, `[[wiki links]]` and bare http(s) URLs (trailing punctuation left out). */
 export function inlineSegments(text: string, ctx: RenderContext): InlineSegment[] {
+  // Struck text is `~x~` (the file convention) or `~~x~~`; split it out first, at render time only.
+  const out: InlineSegment[] = [];
+  let last = 0;
+  for (const m of text.matchAll(/~~?([^~\n]+)~~?/g)) {
+    out.push(...plainSegments(text.slice(last, m.index), ctx), ...plainSegments(m[1], ctx).map((s) => ({ ...s, struck: true })));
+    last = m.index + m[0].length;
+  }
+  return [...out, ...plainSegments(text.slice(last), ctx)];
+}
+
+function plainSegments(text: string, ctx: RenderContext): InlineSegment[] {
+  if (text === "") return [];
   return valueSegments(text, ctx).flatMap((s): InlineSegment[] => {
     if (s.href || s.missing) return [s];
     const out: InlineSegment[] = [];

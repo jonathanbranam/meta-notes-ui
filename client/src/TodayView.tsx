@@ -1,6 +1,6 @@
 import { AddTask } from "./AddTask";
 import { TimeLogPanel } from "./TimeLog";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { EditableCell, RowsEditor } from "./TimeCell";
 import { inlineSegments, type RenderContext } from "./markdown";
@@ -11,7 +11,6 @@ const SNOOZE_MIN = 10;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 export const isoDay = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-const hm = (min: number) => `${Math.floor(min / 60)}:${pad(min % 60)}`;
 
 /** Show a notification; through the service worker where there is one (Android needs it). */
 async function notify(a: Alert): Promise<void> {
@@ -104,17 +103,18 @@ export function FiredAlerts({ fired, dismiss, snooze }: Pick<ReturnType<typeof u
 export function Inline({ text, ctx, open }: { text: string; ctx: RenderContext; open: (p: string) => void }) {
   return (
     <>
-      {inlineSegments(text, ctx).map((s, i) =>
-        s.url ? (
-          <a key={i} href={s.url} target="_blank" rel="noopener noreferrer">{s.text}</a>
+      {inlineSegments(text, ctx).map((s, i) => {
+        const node = s.url ? (
+          <a href={s.url} target="_blank" rel="noopener noreferrer">{s.text}</a>
         ) : s.href ? (
-          <a key={i} href={s.href} className="wikilink" onClick={() => open(decodeURIComponent(s.href!.slice(1).split("#")[0]))}>{s.text}</a>
+          <a href={s.href} className="wikilink" onClick={() => open(decodeURIComponent(s.href!.slice(1).split("#")[0]))}>{s.text}</a>
         ) : s.missing ? (
-          <span key={i} className="wikilink missing" title="No such note">{s.text}</span>
+          <span className="wikilink missing" title="No such note">{s.text}</span>
         ) : (
           s.text
-        ),
-      )}
+        );
+        return s.struck ? <del key={i}>{node}</del> : <Fragment key={i}>{node}</Fragment>;
+      })}
     </>
   );
 }
@@ -149,10 +149,13 @@ export function TodayView({ today, now, open, files }: { today: ReturnType<typeo
         <p className="hint">No Time Block in today's note.</p>
       ) : (
         <table className="timeblock">
+          <thead>
+            <tr><th>Time</th><th>Plan</th><th>Actual</th></tr>
+          </thead>
           <tbody>
             {rows.map((r, i) => (
               <tr key={r.minutes} className={[i === cur ? "now" : "", /^no plan$/i.test(r.plan.trim()) ? "noplan" : "", i === next ? "next" : ""].join(" ").trim()}>
-                <td>{hm(r.minutes)}</td>
+                <td>{r.time}</td>
                 <EditableCell path={data.daily!.path} time={r.time} column="plan" text={r.plan}><Inline text={r.plan} ctx={ctxFor(data.daily!.path)} open={open} /></EditableCell>
                 <EditableCell path={data.daily!.path} time={r.time} column="actual" text={r.actual}><Inline text={r.actual} ctx={ctxFor(data.daily!.path)} open={open} /></EditableCell>
               </tr>
