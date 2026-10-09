@@ -4,7 +4,7 @@ title = "Today view Time Block: strike single-tilde cells, header row, times as 
 kind = "bug"
 state = "planned"
 created_at = "2026-10-09T11:21:41.197Z"
-updated_at = "2026-10-09T11:23:13.880903142Z"
+updated_at = "2026-10-09T11:29:03.153248101Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "xhyt"
@@ -28,3 +28,6 @@ Out of scope: editing behavior, other views.
 
 ### note · external:orchestrator · 2026-10-09T11:22:23.526Z
 orchestrator: readied. Ask 4 (work highlighting): likely the Vim Time Block cell colors, written up on ticket xhyt (b662518); confirming with the human via aide. Build 1-3 first; hold 4 until confirmed.
+
+### note · agent:tilde · 2026-10-09T11:29:03.153Z
+Parts 1-3 built, check green (143 tests, build ok). Part 4 not built: ticket has no human confirmation. parseClock now accepts a leading ~ (a ~7:15am row was previously dropped from the Time Block).
