@@ -83,6 +83,34 @@ current time.
 - **AND** at minute 749 the current row starts at minute 735
 - **AND** at minute 750 there is no current row
 
+### Requirement: The Time Block is shown as written  {#r-5d63}
+
+The Today view SHALL show the Time Block with a Time / Plan / Actual header
+row, each time as written in the file (`7:15am`, `~7:15am`), and text between
+single tildes (`~no plan~`) struck through. The note is never rewritten.
+
+#### Scenario: Struck cells  {#s-62f2}
+
+*Verification*: **executable**
+
+- **WHEN** the cell text "go ~feed the dogs~ now" is rendered inline
+- **THEN** the struck part is "feed the dogs"
+
+#### Scenario: An approximate time keeps its row  {#s-c490}
+
+*Verification*: **executable**
+
+- **WHEN** the Time Block row "| ~7:15am | walk | |" is read
+- **THEN** the row starts at minute 435 and shows the time "~7:15am"
+
+#### Scenario: Header and times  {#s-cfe8}
+
+*Verification*: **non-executable**
+
+- **WHEN** the Today view shows the Time Block
+- **THEN** the table has a header row "Time", "Plan", "Actual"
+- **AND** each time reads as in the file, not in 24-hour form
+
 ### Requirement: Alerts come from due times and the Time Block  {#r-8b04}
 
 The client SHALL build an alert for each task due today with a time (⏰) and

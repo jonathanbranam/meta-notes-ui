@@ -8,6 +8,7 @@ import type { TodayResponse, TodayTask } from "../../shared/types.js";
 import { tmpdir } from "node:os";
 import { createApp } from "../../server/app.js";
 import { EXAMPLE_ROOT, makeExampleRoot } from "../../server/example.js";
+import { inlineSegments } from "../../client/src/markdown";
 import { buildAlerts, currentRow, isPlanned, parseTimeBlock } from "../../client/src/today";
 
 const run = promisify(execFile);
@@ -134,6 +135,18 @@ export function todaySteps(steps: Steps) {
   });
   steps.then(/^the rows are "([^"]+)"$/, (w, list) => {
     expect(w.rows.map((r: any) => `${r.minutes}=${r.plan}`).join(", ")).toBe(list);
+  });
+  steps.when(/^the cell text "([^"]+)" is rendered inline$/, (w, text) => {
+    w.segments = inlineSegments(text, { path: "x.md", files: new Set(), today: "2026-10-04", nowMinutes: 0 });
+  });
+  steps.then(/^the struck part is "([^"]+)"$/, (w, text) => {
+    expect(w.segments.filter((s: any) => s.struck).map((s: any) => s.text)).toEqual([text]);
+  });
+  steps.when(/^the Time Block row "([^"]+)" is read$/, (w, row) => {
+    w.rows = parseTimeBlock(`### Time Block\n\n| Time | Plan | Actual |\n| - | - | - |\n${row}\n`);
+  });
+  steps.then(/^the row starts at minute (\d+) and shows the time "([^"]+)"$/, (w, min, time) => {
+    expect([w.rows[0].minutes, w.rows[0].time]).toEqual([Number(min), time]);
   });
   steps.then(/^the planned rows are "([^"]+)"$/, (w, list) => {
     expect(w.rows.filter((r: any) => isPlanned(r.plan)).map((r: any) => r.minutes).join(", ")).toBe(list);
