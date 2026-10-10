@@ -4,7 +4,7 @@ title = "File tree: collapse and expand it at any window size (<< button), and d
 kind = "feature"
 state = "planned"
 created_at = "2026-10-10T14:28:55.947Z"
-updated_at = "2026-10-10T15:33:16.133748724Z"
+updated_at = "2026-10-10T15:36:33.688606297Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "nfy5"
@@ -25,3 +25,6 @@ Model: sonnet.
 
 ### note · external:orchestrator · 2026-10-10T15:23:43.580Z
 Readied by human via orchestrator. The human, relayed by aide (m-0456): "I will just ship it, and I will review it live."
+
+### note · agent:treepane · 2026-10-10T15:36:33.688Z
+Done at 14e8773 (v0.18.0). npm run check green: 149 tests passed (incl. spec scenarios in design/specs/treepane.md and client/src/treepane.test.ts), build ok. Not tried in a browser (no browser tool here); the layout is CSS and pointer-drag, so please review live. Small-screen drawer CSS is untouched: <<, >> and resize handle are hidden at 720px and below. README status line said v0.15.0; set to v0.18.0.
