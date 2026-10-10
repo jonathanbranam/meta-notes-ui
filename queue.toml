@@ -6,3 +6,9 @@ tasks = ["mu-vn3k"]
 
 [[tier]]
 tasks = ["mu-xhyt"]
+
+[[tier]]
+tasks = [
+    "mu-nfy5",
+    "mu-6u38",
+]
