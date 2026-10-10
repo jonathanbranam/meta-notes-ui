@@ -4,10 +4,15 @@ title = "File tree: collapse and expand it at any window size (<< button), and d
 kind = "feature"
 state = "open"
 created_at = "2026-10-10T14:28:55.947Z"
-updated_at = "2026-10-10T15:23:28.168090090Z"
+updated_at = "2026-10-10T15:23:43.580432642Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "nfy5"
 +++
 
 docs/tickets/open/file-tree-collapse-and-expand-it-at-any-window-size-button-a-nfy5.md
+
+## Thread
+
+### note · external:orchestrator · 2026-10-10T15:23:43.580Z
+Readied by human via orchestrator. The human, relayed by aide (m-0456): "I will just ship it, and I will review it live."
