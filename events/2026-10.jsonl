@@ -165,3 +165,5 @@
 {"actor":"human","at":"2026-10-10T14:28:55.947Z","from":"","task":"mu-nfy5","to":"pending"}
 {"actor":"human","at":"2026-10-10T15:22:40.697Z","from":"","task":"mu-6u38","to":"pending"}
 {"actor":"human","at":"2026-10-10T15:22:40.818Z","from":"","task":"mu-gnqx","to":"pending"}
+{"actor":"external:orchestrator","at":"2026-10-10T15:23:28.168090090Z","from":"pending","task":"mu-nfy5","to":"open"}
+{"actor":"external:orchestrator","at":"2026-10-10T15:23:28.803214308Z","from":"pending","task":"mu-6u38","to":"open"}
