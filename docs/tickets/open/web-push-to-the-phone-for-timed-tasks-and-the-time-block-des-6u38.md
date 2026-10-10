@@ -29,3 +29,7 @@ Add a design to the task and then review it with me. That's the main thing."
 Design first, reviewed with the human, before any build. The design answers the human's questions: what runs on the server (the Node server, the always-on one), how it schedules and wakes at the right time, where subscriptions and keys live, and how it ties to the in-app alerts (no double alerts). No code until the human approves the design.
 
 Background: ticket 35z9 planned this as later ("Push to a closed phone is later, with the phone bridge."). Agent-sent pushes are a separate ticket.
+
+## Design
+
+The design for review is [[docs/design/web-push]]. No build until the human approves it.
