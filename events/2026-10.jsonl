@@ -170,3 +170,4 @@
 {"actor":"external:orchestrator","at":"2026-10-10T15:33:16.133748724Z","from":"open","task":"mu-nfy5","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-10T15:33:16.411689203Z","from":"open","task":"mu-6u38","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-10T15:33:16.620593429Z","queue":"reprioritized"}
+{"actor":"agent:manager-1","at":"2026-10-10T15:36:46.213309528Z","from":"planned","task":"mu-nfy5","to":"integrated"}

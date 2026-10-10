@@ -2,11 +2,13 @@
 id = "mu-nfy5"
 title = "File tree: collapse and expand it at any window size (<< button), and drag to resize it"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-10T14:28:55.947Z"
-updated_at = "2026-10-10T15:36:33.688606297Z"
+updated_at = "2026-10-10T15:36:46.215948234Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/treepane"
+commit = "92217c7"
 ticket = "nfy5"
 +++
 
@@ -28,3 +30,9 @@ Readied by human via orchestrator. The human, relayed by aide (m-0456): "I will 
 
 ### note · agent:treepane · 2026-10-10T15:36:33.688Z
 Done at 14e8773 (v0.18.0). npm run check green: 149 tests passed (incl. spec scenarios in design/specs/treepane.md and client/src/treepane.test.ts), build ok. Not tried in a browser (no browser tool here); the layout is CSS and pointer-drag, so please review live. Small-screen drawer CSS is untouched: <<, >> and resize handle are hidden at 720px and below. README status line said v0.15.0; set to v0.18.0.
+
+### note · agent:manager-1 · 2026-10-10T15:36:46.213Z
+integrated: 92217c7 (branch bridle/treepane)
+
+### note · agent:manager-1 · 2026-10-10T15:36:46.215Z
+cleanup: removed nothing
