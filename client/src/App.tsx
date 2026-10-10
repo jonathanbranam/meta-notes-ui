@@ -1,9 +1,10 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, type CSSProperties, type PointerEvent as ReactPointerEvent, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
+import { clampTreeWidth, readTreePane, writeTreePane } from "./treepane";
 import { isNewVersion } from "./version";
 import { AddTask } from "./AddTask";
 import { TimeLogPanel } from "./TimeLog";
@@ -300,6 +301,19 @@ export function App() {
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
+  const [pane, setPane] = useState(readTreePane);
+  useEffect(() => writeTreePane(pane), [pane]);
+  // Drag the tree's right edge: the width follows the pointer, kept within the min and max.
+  const startResize = (e: ReactPointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const move = (m: PointerEvent) => setPane((p) => ({ ...p, width: clampTreeWidth(m.clientX) }));
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  };
   const [loggedIn, setLoggedIn] = useState(false);
   const [canMessage, setCanMessage] = useState(false);
   const [composing, setComposing] = useState(false);
@@ -521,7 +535,10 @@ export function App() {
       .catch(() => setError("Cannot find today's daily note"));
 
   return (
-    <div className="app">
+    <div
+      className={pane.collapsed ? "app tree-collapsed" : "app"}
+      style={{ "--tree-w": `${pane.width}px` } as CSSProperties}
+    >
       <header>
         <button className="menu" onClick={() => setDrawer(!drawer)} aria-label="Files">
           ☰
@@ -554,8 +571,17 @@ export function App() {
         </button>
       )}
       <nav className={drawer ? "drawer open" : "drawer"}>
+        <button className="tree-collapse" onClick={() => setPane({ ...pane, collapsed: true })} aria-label="Hide the file tree">
+          &lt;&lt;
+        </button>
         <TreeView nodes={tree} current={path} onOpen={open} />
       </nav>
+        <div className="tree-resize" onPointerDown={startResize} role="separator" aria-label="Resize the file tree" />
+      {pane.collapsed && (
+        <button className="tree-expand" onClick={() => setPane({ ...pane, collapsed: false })} aria-label="Show the file tree">
+          &gt;&gt;
+        </button>
+      )}
       {drawer && <div className="scrim" onClick={() => setDrawer(false)} />}
       <main>
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
