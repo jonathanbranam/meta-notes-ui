@@ -576,7 +576,7 @@ export function App() {
         </button>
         <TreeView nodes={tree} current={path} onOpen={open} />
       </nav>
-        <div className="tree-resize" onPointerDown={startResize} role="separator" aria-label="Resize the file tree" />
+      <div className="tree-resize" onPointerDown={startResize} role="separator" aria-label="Resize the file tree" />
       {pane.collapsed && (
         <button className="tree-expand" onClick={() => setPane({ ...pane, collapsed: false })} aria-label="Show the file tree">
           &gt;&gt;
