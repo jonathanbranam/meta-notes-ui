@@ -24,4 +24,4 @@ The file tree pane from ticket nfy5 (v0.18.0, merged 92217c7, live on the NUC si
 
 Fix the layout so the expanded tree sits beside the main pane, not behind it, and the main pane takes the remaining width. Verify it in a real browser before merging (a headless browser screenshot at a desktop width, expanded, collapsed and resized), since the first build had no visual check.
 
-Unknown: which browser and window size the human used. Ask the human through the aide if it matters.
+Browser: the human, 2026-10-11 00:09 ET, verbatim: "I'm using Chrome. The window was wide I can post a few screenshots"
