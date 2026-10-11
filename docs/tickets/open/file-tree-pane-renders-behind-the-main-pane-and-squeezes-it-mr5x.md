@@ -33,3 +33,8 @@ Browser: the human, 2026-10-11 00:09 ET, verbatim: "I'm using Chrome. The window
 as soon as it expands past the mobile size the left sidebar starts being visible on the RIGHT side, underneath the main content, pushing the main content to the left. when I hide the left sidebar, it actually gets bigger and squishes the entire main view to about 20 pixels. And it still seems to be anchored to the right."
 
 So, above the mobile breakpoint in Chrome: the tree lays out on the right, under the main content; collapsing it (`<<`) makes the tree wider instead of hiding it and squeezes the main view to about 20 px. Looks like the grid/flex columns are swapped or the collapsed width is applied to the wrong column. Screenshots are on the human's Mac; to be attached.
+
+## Screenshots (the human's, Chrome on macOS, 2026-10-11 00:22 ET)
+
+- [Expanded](../assets/mr5x-expanded.png): the main content (Today, Time Block) sits at the left in a narrow column; the tree's column is on the right, with only a sliver of a bar and a button edge at its top right. The tree's own content isn't visible.
+- [Collapsed with `<<`](../assets/mr5x-collapsed.png): the `>>` button shows at top left, but the main content is squeezed to about 40 px ("To / 20 / 10 / 11", the table cut off); the rest of the window is empty.
