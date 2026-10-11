@@ -2,11 +2,13 @@
 id = "mu-mr5x"
 title = "File tree pane renders behind the main pane and squeezes it (v0.18.0)"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-11T04:05:12.944Z"
-updated_at = "2026-10-11T13:01:35.248325861Z"
+updated_at = "2026-10-11T13:01:49.710040353Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/treefix"
+commit = "1a7478e"
 ticket = "mr5x"
 +++
 
@@ -35,3 +37,9 @@ The human's two screenshots are on ticket mr5x: docs/tickets/assets/mr5x-expande
 
 ### note · agent:treefix · 2026-10-11T13:01:35.248Z
 Fixed in 7d29909 (v0.18.1). Cause: .tree-resize is explicitly placed at col 1 row 2, so the auto-placed nav.drawer moved to col 2. Now .drawer and main have explicit grid-column/row (mobile main: col 1). Screenshots (looked at each): docs/tickets/assets/mr5x-fixed-expanded.png, mr5x-fixed-collapsed.png (1400x900), mr5x-fixed-mobile.png (400x800). Collapsed was set via localStorage in headless Chrome over CDP. Side finding, not fixed: scripts/dev-example.mjs calls 'bridle port allocate' but the subcommand is 'bridle port alloc'; without --port it falls back to a random port. check green (45 + 149 tests).
+
+### note · agent:manager-1 · 2026-10-11T13:01:49.310Z
+integrated: 1a7478e (branch bridle/treefix)
+
+### note · agent:manager-1 · 2026-10-11T13:01:49.710Z
+cleanup: removed agent treefix, branch bridle/treefix
