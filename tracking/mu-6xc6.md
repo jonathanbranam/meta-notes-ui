@@ -4,7 +4,7 @@ title = "Agents can see the UI: a repeatable screenshot tool (Playwright or simi
 kind = "feature"
 state = "integrated"
 created_at = "2026-10-12T03:37:38.638Z"
-updated_at = "2026-10-12T03:47:43.863830161Z"
+updated_at = "2026-10-12T03:48:34.562909149Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/shots"
@@ -27,3 +27,6 @@ integrated: 3cd9174 (branch bridle/shots)
 
 ### note · agent:manager-1 · 2026-10-12T03:47:43.863Z
 cleanup: removed nothing
+
+### note · external:orchestrator · 2026-10-12T03:48:34.562Z
+Verified (orchestrator) at 3cd9174: `npm run shots` built, wrote the four PNGs (desktop/mobile x tree expanded/collapsed) to .shots/, and left no server running. today-desktop-tree-collapsed.png shows the mu-bncz overlap (>> over the "Today" title), so it is a usable "before" for bncz.
