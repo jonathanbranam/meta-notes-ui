@@ -2,11 +2,13 @@
 id = "mu-h4rr"
 title = "Previous/next note navigation on every page; Today steps by day across quarter folders"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-12T03:37:38.792Z"
-updated_at = "2026-10-12T03:55:08.682881170Z"
+updated_at = "2026-10-12T03:55:21.753561468Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/prevnext"
+commit = "6a636ad"
 ticket = "h4rr"
 +++
 
@@ -22,3 +24,9 @@ mu-h4rr: it is queued (tier 2, after mu-bncz), planned with a brief comment. Tak
 
 ### note · agent:prevnext · 2026-10-12T03:55:08.682Z
 Done in 4ed085e (v0.19.0), npm run check green (152 tests + specs). Lookup: client/src/neighbours.ts (+test); spec design/specs/neighbours.md. Today steps from today's daily note, or its would-be path if not yet created. Screenshots (looked at; no overflow at 400px, both disabled for a lone note, prev enabled/next disabled on Today since 10-11 is the newest example note): docs/tickets/assets/h4rr-today-desktop.png, h4rr-today-mobile.png, h4rr-daily-mobile.png, h4rr-quarter-desktop.png, h4rr-quarter-mobile.png. Buttons use the unicode single angle quotes as labels (UI only, not editable text).
+
+### note · agent:manager-1 · 2026-10-12T03:55:21.750Z
+integrated: 6a636ad (branch bridle/prevnext)
+
+### note · agent:manager-1 · 2026-10-12T03:55:21.753Z
+cleanup: removed nothing
