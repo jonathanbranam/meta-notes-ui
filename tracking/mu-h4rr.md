@@ -4,7 +4,7 @@ title = "Previous/next note navigation on every page; Today steps by day across 
 kind = "feature"
 state = "integrated"
 created_at = "2026-10-12T03:37:38.792Z"
-updated_at = "2026-10-12T03:55:21.753561468Z"
+updated_at = "2026-10-12T03:56:15.003168802Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/prevnext"
@@ -30,3 +30,6 @@ integrated: 6a636ad (branch bridle/prevnext)
 
 ### note · agent:manager-1 · 2026-10-12T03:55:21.753Z
 cleanup: removed nothing
+
+### note · external:orchestrator · 2026-10-12T03:56:15.003Z
+Verified (orchestrator) at 6a636ad / v0.19.0: client/src/neighbours.ts matches the vim DailyPrev/DailyNext model (one sorted list of plan/daily/**/YYYY-MM-DD Ddd.md, so missing days are skipped and quarter/year folders are crossed); other pages use the same folder's .md files; buttons are disabled at the ends and never create a note. Tests cover quarter and year crossing, the ends, a not-yet-existing Today note, and folder pages. Today mobile shot: prev enabled, next disabled. CI green on main and the tag.
