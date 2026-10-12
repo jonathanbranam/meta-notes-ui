@@ -19,4 +19,5 @@ What the aide took from it (check against the quote):
 - Every note page gets previous and next controls at the top. They move alphabetically to the neighbouring note in the current folder.
 - Today page: previous and next go to the previous and next day's notes. At a quarter boundary they cross into the neighbouring quarter folder.
 - They never create a note. A control is disabled when there is no note to go to.
-- Open question for the plan: does Today step to the nearest existing day note (skipping days with no note), or only to the calendar day before or after, disabled if that note is missing? The human's "disable if no note exists" reads as the second. Ask the human if unsure.
+- Answered. The human, 2026-10-11 (to the aide, verbatim): "moving left and right in today jumps over missing notes. it's basically the previous sorted file in the folder, except at year / quarter boundaries."
+  So on Today, previous and next skip days with no note: they go to the previous or next sorted note file in the folder. At the first or last note of a quarter folder, they continue into the neighbouring quarter folder, and across a year folder at a year boundary. They are disabled only when there is no note at all in that direction.
