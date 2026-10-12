@@ -4,7 +4,7 @@ severity: must
 roles: [manager, worker]
 ---
 The human's always-on meta-notes-ui runs on port 7480 as the systemd user
-unit `meta-notes-ui` (deploy/nuc.md). Agents never bind, stop, restart or
+unit `meta-notes-ui` (deploy/always-on.md). Agents never bind, stop, restart or
 kill anything on port 7480, the `meta-notes-ui` service, or its processes.
 
 - **The update units** (`meta-notes-ui-update.path` and `.service`) rebuild

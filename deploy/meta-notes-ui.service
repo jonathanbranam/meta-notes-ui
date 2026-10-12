@@ -1,6 +1,6 @@
-# systemd USER unit for the always-on meta-notes-ui. See deploy/nuc.md.
+# systemd USER unit for the always-on meta-notes-ui. See deploy/always-on.md.
 # Copy to ~/.config/systemd/user/meta-notes-ui.service and replace the four
-# placeholders: NODE, NOTES, NODE_BIN_DIR and META_NOTES_BIN_DIR. On the NUC:
+# placeholders: NODE, NOTES, NODE_BIN_DIR and META_NOTES_BIN_DIR. On vesta:
 #   NODE     = the output of `command -v node`
 #   NOTES    = /srv/shared/work/notes-work/notes
 #   NODE_BIN_DIR = the directory of NODE
@@ -10,7 +10,7 @@ Description=meta-notes-ui (always-on notes UI)
 After=network.target
 
 [Service]
-# `current` is the build deploy/update.sh last finished (see deploy/nuc.md).
+# `current` is the build deploy/update.sh last finished (see deploy/always-on.md).
 WorkingDirectory=%h/.local/share/meta-notes-ui/current
 # A user unit has a minimal PATH; the server runs `meta-notes` and needs it here.
 Environment=PATH=META_NOTES_BIN_DIR:NODE_BIN_DIR:/usr/local/bin:/usr/bin:/bin

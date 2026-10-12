@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 const script = resolve(__dirname, "../deploy/update.sh");
 const repo = resolve(__dirname, "..");
-const nuc = join(repo, "deploy/nuc.md");
+const doc = join(repo, "deploy/always-on.md");
 
 let dir: string;
 let checkout: string;
@@ -110,7 +110,7 @@ describe("deploy/update.sh when main moves during a build", () => {
   });
 });
 
-describe("deploy/nuc.md install loop", () => {
+describe("deploy/always-on.md install loop", () => {
   // Runs the guide's install block over the three templates in a fake HOME, with
   // a stub meta-notes on PATH. Run from the repo root (it only reads deploy/), so
   // $PWD is the repo. The cd and daemon-reload lines are dropped: systemd is never touched.
@@ -122,7 +122,7 @@ describe("deploy/nuc.md install loop", () => {
     writeFileSync(join(bin, "meta-notes"), "#!/bin/sh\n");
     chmodSync(join(bin, "meta-notes"), 0o755);
 
-    const block = readFileSync(nuc, "utf8").match(/```sh\n([\s\S]*?)```/g)!
+    const block = readFileSync(doc, "utf8").match(/```sh\n([\s\S]*?)```/g)!
       .map((b) => b.replace(/^```sh\n|```$/g, ""))
       .find((b) => b.includes('sed -e "s|META_NOTES_BIN_DIR'))!;
     const lines = block.split("\n").filter((l) => !/^cd |systemctl/.test(l)).join("\n");

@@ -1,4 +1,4 @@
-# Always-on meta-notes-ui on the NUC
+# Always-on meta-notes-ui on vesta
 
 One server, port **7480**, bound to 127.0.0.1, serving the notes root
 `/srv/shared/work/notes-work/notes`, run by a systemd user unit from a build of `main`
@@ -51,14 +51,14 @@ sudo tailscale set --operator=jbranam      # only if `tailscale serve` is refuse
 tailscale serve --bg --https=443 http://127.0.0.1:7480
 ```
 
-The phone URL is then `https://nuc.<tailnet>.ts.net/`.
+The phone URL is then `https://vesta.<tailnet>.ts.net/`.
 
 ## Token and phone
 
 In the notes root, `meta-notes ui url` prints `<server.json url>?token=<token>`.
 The server records its own address, `http://127.0.0.1:7480`, so for the phone
 replace that origin with the Tailscale one:
-`https://nuc.<tailnet>.ts.net/?token=<token>`. Open it once; the server
+`https://vesta.<tailnet>.ts.net/?token=<token>`. Open it once; the server
 trades the token for a cookie. The server creates the token file
 (`<notes>/.meta-notes-cache/ui/token`, mode 0600) on its first start; run
 `meta-notes ui url` only after that, since before it the command fails with
@@ -128,7 +128,19 @@ meta-notes ui url
 `start meta-notes-ui-update` takes a minute (`npm ci` and the build); the
 server comes up when it ends. Step 3 prints
 `http://127.0.0.1:7480/?token=<token>`: swap the origin for
-`https://nuc.<tailnet>.ts.net` and open that once on the phone.
+`https://vesta.<tailnet>.ts.net` and open that once on the phone.
 
 Update logs: `journalctl --user -u meta-notes-ui-update`. Server logs:
 `journalctl --user -u meta-notes-ui`.
+
+## Renaming the host
+
+When the machine gets a new hostname, the phone URL changes with it. The
+human does these steps on the host and the phone (agents never do):
+
+1. Re-apply `tailscale serve`: its config is tied to the old name, so run
+   `tailscale serve --bg --https=443 http://127.0.0.1:7480` again on the new host.
+2. Reinstall the Home Screen app on the phone, from the new URL. The origin
+   changes, so the app's localStorage, its token and any push subscription
+   start over: open `https://<new-name>.<tailnet>.ts.net/?token=<token>` once
+   more, and allow notifications again.
