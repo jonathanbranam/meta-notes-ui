@@ -3,7 +3,6 @@
 # bridle names the project after the repo directory ("meta-notes-ui").
 
 # L1 base layer and packs, from the NUC's bridle checkout.
-workflow = "/srv/shared/work/bridle-work/bridle/workflow"
 packs = ["typescript"]
 
 [tasks]
