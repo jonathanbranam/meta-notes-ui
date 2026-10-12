@@ -15,3 +15,9 @@ from = "mu-6xc6"
 to = "mu-mr5x"
 kind = "related"
 created_at = "2026-10-12T03:37:51.384Z"
+
+[[edge]]
+from = "mu-6xc6"
+to = "mu-bncz"
+kind = "blocks"
+created_at = "2026-10-12T03:43:21.473Z"
