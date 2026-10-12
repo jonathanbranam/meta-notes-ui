@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.18.0, v1 in development.
+Status: v0.19.0, v1 in development.
 
 ## How it fits
 
@@ -154,6 +154,12 @@ for any visible UI change, run it before and after and Read the PNGs; a reviewer
 look at them too. Production does not depend on it.
 
 ## Today, alerts and the phone app
+
+- **Previous/next** (the `<` `>` buttons left of the title, every page): open the neighbouring
+  `.md` in the same folder, sorted. On a daily note, and on Today (from today's note, which may
+  not exist), they step through one sorted list of `plan/daily/**`, crossing quarter and year
+  folders and skipping missing days, like the vim command. Disabled at either end; never
+  creates a note (`client/src/neighbours.ts`, `design/specs/neighbours.md`).
 
 - **Today** (header button; `#!today`): today's Time Block with the current
   row and the next planned row marked, open tasks due today or overdue, and
