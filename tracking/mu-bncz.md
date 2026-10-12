@@ -2,11 +2,13 @@
 id = "mu-bncz"
 title = "Collapsed file tree: the >> button overlaps the top bar"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-12T03:37:38.520Z"
-updated_at = "2026-10-12T03:52:07.310168369Z"
+updated_at = "2026-10-12T03:52:22.782904158Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/gtbtn"
+commit = "bdd1f9f"
 ticket = "bncz"
 +++
 
@@ -22,3 +24,9 @@ mu-bncz: comment added. It is blocked by mu-6xc6 (blocked_by on the file; the qu
 
 ### note · agent:gtbtn · 2026-10-12T03:52:07.310Z
 Fixed: .tree-expand is now a grid item (col 1, row 2) and the collapsed column is auto width, so it sits below the header at any header height. Before shots (not saved) showed it over the header text. After shots, looked at: docs/tickets/assets/bncz-after-{desktop,mobile}-tree-{collapsed,expanded}.png (mobile hides the button; the menu drawer is unchanged).
+
+### note · agent:manager-1 · 2026-10-12T03:52:22.777Z
+integrated: bdd1f9f (branch bridle/gtbtn)
+
+### note · agent:manager-1 · 2026-10-12T03:52:22.782Z
+cleanup: removed nothing
