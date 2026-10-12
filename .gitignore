@@ -5,3 +5,4 @@
 .bridle/cache/
 node_modules/
 dist/
+.shots/

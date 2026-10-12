@@ -143,6 +143,16 @@ server there (port `0` unless given; `bridle port allocate` is used if the
 binary exists), printing the URL with token. **Whenever a feature needs
 content to verify, extend the example** and its README.
 
+## Screenshots (dev tooling)
+
+`npm run shots [-- --out DIR] [--no-build] [route ...]` builds, serves a temp copy of
+`examples/notes` on a free port (never 7480), and writes desktop (1400x900) and mobile
+(400x800) PNGs of each hash route (default `#!today`) with the file tree expanded and
+collapsed, to `.shots/` (gitignored) or DIR. It uses the system Chrome through the
+`playwright` devDependency (no browser download) and always stops its server. Agents:
+for any visible UI change, run it before and after and Read the PNGs; a reviewer should
+look at them too. Production does not depend on it.
+
 ## Today, alerts and the phone app
 
 - **Today** (header button; `#!today`): today's Time Block with the current
