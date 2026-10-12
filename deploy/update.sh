@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build the checkout's main out of tree and point STATE/current at it, then
-# restart the server. Run by meta-notes-ui-update.service (deploy/nuc.md).
+# restart the server. Run by meta-notes-ui-update.service (deploy/always-on.md).
 # Fails closed: on any error `current` and the running server are untouched.
 set -euo pipefail
 

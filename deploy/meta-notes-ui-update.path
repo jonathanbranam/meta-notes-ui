@@ -1,5 +1,5 @@
 # systemd USER path unit: rebuild and restart the server when main moves.
-# See deploy/nuc.md. Copy to ~/.config/systemd/user/ and replace CHECKOUT with
+# See deploy/always-on.md. Copy to ~/.config/systemd/user/ and replace CHECKOUT with
 # the repo checkout (/srv/shared/work/meta-notes-ui-work/meta-notes-ui).
 # The reflog is appended on every move of main and survives `git pack-refs`.
 [Unit]
