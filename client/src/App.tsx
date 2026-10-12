@@ -9,6 +9,7 @@ import { isNewVersion } from "./version";
 import { AddTask } from "./AddTask";
 import { TimeLogPanel } from "./TimeLog";
 import { EditableCell, rowCells } from "./TimeCell";
+import { dailyPath, neighbours } from "./neighbours";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -528,6 +529,12 @@ export function App() {
   const plugins = useMemo(() => [remarkGfm, metaNotes(ctx)], [ctx]);
   const props = useMemo(() => (note ? parseFrontmatter(note.text) : []), [note]);
 
+  // On Today, step from today's daily note (which may not exist yet).
+  const current = path === TODAY_PATH ? (todayState.data?.daily?.path ?? dailyPath(now)) : path;
+  const near = useMemo(
+    () => (current && (path === TODAY_PATH || isNote(path)) ? neighbours(current, filePaths) : { prev: null, next: null }),
+    [current, path, filePaths],
+  );
   const openToday = () => open(TODAY_PATH);
   const openDaily = () =>
     getJson<{ path: string; exists: boolean }>("/api/daily")
@@ -563,7 +570,15 @@ export function App() {
         <button onClick={() => location.reload()} aria-label="Reload">
           Reload
         </button>
-        <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
+        <div className="titlebar">
+          <button disabled={!near.prev} onClick={() => near.prev && open(near.prev)} aria-label="Previous note" title={near.prev ?? undefined}>
+            &lsaquo;
+          </button>
+          <button disabled={!near.next} onClick={() => near.next && open(near.next)} aria-label="Next note" title={near.next ?? undefined}>
+            &rsaquo;
+          </button>
+          <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
+        </div>
       </header>
       {stale && (
         <button className="update-bar" onClick={() => location.reload()}>
