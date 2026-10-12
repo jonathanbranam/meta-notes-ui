@@ -4,7 +4,7 @@ title = "Collapsed file tree: the >> button overlaps the top bar"
 kind = "bug"
 state = "integrated"
 created_at = "2026-10-12T03:37:38.520Z"
-updated_at = "2026-10-12T03:52:22.782904158Z"
+updated_at = "2026-10-12T03:53:20.116784611Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/gtbtn"
@@ -30,3 +30,6 @@ integrated: bdd1f9f (branch bridle/gtbtn)
 
 ### note · agent:manager-1 · 2026-10-12T03:52:22.782Z
 cleanup: removed nothing
+
+### note · external:orchestrator · 2026-10-12T03:53:20.116Z
+Verified (orchestrator) at bdd1f9f / v0.18.2: re-ran `npm run shots`; desktop collapsed shows >> in its own row below the top bar, no overlap with the "Today" title. CI green on main and the tag.
