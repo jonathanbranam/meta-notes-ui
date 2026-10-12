@@ -11,7 +11,7 @@ right edge to set its width. The browser remembers both. (Ticket nfy5.)
 ### Requirement: The tree collapses and expands at any window size  {#r-c42e}
 
 The client SHALL show a `<<` button at the top of the file tree that hides the
-tree, and, while the tree is hidden, a small button on the left edge that
+tree, and, while the tree is hidden, a small button at the left edge of the main area, below the top bar (never over it), that
 shows it again. This SHALL work at every window width on a pointer screen.
 On a small screen (up to 720 px) the tree stays the slide-in drawer opened by
 the menu button.
