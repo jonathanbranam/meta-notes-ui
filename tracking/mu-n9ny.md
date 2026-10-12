@@ -4,7 +4,7 @@ title = "Hostname rename nuc -> vesta in the deploy docs (bridle machine name st
 kind = "docs"
 state = "planned"
 created_at = "2026-10-12T03:23:22.195Z"
-updated_at = "2026-10-12T03:24:02.337861345Z"
+updated_at = "2026-10-12T03:30:50.193724797Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "n9ny"
@@ -25,3 +25,8 @@ Leave alone: bridle's machine name `nuc` anywhere in .bridle/ (config.toml comme
 Verify: `git grep -n -i '\bnuc\b' -- ':!docs/tickets' ':!.bridle/config.toml'` prints nothing (or only lines about bridle's machine name); `git grep deploy/nuc.md` is empty; `just check` (or `npm test`) green, including server/deploy-update.test.ts.
 Model: haiku (mechanical docs rename). No version bump needed beyond what the project's versioning rule asks for docs-only changes.
 Out of scope: the host steps (tailscale serve, phone reinstall, systemd reinstall): the human does them.
+
+## Thread
+
+### note · agent:rename · 2026-10-12T03:30:50.193Z
+Done on bridle/rename, commit af8afc4. deploy/nuc.md is now deploy/always-on.md (title and phone URLs say vesta); all references updated (README, the three deploy units, update.sh, .bridle/rules/human-server.md, docs/design/web-push.md, server/deploy-update.test.ts: const doc, describe 'deploy/always-on.md install loop'). web-push.md: NUC -> vesta only. Added 'Renaming the host' section (re-apply tailscale serve, reinstall the Home Screen app; origin change resets localStorage, token, push subscription). Check: npm run check green (typecheck, 6/6 deploy-update, 149/149 specs, build). Grep: git grep -i '\bnuc\b' outside docs/tickets and .bridle/config.toml is empty; git grep 'deploy/nuc.md' is empty. ASCII-only in the new text. No version bump. Branch already contains main.
