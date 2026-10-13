@@ -1,7 +1,8 @@
 # Web Push to the phone
 
-Status: design for review (ticket `web-push-to-the-phone-for-timed-tasks-and-the-time-block-des-6u38`).
-No code until the human approves. Written for a 10-minute read.
+Status: approved by the human 2026-10-13 and built (ticket mu-nqwt, v0.20.0). Written for a 10-minute read.
+Build notes: the three routes live in `server/pushroutes.ts` (like `server/message.ts`); the scheduler sends a late
+alert as it finds it, on any re-plan, not only at start.
 
 ## What this is
 

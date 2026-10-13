@@ -7,11 +7,13 @@ import { serve } from "@hono/node-server";
 import type { AddressInfo } from "node:net";
 import type { ChangeEvent, ServerInfo } from "../shared/types.js";
 import { createApp } from "./app.js";
+import { createPush, validContact } from "./push.js";
+import { cliInputs, createScheduler } from "./scheduler.js";
 import { loadToken } from "./token.js";
 import { readVersion } from "./version.js";
 import { watchRoot } from "./watcher.js";
 
-export const USAGE = "usage: node index.js --root <notes root> --token-file <path> [--port N] [--host H] [--bridle-url U --bridle-token-file F [--bridle-to T]]";
+export const USAGE = "usage: node index.js --root <notes root> --token-file <path> [--port N] [--host H] [--bridle-url U --bridle-token-file F [--bridle-to T]] [--push-contact <mailto:...|https://...>]";
 
 /** Thrown when --root or --token-file is missing; the entry point prints it and exits 2. */
 export class UsageError extends Error {}
@@ -35,6 +37,7 @@ export async function startServer(args: string[]): Promise<RunningServer> {
       "bridle-url": { type: "string" },
       "bridle-token-file": { type: "string" },
       "bridle-to": { type: "string" },
+      "push-contact": { type: "string" },
     },
   });
   if (!values.root || !values["token-file"]) throw new UsageError(USAGE);
@@ -47,6 +50,9 @@ export async function startServer(args: string[]): Promise<RunningServer> {
     ? { url: values["bridle-url"], tokenFile: values["bridle-token-file"]!, to: values["bridle-to"] ?? "external:advisor" }
     : undefined;
 
+  const contact = values["push-contact"];
+  if (contact !== undefined && !validContact(contact)) throw new UsageError("--push-contact must be a mailto: or https: URL");
+
   const root = await realpath(values.root);
   const token = await loadToken(values["token-file"]);
   const version = readVersion();
@@ -55,12 +61,18 @@ export async function startServer(args: string[]): Promise<RunningServer> {
   const listeners = new Set<(events: ChangeEvent[]) => void>();
   const watcher = watchRoot(root, (events) => listeners.forEach((fn) => fn(events)));
 
+  // Web Push is off without --push-contact; the scheduler re-plans on note changes and when a device subscribes.
+  const push = contact ? await createPush({ root, contact }) : undefined;
+  const scheduler = push ? createScheduler(push, cliInputs(root)) : undefined;
+  if (scheduler) listeners.add(scheduler.onChanges);
+
   const here = path.dirname(fileURLToPath(import.meta.url));
   const app = createApp({
     root,
     token,
     version,
     message,
+    push: push && scheduler ? { store: push, onSubscribed: () => void scheduler.replan() } : undefined,
     clientDir: path.resolve(here, "../client"),
     subscribe: (fn) => {
       listeners.add(fn);
@@ -83,6 +95,7 @@ export async function startServer(args: string[]): Promise<RunningServer> {
       };
       await mkdir(path.dirname(infoFile), { recursive: true });
       await writeFile(infoFile, JSON.stringify(info, null, 2) + "\n");
+      void scheduler?.replan();
       resolve({
         info,
         infoFile,
@@ -90,6 +103,8 @@ export async function startServer(args: string[]): Promise<RunningServer> {
           if (closed) return;
           closed = true;
           watcher.close();
+          scheduler?.stop();
+          push?.stop();
           server.close();
           rmSync(infoFile, { force: true });
         },

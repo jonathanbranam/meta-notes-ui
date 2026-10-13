@@ -59,3 +59,24 @@ export interface TodayResponse {
 
 /** `GET /api/tag-aliases`: alias tag to canonical tag, as `meta-notes conventions --json` reports it; empty when unavailable. */
 export type TagAliasesResponse = Record<string, string>;
+
+/** A browser's Web Push subscription, as `PushSubscription.toJSON()` gives it. */
+export interface PushSubscriptionJSON {
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+}
+
+/** What the service worker's `push` handler reads. `tag` is the alert id, so repeats replace each other. */
+export interface PushPayload {
+  title: string;
+  body?: string;
+  tag: string;
+  url?: string;
+}
+
+/** What `sendPush` did: delivered, subscriptions removed as gone, and sends that failed. */
+export interface PushResult {
+  sent: number;
+  removed: number;
+  failed: number;
+}

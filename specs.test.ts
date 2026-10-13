@@ -7,6 +7,7 @@ import { messageSteps } from "./specs/steps/message.js";
 import { todaySteps } from "./specs/steps/today.js";
 import { lastpageSteps } from "./specs/steps/lastpage.js";
 import { treepaneSteps } from "./specs/steps/treepane.js";
+import { pushSteps } from "./specs/steps/push.js";
 import { neighboursSteps } from "./specs/steps/neighbours.js";
 
 const steps = createSteps();
@@ -19,5 +20,6 @@ messageSteps(steps);
 lastpageSteps(steps);
 treepaneSteps(steps);
 neighboursSteps(steps);
+pushSteps(steps);
 
 await registerBridleSpecs({ steps });

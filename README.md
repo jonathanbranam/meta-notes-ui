@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.19.0, v1 in development.
+Status: v0.20.0, v1 in development.
 
 ## How it fits
 
@@ -30,7 +30,7 @@ Needs Node and `meta-notes` on PATH.
 `meta-notes ui` starts the server with exactly this:
 
 ```bash
-node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --token-file <path> [--bridle-url U --bridle-token-file F [--bridle-to T]]
+node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --token-file <path> [--bridle-url U --bridle-token-file F [--bridle-to T]] [--push-contact <mailto:you@example.com|https://...>]
 ```
 
 - `--host` defaults to `127.0.0.1` (bind a LAN or Tailscale address for the
@@ -38,6 +38,11 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
 - `--bridle-url`, `--bridle-token-file` (and `--bridle-to`, default `external:advisor`), all
   or none, turn on a Message button: `POST /api/message {body}` sends the text to a bridle
   daemon as the human (`design/specs/message.md`). `/api/version` reports `message: true|false`.
+- `--push-contact` turns on Web Push (off without it): the server keeps a VAPID key pair in
+  `<root>/.meta-notes-cache/ui/push/` (mode 0600), plans today's alerts, and sends each one to every
+  subscribed device at its time, with one timer and no polling. The Today view's "Enable alerts"
+  subscribes a device (a Home Screen app on iOS 16.4+). `GET /api/push/key`, `POST` and
+  `DELETE /api/push/subscribe`. Design: `docs/design/web-push.md`; spec: `design/specs/push.md`.
 - `--token-file` holds the secret (created, mode 0600, if missing). Every
   request needs it: open `<url>/?token=<token>` once and the server sets an
   httpOnly cookie and redirects; API clients may send `Authorization: Bearer`.

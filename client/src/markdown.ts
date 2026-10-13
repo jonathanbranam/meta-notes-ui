@@ -1,3 +1,4 @@
+import { parseClock } from "../../shared/today";
 import { headingSlug, parseWikiLink, resolveLink, WIKI_LINK } from "../../shared/links";
 
 // A small subset of mdast, enough for the plugins below.
@@ -104,13 +105,6 @@ export function taskChips(nodes: Node[], status: string, today: string): { nodes
 }
 
 export const isOpen = (status: string) => !"xX->".includes(status);
-
-/** Minutes since midnight for `8:15am`, `12:00pm`, `~8:15am` (approximately); null if not a time. */
-export function parseClock(s: string): number | null {
-  const m = /^\s*~?\s*(\d{1,2}):(\d{2})\s*(am|pm)\s*$/i.exec(s);
-  if (!m) return null;
-  return (Number(m[1]) % 12) * 60 + Number(m[2]) + (m[3].toLowerCase() === "pm" ? 720 : 0);
-}
 
 const plain = (n: Node): string => (n.value ?? "") + (n.children ?? []).map(plain).join("");
 

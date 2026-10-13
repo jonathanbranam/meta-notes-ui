@@ -4,8 +4,9 @@
 
 The human wants a view of today's plan, tasks and Time Block, nudges from due
 times and the Time Block, and the app installed on the phone. Alerts are
-browser notifications driven by client-side timers, so the server does
-nothing while idle (rule light-on-resources). Words from the human: "alerts
+browser notifications driven by client-side timers, plus Web Push from the
+server when a device is subscribed (design/specs/push.md); the server keeps
+one timer and nothing polls (rule light-on-resources). Words from the human: "alerts
 and reminders and some interactive capabilities that vim doesn't".
 
 ## Requirements
@@ -150,13 +151,13 @@ when a plan starts, not one per quarter hour).
 
 #### Scenario: Alerts reach the phone when the app is closed  {#s-d7c1}
 
-*Verification*: **non-executable**
+*Verification*: **executable**
 
-- **WHEN** an alert's time arrives and the app is not open on the phone
-- **THEN** the phone shows a push, alert or alarm
+The server sends the push (design/specs/push.md); the phone's service worker
+shows it, which only a real phone can check.
 
-Gap: alerts fire only from timers in an open page; the human asked for a
-bridge that sends pushes, alerts and alarms to the device.
+- **WHEN** a device is subscribed, the notes hold a task at 09:30 and the clock runs from 08:00 to 10:30
+- **THEN** one push is sent at 09:30 with the tag "task:a.md:3:09:30" and the title "09:30 Call the dentist"
 
 ### Requirement: Links in Today view text are clickable  {#r-6275}
 

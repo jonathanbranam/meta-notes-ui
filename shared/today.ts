@@ -1,5 +1,11 @@
-import type { TodayTask } from "../../shared/types";
-import { parseClock } from "./markdown";
+import type { TodayTask } from "./types.js";
+
+/** Minutes since midnight for `8:15am`, `12:00pm`, `~8:15am` (approximately); null if not a time. */
+export function parseClock(s: string): number | null {
+  const m = /^\s*~?\s*(\d{1,2}):(\d{2})\s*(am|pm)\s*$/i.exec(s);
+  if (!m) return null;
+  return (Number(m[1]) % 12) * 60 + Number(m[2]) + (m[3].toLowerCase() === "pm" ? 720 : 0);
+}
 
 export interface BlockRow {
   /** Minutes since midnight. */
