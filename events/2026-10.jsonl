@@ -199,3 +199,4 @@
 {"actor":"external:orchestrator","at":"2026-10-13T12:46:56.842307827Z","from":"pending","task":"mu-nqwt","to":"open"}
 {"actor":"external:orchestrator","at":"2026-10-13T12:46:57.133091444Z","from":"open","task":"mu-nqwt","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-13T12:46:57.199354184Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-10-13T22:16:02.539267376Z","from":"planned","task":"mu-nqwt","to":"integrated"}
