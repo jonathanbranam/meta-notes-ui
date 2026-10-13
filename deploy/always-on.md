@@ -79,6 +79,33 @@ token, read from `/srv/shared/work/notes-work/.bridle/tokens/human` on each send
 or neither; without them there is no button and the server needs no bridle.
 Send only: no replies yet. Design: `design/specs/message.md`.
 
+## Optional: Web Push to the phone
+
+`--push-contact` in the unit's `ExecStart` turns on alerts that reach the phone
+when the app is closed or locked; drop it and push is off. The value is a
+`mailto:` or `https:` URL the push services can reach you at (Apple rejects a
+push without one). The unit in this repo has the placeholder
+`mailto:you@example.com`; the install script does not change it, so edit the
+installed unit (`~/.config/systemd/user/meta-notes-ui.service`) to your own
+address and keep that address out of the repo, then `systemctl --user
+daemon-reload`.
+
+- The server makes its key pair on first start with the flag
+  (`<notes>/.meta-notes-cache/ui/push/vapid.json`, mode 0600, git-ignored with
+  the token). Deleting the file makes every phone re-enable alerts.
+  Subscriptions and what was already sent are beside it.
+- On the phone (a Home Screen app, iOS 16.4 or later): Today, "Enable alerts".
+- The server needs outbound HTTPS (443) to the push service in each
+  subscription: `web.push.apple.com` for iOS, `fcm.googleapis.com` or
+  `updates.push.services.mozilla.com` for other browsers. No inbound port.
+- **Time zone:** alerts use the host's zone (`date` on vesta prints US
+  Eastern). If the host zone changes, alert times shift with it.
+- A restart (the update unit restarts the server on every merge to `main`)
+  loses nothing: it re-plans from the notes, and sends an alert it missed only
+  if it is at most 10 minutes late.
+- Logs: `journalctl --user -u meta-notes-ui`. Design: `docs/design/web-push.md`;
+  spec: `design/specs/push.md`.
+
 ## Optional: a login instead of the token
 
 The human's step (agents never do it): run the CLI from the deployed build (the

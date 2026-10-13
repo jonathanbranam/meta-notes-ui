@@ -4,7 +4,8 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { EditableCell, RowsEditor } from "./TimeCell";
 import { inlineSegments, type RenderContext } from "./markdown";
-import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "./today";
+import { disablePush, enablePush, isPushSubscribed, pushAvailable, syncPush } from "./push";
+import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "../../shared/today";
 
 export const TODAY_PATH = "!today";
 const SNOOZE_MIN = 10;
@@ -14,6 +15,7 @@ export const isoDay = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-
 
 /** Show a notification; through the service worker where there is one (Android needs it). */
 async function notify(a: Alert): Promise<void> {
+  if (isPushSubscribed()) return; // the server pushes this alert; the in-app list still shows it
   if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
   const reg = await navigator.serviceWorker?.getRegistration();
   if (reg) await reg.showNotification(a.title, { tag: a.id });
@@ -122,7 +124,14 @@ export function Inline({ text, ctx, open }: { text: string; ctx: RenderContext; 
 export function TodayView({ today, now, open, files }: { today: ReturnType<typeof useToday>; now: Date; open: (p: string) => void; files: ReadonlySet<string> }) {
   const { data, error } = today;
   const [editRows, setEditRows] = useState(false);
+  const [push, setPush] = useState<"off" | "available" | "on">("off");
+  const [pushError, setPushError] = useState("");
   const [perm, setPerm] = useState(() => (typeof Notification === "undefined" ? "unsupported" : Notification.permission));
+  useEffect(() => {
+    void pushAvailable().then(async (ok) => {
+      if (ok) setPush((await syncPush()) ? "on" : "available");
+    });
+  }, []);
   if (error) return <p className="error">{error}</p>;
   if (!data) return <p className="hint">Loading…</p>;
   const rows = parseTimeBlock(data.daily?.text ?? "");
@@ -136,11 +145,35 @@ export function TodayView({ today, now, open, files }: { today: ReturnType<typeo
       <h2>Today, {day}</h2>
       {perm === "default" && (
         <p>
-          <button className="primary" onClick={() => void Notification.requestPermission().then(setPerm)}>
+          <button
+            className="primary"
+            onClick={() =>
+              void Notification.requestPermission().then(async (p) => {
+                setPerm(p);
+                if (p === "granted" && push === "available") {
+                  const err = await enablePush();
+                  setPushError(err);
+                  if (!err) setPush("on");
+                }
+              })
+            }
+          >
             Enable alerts
           </button>
         </p>
       )}
+      {perm === "granted" && push === "available" && (
+        <p>
+          <button className="primary" onClick={() => void enablePush().then((err) => (setPushError(err), err || setPush("on")))}>Enable alerts when the app is closed</button>
+        </p>
+      )}
+      {push === "on" && (
+        <p className="hint">
+          Alerts reach this device when the app is closed.{" "}
+          <button onClick={() => void disablePush().then(() => setPush("available"))}>Alerts off</button>
+        </p>
+      )}
+      {pushError && <p className="error">{pushError}</p>}
       {perm === "denied" && <p className="hint">Alerts are blocked in this browser.</p>}
       {perm === "unsupported" && <p className="hint">This browser cannot show notifications.</p>}
 

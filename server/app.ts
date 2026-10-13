@@ -9,6 +9,7 @@ import type { BacklinksResponse, ChangeEvent, NoteResponse, TagAliasesResponse }
 import { createBacklinks } from "./backlinks.js";
 import { editRoutes, runMetaNotes } from "./edits.js";
 import { messageRoutes, type MessageConfig } from "./message.js";
+import { pushRoutes, type PushConfig } from "./pushroutes.js";
 import { confine, PathError } from "./paths.js";
 import { createLoginStore, SESSION_MS, verifyLogin, type LoginStore } from "./login.js";
 import { tokenMatches } from "./token.js";
@@ -42,6 +43,8 @@ export interface AppOptions {
   failDelayMs?: number;
   /** Send-to-advisor settings; without them there is no /api/message. */
   message?: MessageConfig;
+  /** Web Push store; without it there is no /api/push route. */
+  push?: PushConfig;
   /** Subscribe to change batches; returns an unsubscribe function. */
   subscribe: (fn: (events: ChangeEvent[]) => void) => () => void;
 }
@@ -220,6 +223,7 @@ export function createApp(opts: AppOptions): Hono {
 
   editRoutes(app, root);
   if (opts.message) messageRoutes(app, opts.message);
+  if (opts.push) pushRoutes(app, opts.push);
   todayRoutes(app, root);
 
   app.get("/api/events", (c) =>
