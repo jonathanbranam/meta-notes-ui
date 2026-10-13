@@ -4,10 +4,15 @@ title = "Build Web Push to the phone (per docs/design/web-push)"
 kind = "feature"
 state = "planned"
 created_at = "2026-10-13T12:46:48.447Z"
-updated_at = "2026-10-13T12:46:57.133091444Z"
+updated_at = "2026-10-13T12:50:10.405452755Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "nqwt"
 +++
 
 docs/tickets/open/build-web-push-to-the-phone-per-docs-design-web-push-nqwt.md
+
+## Thread
+
+### note · external:orchestrator · 2026-10-13T12:50:10.405Z
+human via orchestrator, 2026-10-13: the human chose the --push-contact value (a mailto: address of theirs) and approved it on the condition that it is not public. This repo is public, so the address must not appear anywhere in it (code, tests, docs, deploy unit, tickets, commit messages). Deploy docs use a placeholder such as mailto:you@example.com; the human sets the real value in the unit on vesta.
