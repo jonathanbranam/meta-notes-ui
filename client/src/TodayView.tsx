@@ -4,7 +4,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { EditableCell, RowsEditor } from "./TimeCell";
 import { inlineSegments, type RenderContext } from "./markdown";
-import { disablePush, enablePush, isPushSubscribed, pushAvailable, syncPush } from "./push";
+import { isPushSubscribed } from "./push";
 import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "../../shared/today";
 
 export const TODAY_PATH = "!today";
@@ -124,14 +124,6 @@ export function Inline({ text, ctx, open }: { text: string; ctx: RenderContext; 
 export function TodayView({ today, now, open, files }: { today: ReturnType<typeof useToday>; now: Date; open: (p: string) => void; files: ReadonlySet<string> }) {
   const { data, error } = today;
   const [editRows, setEditRows] = useState(false);
-  const [push, setPush] = useState<"off" | "available" | "on">("off");
-  const [pushError, setPushError] = useState("");
-  const [perm, setPerm] = useState(() => (typeof Notification === "undefined" ? "unsupported" : Notification.permission));
-  useEffect(() => {
-    void pushAvailable().then(async (ok) => {
-      if (ok) setPush((await syncPush()) ? "on" : "available");
-    });
-  }, []);
   if (error) return <p className="error">{error}</p>;
   if (!data) return <p className="hint">Loading…</p>;
   const rows = parseTimeBlock(data.daily?.text ?? "");
@@ -143,41 +135,11 @@ export function TodayView({ today, now, open, files }: { today: ReturnType<typeo
   return (
     <article className="note today">
       <h2>Today, {day}</h2>
-      {/* Push off on the server: no alerts button at all, so the notification prompt is not offered either. */}
-      {perm === "default" && push !== "off" && (
+      {data.daily && (
         <p>
-          <button
-            className="primary"
-            onClick={() =>
-              void Notification.requestPermission().then(async (p) => {
-                setPerm(p);
-                if (p === "granted" && push === "available") {
-                  const err = await enablePush();
-                  setPushError(err);
-                  if (!err) setPush("on");
-                }
-              })
-            }
-          >
-            Enable alerts
-          </button>
+          <button onClick={() => open(data.daily!.path)}>Daily note</button>
         </p>
       )}
-      {perm === "granted" && push === "available" && (
-        <p>
-          <button className="primary" onClick={() => void enablePush().then((err) => (setPushError(err), err || setPush("on")))}>Enable alerts when the app is closed</button>
-        </p>
-      )}
-      {push === "on" && (
-        <p className="hint">
-          Alerts reach this device when the app is closed.{" "}
-          <button onClick={() => void disablePush().then(() => setPush("available"))}>Alerts off</button>
-        </p>
-      )}
-      {pushError && <p className="error">{pushError}</p>}
-      {perm === "denied" && <p className="hint">Alerts are blocked in this browser.</p>}
-      {perm === "unsupported" && <p className="hint">This browser cannot show notifications.</p>}
-
       <h3>Time Block</h3>
       {rows.length === 0 ? (
         <p className="hint">No Time Block in today's note.</p>
@@ -204,13 +166,6 @@ export function TodayView({ today, now, open, files }: { today: ReturnType<typeo
       ))}
       {data.daily && <TimeLogPanel path={data.daily.path} text={data.daily.text} />}
       {!data.daily && <p className="hint">No daily note for today yet.</p>}
-      {data.daily && (
-        <p>
-          <a href={`#${encodeURIComponent(data.daily.path).replace(/%2F/g, "/")}`} onClick={() => open(data.daily!.path)}>
-            Open the daily note
-          </a>
-        </p>
-      )}
       {data.daily && <AddTask path={data.daily.path} />}
 
       <h3>Due and overdue</h3>

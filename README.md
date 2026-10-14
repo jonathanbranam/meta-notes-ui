@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.20.1, v1 in development.
+Status: v0.21.0, v1 in development.
 
 ## How it fits
 
@@ -40,7 +40,7 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
   daemon as the human (`design/specs/message.md`). `/api/version` reports `message: true|false`.
 - `--push-contact` turns on Web Push (off without it): the server keeps a VAPID key pair in
   `<root>/.meta-notes-cache/ui/push/` (mode 0600), plans today's alerts, and sends each one to every
-  subscribed device at its time, with one timer and no polling. The Today view's "Enable alerts"
+  subscribed device at its time, with one timer and no polling. The top-bar Menu's "Enable alerts"
   subscribes a device (a Home Screen app on iOS 16.4+). `GET /api/push/key`, `POST` and
   `DELETE /api/push/subscribe`. Design: `docs/design/web-push.md`; spec: `design/specs/push.md`.
 - `--token-file` holds the secret (created, mode 0600, if missing). Every
@@ -177,7 +177,7 @@ look at them too. Production does not depend on it.
   a fresh start with no `#` in the URL opens it, else Today. A stored page that is gone opens Today.
 - **Alerts**: browser notifications at the time of a timed task due today
   (`⏰ HH:MM`) and at each planned Time Block row (not empty, `no plan` or
-  struck out), while a tab is open. "Enable alerts" on the Today view asks for
+  struck out), while a tab is open. "Enable alerts" in the top-bar Menu (on every page; spec: `design/specs/menu.md`) asks for
   permission. A fired alert shows at the top of the page with **Snooze 10
   min** and **Dismiss**. All timers are `setTimeout`s in the browser; the
   server never polls. Push to a closed phone is later (the phone bridge).
