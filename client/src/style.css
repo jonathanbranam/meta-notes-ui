@@ -131,3 +131,8 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
   border: 0;
   font-size: 1rem;
 }
+header .menu-box { order: 98; margin-left: auto; position: relative; }
+.menu-items { position: absolute; right: 0; top: 100%; z-index: 10; min-width: 12rem; margin: .25rem 0 0; padding: .25rem; list-style: none; background: #fff; color: #1c1c1e; border: 1px solid #bbb; border-radius: 6px; box-shadow: 0 4px 12px #0003; }
+.menu-items button { display: block; width: 100%; padding: .6rem .75rem; border: 0 !important; }
+.menu-items button:disabled { opacity: .6; cursor: default; }
+@media (prefers-color-scheme: dark) { .menu-items { background: #202225; color: #e6e6e6; border-color: #333; } }
