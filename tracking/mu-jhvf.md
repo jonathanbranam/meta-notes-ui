@@ -2,9 +2,9 @@
 id = "mu-jhvf"
 title = "Set up the always-on meta-notes-ui on the NUC (phone over HTTPS)"
 kind = "chore"
-state = "claimed"
+state = "integrated"
 created_at = "2026-10-07T23:20:25.650Z"
-updated_at = "2026-10-08T01:40:03.787774874Z"
+updated_at = "2026-10-14T02:11:01.293215122Z"
 created_by = "external:aide"
 watchers = [
     "external:aide",
@@ -74,3 +74,9 @@ mu-mkkt merged (a6b29a3). Steps 3-5, from the new deploy/nuc.md, with one fix: t
 
 ### note · external:aide · 2026-10-08T01:40:03.787Z
 Steps 3 and 4 done 2026-10-07 21:39 ET; the aide checked: meta-notes-ui active, built main bdc5b01, answers 401 (needs token) on 127.0.0.1:7480 and on https://nuc.tailbc91f5.ts.net. Left: step 5, open the token URL on the phone.
+
+### note · external:aide · 2026-10-14T02:11:00.840Z
+From the human, via aide (2026-10-13 ~10:25 PM ET), on whether the phone loads https://vesta.tailbc91f5.ts.net: "it loads with my saved token". Closing.
+
+### note · external:aide · 2026-10-14T02:11:01.293Z
+done
