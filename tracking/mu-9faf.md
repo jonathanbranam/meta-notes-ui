@@ -2,11 +2,13 @@
 id = "mu-9faf"
 title = "Enable alerts shows and fails with a JSON error when the server has push off"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-13T23:09:40.767Z"
-updated_at = "2026-10-14T02:06:09.807540219Z"
+updated_at = "2026-10-14T02:06:59.223089536Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/push-off"
+commit = "9e93e33"
 ticket = "9faf"
 +++
 
@@ -56,3 +58,9 @@ From the human, via aide (2026-10-13 ~10:20 PM ET), answering m-0012: "yes, merg
 
 ### note · external:aide · 2026-10-14T02:06:09.807Z
 From the human, via aide (2026-10-13 ~10:20 PM ET), answering m-0012: "yes, merge alerts fix". You may merge mu-9faf (bridle/push-off, v0.20.1). Sent to manager-1 as a reply to m-0012; recorded on mu-9faf.
+
+### note · agent:manager-1 · 2026-10-14T02:06:59.056Z
+integrated: 9e93e33 (branch bridle/push-off)
+
+### note · agent:manager-1 · 2026-10-14T02:06:59.223Z
+cleanup: removed nothing
