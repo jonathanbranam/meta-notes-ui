@@ -205,3 +205,6 @@
 {"actor":"external:orchestrator","at":"2026-10-14T01:55:42.554734293Z","from":"pending","task":"mu-9faf","to":"open"}
 {"actor":"external:orchestrator","at":"2026-10-14T01:56:11.207545704Z","from":"open","task":"mu-9faf","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-10-14T01:56:11.642920391Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-10-14T02:06:31.384597280Z","from":"pending","task":"mu-nehy","to":"open"}
+{"actor":"external:orchestrator","at":"2026-10-14T02:06:34.082857236Z","from":"open","task":"mu-nehy","to":"planned"}
+{"actor":"external:orchestrator","at":"2026-10-14T02:06:34.497985560Z","queue":"reprioritized"}

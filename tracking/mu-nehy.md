@@ -2,9 +2,9 @@
 id = "mu-nehy"
 title = "Top-right menu on every note, with the alerts on/off control"
 kind = "feature"
-state = "pending"
+state = "planned"
 created_at = "2026-10-13T23:12:33.811Z"
-updated_at = "2026-10-14T02:06:00.069575121Z"
+updated_at = "2026-10-14T02:06:34.082857236Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "nehy"
