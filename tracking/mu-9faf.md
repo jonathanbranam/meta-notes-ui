@@ -2,9 +2,9 @@
 id = "mu-9faf"
 title = "Enable alerts shows and fails with a JSON error when the server has push off"
 kind = "bug"
-state = "pending"
+state = "open"
 created_at = "2026-10-13T23:09:40.767Z"
-updated_at = "2026-10-13T23:10:09.844949777Z"
+updated_at = "2026-10-14T01:55:42.554734293Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9faf"
