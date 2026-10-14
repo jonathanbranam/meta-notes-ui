@@ -96,7 +96,11 @@ export function pushSteps(steps: Steps) {
     const app = createApp({ root, token: TOKEN, version: "0.0.0", subscribe: () => () => {} });
     w.res = await api(app, "GET", "/api/push/key");
   });
-  steps.then(/^the push key request is answered 404$/, (w) => expect(w.res.status).toBe(404));
+  steps.then(/^the push key request is answered 404 with the JSON body \{"error":"not found"\}$/, async (w) => {
+    expect(w.res.status).toBe(404);
+    expect(w.res.headers.get("content-type")).toContain("application/json");
+    expect(await w.res.json()).toEqual({ error: "not found" });
+  });
 
   steps.when(/^the server is started with the push contact "([^"]*)"$/, async (w, contact) => {
     const { root } = await makeFixtureRoot();

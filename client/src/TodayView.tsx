@@ -143,7 +143,8 @@ export function TodayView({ today, now, open, files }: { today: ReturnType<typeo
   return (
     <article className="note today">
       <h2>Today, {day}</h2>
-      {perm === "default" && (
+      {/* Push off on the server: no alerts button at all, so the notification prompt is not offered either. */}
+      {perm === "default" && push !== "off" && (
         <p>
           <button
             className="primary"

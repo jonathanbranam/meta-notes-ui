@@ -27,17 +27,26 @@ export async function syncPush(): Promise<boolean> {
   return subscribed;
 }
 
+/** The server's public push key: undefined when push is off (a JSON 404) or the answer is not JSON with a key. */
+async function serverKey(): Promise<string | undefined> {
+  const res = await fetch("/api/push/key").catch(() => null);
+  if (!res?.ok || !res.headers.get("content-type")?.includes("application/json")) return undefined;
+  const key = (await res.json().catch(() => null))?.key;
+  return typeof key === "string" ? key : undefined;
+}
+
 /** Does the server have push on (a --push-contact) and does this browser support it? */
 export async function pushAvailable(): Promise<boolean> {
   if (!(await registration())) return false;
-  return (await fetch("/api/push/key").catch(() => null))?.ok === true;
+  return (await serverKey()) !== undefined;
 }
 
 /** Subscribe this device; must run from a tap on iOS. Resolves to an error message, or "" on success. */
 export async function enablePush(): Promise<string> {
   try {
     const reg = await registration();
-    const key = (await (await fetch("/api/push/key")).json()).key as string;
+    const key = await serverKey();
+    if (!key) return "Alerts are off on the server";
     const old = await reg!.pushManager.getSubscription();
     await old?.unsubscribe(); // a changed server key makes subscribe fail loudly; start clean
     const sub = await reg!.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(key) });

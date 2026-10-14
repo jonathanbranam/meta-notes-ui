@@ -16,14 +16,16 @@ and nothing polls (rule light-on-resources).
 The server SHALL take `--push-contact <mailto:...|https://...>`, SHALL refuse to
 start with any other value, SHALL have no `/api/push` routes without it, and
 with it SHALL keep a VAPID key pair in `.meta-notes-cache/ui/push/vapid.json`
-(mode 0600) and serve only the public key at `GET /api/push/key`.
+(mode 0600) and serve only the public key at `GET /api/push/key`. Without it an
+unmatched `/api/*` path SHALL answer a JSON 404 (`{"error":"not found"}`), never
+the client's index.html, so the page reads push as off instead of failing to parse.
 
 #### Scenario: Flag absent  {#s-8ce3}
 
 *Verification*: **executable**
 
 - **WHEN** a client asks for the push key of a server started without a push contact
-- **THEN** the push key request is answered 404
+- **THEN** the push key request is answered 404 with the JSON body {"error":"not found"}
 
 #### Scenario: Bad contact  {#s-4107}
 
