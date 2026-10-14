@@ -9,6 +9,7 @@ changes: []
 specs: []
 blocked_by: []
 related: []
+resolved: 2026-10-14T02:06:59Z
 ---
 
 From the human, in the aide session, 2026-10-13 ET, verbatim:
