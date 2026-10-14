@@ -147,7 +147,7 @@ when a plan starts, not one per quarter hour).
 *Verification*: **non-executable**
 
 - **WHEN** the browser has not granted notifications and the server has push on
-- **THEN** the view offers to enable alerts, and says so when they are blocked or unsupported; with push off it offers nothing
+- **THEN** the top-bar menu offers to enable alerts (design/specs/menu.md), and says so when they are blocked; with push off, or notifications unsupported, it offers nothing
 
 #### Scenario: Alerts reach the phone when the app is closed  {#s-d7c1}
 
