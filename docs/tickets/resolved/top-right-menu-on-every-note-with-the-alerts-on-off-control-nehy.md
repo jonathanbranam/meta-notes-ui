@@ -9,6 +9,7 @@ changes: []
 specs: []
 blocked_by: [mu-9faf]
 related: []
+resolved: 2026-10-14T02:15:50Z
 ---
 
 From the human, in the aide session, 2026-10-13 ET, verbatim (after enabling alerts on the phone, where the control is only on Today):
