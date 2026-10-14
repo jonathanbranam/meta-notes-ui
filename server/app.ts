@@ -240,6 +240,9 @@ export function createApp(opts: AppOptions): Hono {
     }),
   );
 
+  // An unmatched API path is a JSON 404, never index.html: a client parsing it as JSON would fail.
+  app.all("/api/*", (c) => c.json({ error: "not found" }, 404));
+
   // Built client, with index.html as the fallback.
   app.get("*", async (c) => {
     if (!opts.clientDir) return c.text("not found", 404);
