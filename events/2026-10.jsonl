@@ -210,3 +210,5 @@
 {"actor":"external:orchestrator","at":"2026-10-14T02:06:34.497985560Z","queue":"reprioritized"}
 {"actor":"agent:manager-1","at":"2026-10-14T02:06:59.056369807Z","from":"planned","task":"mu-9faf","to":"integrated"}
 {"actor":"external:aide","at":"2026-10-14T02:11:01.293215122Z","from":"claimed","task":"mu-jhvf","to":"integrated"}
+{"actor":"external:orchestrator","at":"2026-10-14T02:15:58.033833670Z","from":"planned","task":"mu-nehy","to":"integrated"}
+{"actor":"external:aide","at":"2026-10-14T02:16:00.843969123Z","from":"claimed","task":"mu-rneq","to":"integrated"}

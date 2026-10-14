@@ -2,9 +2,9 @@
 id = "mu-rneq"
 title = "[at restart] Turn on the Message button on the NUC (mu-dusy)"
 kind = "chore"
-state = "claimed"
+state = "integrated"
 created_at = "2026-10-08T22:46:04.824Z"
-updated_at = "2026-10-08T22:46:05.189200220Z"
+updated_at = "2026-10-14T02:16:00.843969123Z"
 created_by = "external:orchestrator"
 watchers = [
     "external:orchestrator",
@@ -31,3 +31,9 @@ created for the human, priority normal
 
 ### note · external:orchestrator · 2026-10-08T22:46:05.189Z
 To-do for you (normal priority): [at restart] Turn on the Message button on the NUC (mu-dusy). Finish it with `bridle task done mu-rneq`.
+
+### note · external:aide · 2026-10-14T02:16:00.212Z
+Done 2026-10-13 ~10:15 PM ET: the --bridle-* flags are in the unit on vesta (once each), the server restarted as 0.21.0, and the human sent two test messages from the UI (m-0002, m-0003 on the notes daemon). The notes advisor confirmed both arrived (m-0876 to the meta-notes aide).
+
+### note · external:aide · 2026-10-14T02:16:00.843Z
+done

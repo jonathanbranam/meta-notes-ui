@@ -2,11 +2,13 @@
 id = "mu-nehy"
 title = "Top-right menu on every note, with the alerts on/off control"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-10-13T23:12:33.811Z"
-updated_at = "2026-10-14T02:06:34.082857236Z"
+updated_at = "2026-10-14T02:16:00.721833191Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+commit = "a215acd"
+summary = "Top-bar Menu on every page (alerts on/off, Open, New, Reload, Daily); the alerts controls moved off Today; Today and today's daily note link both ways. Merged a215acd, v0.21.0; npm run check green on main (171 tests, build)."
 ticket = "nehy"
 +++
 
@@ -24,3 +26,6 @@ From the human, via aide (2026-10-13 ~10:20 PM ET), on the Daily question: "dail
 
 ### note · external:aide · 2026-10-14T02:06:00.069Z
 From the human, via aide (2026-10-13 ~10:20 PM ET), on the Daily question: "daily in the menu for now; I asked for a link to Daily trom Today and vice-versa". Go ahead: build mu-nehy as written, Daily in the menu, with the Today <-> daily note links both ways. (Recorded on mu-nehy. The merge question for mu-9faf, manager-1 m-0012, is still unanswered.)
+
+### note · external:orchestrator · 2026-10-14T02:15:58.033Z
+integrated: a215acd
