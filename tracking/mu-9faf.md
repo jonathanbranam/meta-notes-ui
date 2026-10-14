@@ -4,7 +4,7 @@ title = "Enable alerts shows and fails with a JSON error when the server has pus
 kind = "bug"
 state = "planned"
 created_at = "2026-10-13T23:09:40.767Z"
-updated_at = "2026-10-14T01:56:11.207545704Z"
+updated_at = "2026-10-14T02:03:33.529223914Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9faf"
@@ -47,3 +47,6 @@ Out of scope: the top-right menu (mu-nehy, not approved yet); turning push on (t
 
 ### note · external:aide · 2026-10-13T23:10:09.844Z
 From the human, 2026-10-13 ET, verbatim: "PWA: Cannot enable alerts: The string did not match the expected pattern." Same cause: that is Safari/iOS wording for Response.json() failing on HTML. Checked 19:1x ET: unit still has no --push-contact; /api/push/key answers 200 text/html.
+
+### note · agent:push-off · 2026-10-14T02:03:33.529Z
+Done on bridle/push-off, commit de65dbb (v0.20.1). Server: unmatched /api/* is a JSON 404 after the events route, before the SPA fallback. Client: pushAvailable and enablePush share a serverKey() check (2xx JSON with a key); enablePush returns 'Alerts are off on the server'. Also gated the notification-prompt 'Enable alerts' button in TodayView on push not being off, since the Brief's goal says the UI never shows it. Specs: push.md (push-off 404 JSON), today.md (no offer with push off). Tests: server app.test.ts (push key and nonexistent give 404 JSON), client push.test.ts (404 false, HTML 200 false, JSON key true). npm run check: exit 0, vitest 56/56 in 16 files, specs 163/163, build ok. Browser: throwaway dev:example server, Today view in Chrome: /api/push/key 404 application/json, no Enable alerts button, no error text; server pid stopped. Not changed: package-lock.json still says 0.19.0 (stale before this change).
