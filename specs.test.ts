@@ -9,6 +9,7 @@ import { lastpageSteps } from "./specs/steps/lastpage.js";
 import { treepaneSteps } from "./specs/steps/treepane.js";
 import { pushSteps } from "./specs/steps/push.js";
 import { menuSteps } from "./specs/steps/menu.js";
+import { tagviewSteps } from "./specs/steps/tagview.js";
 import { neighboursSteps } from "./specs/steps/neighbours.js";
 
 const steps = createSteps();
@@ -23,5 +24,6 @@ treepaneSteps(steps);
 neighboursSteps(steps);
 pushSteps(steps);
 menuSteps(steps);
+tagviewSteps(steps);
 
 await registerBridleSpecs({ steps });

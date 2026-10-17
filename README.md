@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.21.0, v1 in development.
+Status: v0.22.0, v1 in development.
 
 ## How it fits
 
@@ -85,7 +85,9 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
   nested properties, `[[links]]` in values as links. `#tags` are highlighted, with
   aliases folded: `data-tag` is the canonical tag, from `tag_aliases` in
   `meta-notes conventions --json` (`/api/tag-aliases`; unfolded if the CLI
-  lacks it).
+  lacks it). A tag links to its task view: `#tag/<tag>` lists every open task with that tag across
+  all notes (`GET /api/tasks?tag=`, from `meta-notes tasks --tag`) with a box to check each off
+  (`design/specs/tagview.md`).
 - Checkbox lines (`- [c]`) with a `📅` or `🛫` date are tasks; without one
   they are checklist items (class `checklist`) and show the same status.
   Both show their status and chips for `📅 ⏳ 🛫 ✅ ⏰ 🔁`

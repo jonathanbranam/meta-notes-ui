@@ -14,6 +14,7 @@ import { confine, PathError } from "./paths.js";
 import { createLoginStore, SESSION_MS, verifyLogin, type LoginStore } from "./login.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
+import { tagTaskRoutes } from "./tagtasks.js";
 import { todayRoutes } from "./today.js";
 
 const exec = promisify(execFile);
@@ -225,6 +226,7 @@ export function createApp(opts: AppOptions): Hono {
   if (opts.message) messageRoutes(app, opts.message);
   if (opts.push) pushRoutes(app, opts.push);
   todayRoutes(app, root);
+  tagTaskRoutes(app, root);
 
   app.get("/api/events", (c) =>
     streamSSE(c, async (stream) => {
