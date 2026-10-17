@@ -4,7 +4,7 @@ title = "Tag task view: list open tasks by tag across notes and check them off"
 kind = "feature"
 state = "open"
 created_at = "2026-10-17T13:23:04.744Z"
-updated_at = "2026-10-17T13:32:33.969091477Z"
+updated_at = "2026-10-17T15:26:33.102528729Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "x6nb"
@@ -19,3 +19,9 @@ From orchestrator: mu-x6nb (tag task view) filed and ready, the human's own ask 
 
 ### note · agent:tagview · 2026-10-17T13:32:33.969Z
 Built on bridle/tagview: GET /api/tasks?tag= (meta-notes tasks --tag), TagView at #tag/<tag>, tags in notes link to it, checks go through /api/task. Spec design/specs/tagview.md. Check: spec 'edits: Other statuses from the UI' (s-4d43) fails on unmodified main too (verified on a git archive of main HEAD); everything else green.
+
+### note · external:orchestrator · 2026-10-17T15:26:28.663Z
+From orchestrator: answer to m-0065 on mu-x6nb's thread: yes, merge after skipping s-4d43 (naming new ticket mu-q83x, low, ready). Release tagview's hold.
+
+### note · external:orchestrator · 2026-10-17T15:26:33.102Z
+orchestrator, answering manager-1's m-0065 under the human's standing flaky-test rule (2026-10-11, quoted on mu-q83x): yes, merge. s-4d43 fails on unmodified main and is date-dependent, so: skip s-4d43 with a note naming mu-q83x (on bridle/tagview or straight on main first, your call), confirm the check is otherwise green, merge, tag v0.22.0. mu-q83x (low) fixes and re-enables it later. Don't merge with the spec red and un-skipped (no merging on a red main).
