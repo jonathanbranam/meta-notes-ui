@@ -212,3 +212,5 @@
 {"actor":"external:aide","at":"2026-10-14T02:11:01.293215122Z","from":"claimed","task":"mu-jhvf","to":"integrated"}
 {"actor":"external:orchestrator","at":"2026-10-14T02:15:58.033833670Z","from":"planned","task":"mu-nehy","to":"integrated"}
 {"actor":"external:aide","at":"2026-10-14T02:16:00.843969123Z","from":"claimed","task":"mu-rneq","to":"integrated"}
+{"actor":"human","at":"2026-10-17T13:23:04.744Z","from":"","task":"mu-x6nb","to":"pending"}
+{"actor":"external:orchestrator","at":"2026-10-17T13:23:21.295360212Z","from":"pending","task":"mu-x6nb","to":"open"}
