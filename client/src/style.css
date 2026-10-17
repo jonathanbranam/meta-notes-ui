@@ -136,3 +136,9 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .menu-items button { display: block; width: 100%; padding: .6rem .75rem; border: 0 !important; }
 .menu-items button:disabled { opacity: .6; cursor: default; }
 @media (prefers-color-scheme: dark) { .menu-items { background: #202225; color: #e6e6e6; border-color: #333; } }
+
+.note a.tag { text-decoration: none; }
+.tagtasks { list-style: none; padding: 0; }
+.tagtasks li { display: flex; gap: .6rem; align-items: flex-start; padding: .4rem 0; }
+.tagtasks input { width: 1.4rem; height: 1.4rem; flex: none; }
+.tagtasks li.overdue { color: #c0392b; }

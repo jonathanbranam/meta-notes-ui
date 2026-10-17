@@ -12,6 +12,8 @@ import { EditableCell, rowCells } from "./TimeCell";
 import { dailyPath, neighbours } from "./neighbours";
 import { Menu } from "./Menu";
 import { dayLink } from "./menu";
+import { TagView } from "./TagView";
+import { tagFromPath } from "./tagview";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -178,7 +180,14 @@ function TimeBlockCell({ node, children, ...rest }: BlockProps) {
     </EditableCell>
   );
 }
-const COMPONENTS = { p: block("p"), li: block("li"), table: block("table"), td: TimeBlockCell } as unknown as Components;
+/** A marked `#tag` links to its task view (hash `tag/<name>`); other spans pass through. */
+function Span({ node: _node, ...rest }: BlockProps) {
+  const tag = rest["data-tag"] as string | undefined;
+  if (!tag) return <span {...(rest as object)} />;
+  const { children, className } = rest as { children?: React.ReactNode; className?: string };
+  return <a className={className} href={`#tag/${encodeURIComponent(tag)}`}>{children}</a>;
+}
+const COMPONENTS = { p: block("p"), li: block("li"), table: block("table"), td: TimeBlockCell, span: Span } as unknown as Components;
 
 /** A file that is not a note: images inline, text as text, PDFs and the rest as links to the raw file. */
 function FileView({ path }: { path: string }) {
@@ -300,7 +309,7 @@ export function App() {
   const [target, setTarget] = useState(() => parseHash(startHash(decodeURIComponent(location.hash.slice(1)), readLastPage(), TODAY_PATH)));
   const path = target.path;
   // The stored page a fresh start opened, until the tree shows whether it still exists.
-  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH ? path : null);
+  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH && !tagFromPath(path) ? path : null);
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
@@ -582,7 +591,7 @@ export function App() {
           <button disabled={!near.next} onClick={() => near.next && open(near.next)} aria-label="Next note" title={near.next ?? undefined}>
             &rsaquo;
           </button>
-          <span className="title">{path === TODAY_PATH ? "Today" : path.replace(/\.md$/, "") || "meta-notes"}</span>
+          <span className="title">{path === TODAY_PATH ? "Today" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
         </div>
       </header>
       {stale && (
@@ -608,6 +617,8 @@ export function App() {
         {error && <p className="error">{error}</p>}
         {path === TODAY_PATH ? (
           <TodayView today={todayState} now={now} open={open} files={filePaths} />
+        ) : tagFromPath(path) ? (
+          <TagView tag={tagFromPath(path)!} refreshKey={refreshKey} open={open} ctxFor={(p) => ({ path: p, files: filePaths, today, nowMinutes, tagAliases })} />
         ) : path && !isNote(path) ? (
           <FileView path={path} />
         ) : note ? (

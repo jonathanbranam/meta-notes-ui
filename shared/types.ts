@@ -40,6 +40,12 @@ export interface TodayTask {
   section?: string;
 }
 
+/** `GET /api/tasks?tag=`: the open tasks with the tag, across all notes. */
+export interface TagTasksResponse {
+  tag: string;
+  tasks: TodayTask[];
+}
+
 export interface AgendaEvent {
   start: string;
   end: string;
