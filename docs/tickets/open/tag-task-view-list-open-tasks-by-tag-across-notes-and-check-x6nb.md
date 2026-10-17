@@ -13,8 +13,6 @@ related: []
 
 ## The ask
 
-## Ask
-
 From the human (Sat 2026-10-17 9:20 AM ET, verbatim, relayed by aide on notes, m-0096):
 "how can i see the online tasks I have? Can i see them in the notes ui? I should be able to pull
 them all up together and click them off one by one. help me do that here, bt this should be a
