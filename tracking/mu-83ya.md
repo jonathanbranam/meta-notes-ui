@@ -4,7 +4,7 @@ title = "v1.1 skeleton: server, token, file tree, rendered notes, live updates"
 kind = "feature"
 state = "integrated"
 created_at = "2026-10-05T02:15:04.215Z"
-updated_at = "2026-10-05T02:20:15.064337426Z"
+updated_at = "2026-10-17T11:56:51.783906273Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 branch = "bridle/skeleton"
@@ -27,3 +27,6 @@ integrated: 9f3e8b7 (branch bridle/skeleton)
 
 ### note · agent:manager-1 · 2026-10-05T02:20:15.064Z
 cleanup: removed nothing
+
+### note · external:orchestrator · 2026-10-17T11:56:51.783Z
+orchestrator (human via aide@dalek, m-0095): rights check for br-j86p after token re-pair on v0.7.6. No action needed.
