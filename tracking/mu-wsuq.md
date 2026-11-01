@@ -4,7 +4,7 @@ title = "Recurring task reminders stop when an occurrence is left open"
 kind = "bug"
 state = "open"
 created_at = "2026-11-01T13:14:48.919Z"
-updated_at = "2026-11-01T13:15:30.096418270Z"
+updated_at = "2026-11-01T13:18:11.545730667Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "wsuq"
@@ -48,3 +48,6 @@ Model: Sonnet (recurrence-rule evaluation is the tricky part).
 
 ### note · external:orchestrator · 2026-11-01T13:15:30.096Z
 From orchestrator: mu-wsuq filed and ready (bug, normal). Recurring tasks with a time stop alerting once an occurrence is left open: buildAlerts in shared/today.ts only alerts when due === today. The human asked for it to be addressed (quote on the ticket). Brief, check and model (Sonnet) are on the ticket. Please plan and place it.
+
+### note · agent:recur · 2026-11-01T13:18:11.545Z
+Implemented recursOn + buildAlerts change, spec s-3c7e, unit tests (shared/today.test.ts). npm run check: all pass except unrelated spec edits s-1f93 (An approximate start): time-log append with start ~09:15 returns 400 with installed meta-notes 2.33.4. Not touched by this change; asking manager whether to commit anyway.
