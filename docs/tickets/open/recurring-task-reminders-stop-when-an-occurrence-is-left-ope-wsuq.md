@@ -13,6 +13,9 @@ related: []
 
 ## The ask
 
+Make an open recurring task with a time alert every day its recurrence rule says it is due, even
+while an older occurrence is still open (overdue). Details, check and model below.
+
 ## Report
 
 The human (2026-11-01 8:12 AM, via aide on notes): "Did we lose the reminder because the recurrence
