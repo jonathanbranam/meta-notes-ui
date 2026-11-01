@@ -1,1 +1,2 @@
 {"actor":"human","at":"2026-11-01T13:14:48.919Z","from":"","task":"mu-wsuq","to":"pending"}
+{"actor":"external:orchestrator","at":"2026-11-01T13:15:23.180874795Z","from":"pending","task":"mu-wsuq","to":"open"}

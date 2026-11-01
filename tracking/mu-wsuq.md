@@ -2,9 +2,9 @@
 id = "mu-wsuq"
 title = "Recurring task reminders stop when an occurrence is left open"
 kind = "bug"
-state = "pending"
+state = "open"
 created_at = "2026-11-01T13:14:48.919Z"
-updated_at = "2026-11-01T13:15:10.230981796Z"
+updated_at = "2026-11-01T13:15:30.096418270Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "wsuq"
@@ -43,3 +43,8 @@ produces an alert today; a non-recurring overdue task with a time still does not
 pass.
 
 Model: Sonnet (recurrence-rule evaluation is the tricky part).
+
+## Thread
+
+### note · external:orchestrator · 2026-11-01T13:15:30.096Z
+From orchestrator: mu-wsuq filed and ready (bug, normal). Recurring tasks with a time stop alerting once an occurrence is left open: buildAlerts in shared/today.ts only alerts when due === today. The human asked for it to be addressed (quote on the ticket). Brief, check and model (Sonnet) are on the ticket. Please plan and place it.
