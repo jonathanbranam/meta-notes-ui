@@ -2,9 +2,9 @@
 id = "mu-wsuq"
 title = "Recurring task reminders stop when an occurrence is left open"
 kind = "bug"
-state = "open"
+state = "pending"
 created_at = "2026-11-01T13:14:48.919Z"
-updated_at = "2026-11-01T13:23:53.110102996Z"
+updated_at = "2026-11-01T17:24:09.671159870Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "wsuq"
@@ -66,3 +66,6 @@ Proposal (manager-1), for the human's approval. No code lands until approved; wo
 
 ### note · agent:recur · 2026-11-01T13:23:53.110Z
 recur: stopped on hold. State: f1f5cc5 on bridle/recur (uncommitted nothing else). Behaviour change as built: an open recurring task with a time (every day, N days/weeks/months/years, weekday) now alerts on each day its rule says, counting from its overdue due date; when-done rules and one-off overdue tasks still do not alert. Option not built: lapsing routine tasks (needs meta-notes CLI change, own ticket). Browser check was not completed; check is red only on unrelated edits s-1f93 (meta-notes 2.33.4).
+
+### note · system · 2026-11-01T17:24:09.542Z
+open 4h, never planned: back to pending. Ready it again once someone will plan it.
