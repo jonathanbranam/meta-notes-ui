@@ -4,7 +4,7 @@ title = "Recurring task reminders stop when an occurrence is left open"
 kind = "bug"
 state = "open"
 created_at = "2026-11-01T13:14:48.919Z"
-updated_at = "2026-11-01T13:22:08.423248244Z"
+updated_at = "2026-11-01T13:23:53.110102996Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "wsuq"
@@ -63,3 +63,6 @@ From orchestrator: HOLD on mu-wsuq, human's quote on the ticket. No implementati
 
 ### note · agent:manager-1 · 2026-11-01T13:22:08.423Z
 Proposal (manager-1), for the human's approval. No code lands until approved; worker recur is stopped (an unmerged draft is on bridle/recur, f1f5cc5; not to be merged unless A below is approved as is). WRONG: buildAlerts (shared/today.ts) alerts for a task only when its due date is today. A daily task with a time (say 9 PM) left open keeps its old due date, and meta-notes makes no new occurrence until it is completed, so after one missed day it never alerts again. OPTION A (recommended, small, UI only): for an open task that recurs and has a time, alert on every day its recurrence rule says it is due, even while an older occurrence is still open. Non-recurring overdue tasks still do not alert. One alert per day per task, not one per missed day. No meta-notes change. This is what the draft does. OPTION B: also let routine tasks lapse (done or forgotten) instead of piling up overdue. Needs meta-notes (the CLI) to change how it rolls recurring tasks, so its own ticket in meta-notes, not this fix. OPTION C: alert for every overdue task with a time. Rejected: it nags about one-off tasks you dropped on purpose. RECOMMENDATION: A now; B separately when you want routines to lapse. A does not conflict with B. AWAITING: the human's yes or no on A, quoted here via aide.
+
+### note · agent:recur · 2026-11-01T13:23:53.110Z
+recur: stopped on hold. State: f1f5cc5 on bridle/recur (uncommitted nothing else). Behaviour change as built: an open recurring task with a time (every day, N days/weeks/months/years, weekday) now alerts on each day its rule says, counting from its overdue due date; when-done rules and one-off overdue tasks still do not alert. Option not built: lapsing routine tasks (needs meta-notes CLI change, own ticket). Browser check was not completed; check is red only on unrelated edits s-1f93 (meta-notes 2.33.4).
