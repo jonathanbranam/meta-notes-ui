@@ -25,8 +25,8 @@ const isLine = (v: unknown): v is number => Number.isInteger(v) && (v as number)
 /** A Time Block row's time as the CLI takes it: `HH:MM` or `9:30am`. */
 const isTime = (v: unknown): v is string => isStr(v) && /^\d{1,2}:\d{2}\s*([ap]m)?$/i.test(v.trim());
 
-/** A Time Log time: `HH:MM` or `9:30am`, `~` first for approximately. */
-const isClock = (s: string) => /^~?\s*\d{1,2}:\d{2}\s*([ap]m)?$/i.test(s.trim());
+/** A Time Log time: `HH:MM` or `9:30am`; meta-notes refuses a `~` here, so do we. */
+const isClock = (s: string) => /^\s*\d{1,2}:\d{2}\s*([ap]m)?$/i.test(s.trim());
 
 /** A root-relative `.md` path that is inside the root and not hidden; for notes that may not exist yet. */
 async function notePath(root: string, rel: unknown, mustExist: boolean): Promise<string | null> {
