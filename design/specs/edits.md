@@ -322,7 +322,8 @@ The server SHALL add an entry at the end of a note's Time Log with
 `--first` for an empty log, and SHALL replace whole entries with
 `meta-notes time-log update`, given the entries as the client saw them as
 `--expect`. A log that changed meanwhile is refused as a conflict showing the
-current entry. A start time may be approximate (`~HH:MM`).
+current entry. A Time Log time is plain `HH:MM` or `9:30am`; a `~` is refused, as
+meta-notes refuses it (times may be approximate; the tilde is left out).
 
 #### Scenario: Starting an entry and closing the open one  {#s-5d4c}
 
@@ -333,13 +334,12 @@ current entry. A start time may be approximate (`~HH:MM`).
 - **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "- emails"
 - **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "end:   09:00"
 
-#### Scenario: An approximate start  {#s-1f93}
+#### Scenario: A start with a tilde is refused  {#s-1f93}
 
 *Verification*: **executable**
 
 - **WHEN** the client appends the log entry "- walk" starting "~09:15" after the open "- start work:" starting "08:30", leaving it open
-- **THEN** the edit succeeds
-- **AND** the note "plan/daily/26-Q3/2026-10-01 Thu.md" holds "~09:15"
+- **THEN** the edit is refused as a bad request
 
 #### Scenario: The log moved on  {#s-dd0b}
 
