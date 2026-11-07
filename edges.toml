@@ -123,3 +123,21 @@ from = "mu-rb5u"
 to = "mu-rwk3"
 kind = "blocks"
 created_at = "2026-11-07T17:27:18.842Z"
+
+[[edge]]
+from = "mu-bmbr"
+to = "mu-xfm2"
+kind = "related"
+created_at = "2026-11-07T19:46:20.122Z"
+
+[[edge]]
+from = "mu-bmbr"
+to = "mu-5eme"
+kind = "related"
+created_at = "2026-11-07T19:46:20.180Z"
+
+[[edge]]
+from = "mu-bmbr"
+to = "mu-97fh"
+kind = "related"
+created_at = "2026-11-07T19:46:20.236Z"
