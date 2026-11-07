@@ -5,6 +5,9 @@ export const NOW_TAB_PATH = "!now";
 
 export const LISTS_PATH = "!lists";
 
+/** The all-lists page; the bare `!lists` is what the tab opens first and resolves to the current list. */
+export const ALL_LISTS_PATH = "!lists/";
+
 export const TABS: { id: TabId; label: string }[] = [
   { id: "now", label: "Now" },
   { id: "home", label: "Home" },
@@ -26,7 +29,7 @@ export function tabOf(path: string): TabId {
 
 /** The list path a Lists page shows, or null for the all-lists page. */
 export function listOf(path: string): string | null {
-  return path.startsWith(`${LISTS_PATH}/`) ? path.slice(LISTS_PATH.length + 1) : null;
+  return path.startsWith(`${LISTS_PATH}/`) ? path.slice(LISTS_PATH.length + 1) || null : null;
 }
 
 /** What each tab last showed, so switching tabs keeps its state. */

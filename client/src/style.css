@@ -147,7 +147,16 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .tabbar button { flex: 1 1 0; text-align: center; min-height: 3.25rem; border: 0; background: none; font: inherit; color: inherit; }
 .tabbar button.active { font-weight: 700; color: #2563eb; }
 .message-sheet .send { width: 100%; min-height: 3.25rem; margin-top: .5rem; font: inherit; font-weight: 600; border: 1px solid #bbb; border-radius: 8px; }
-.lists .all-lists:disabled { visibility: hidden; }
+.lists ul { list-style: none; padding: 0; }
+.lists .all li button { width: 100%; min-height: 3rem; text-align: left; font: inherit; border: 0; border-bottom: 1px solid #ddd; background: none; }
+.lists h3 { font-size: .85rem; text-transform: uppercase; opacity: .7; margin: 1rem 0 .25rem; }
+.lists .item { display: flex; align-items: center; gap: .75rem; min-height: 3rem; border-bottom: 1px solid #eee; }
+.lists .item .text { flex: 1 1 auto; }
+.lists .item .box { flex: none; width: 1.75rem; height: 1.75rem; border: 2px solid #888; border-radius: 50%; background: none; font: inherit; line-height: 1; padding: 0; }
+.lists .item.done .box { background: #2563eb; border-color: #2563eb; color: #fff; }
+.lists .item.done .text, .lists .item.canceled .text { text-decoration: line-through; opacity: .6; }
+.lists .item.canceled { opacity: .5; }
+.lists .item .source { flex: none; min-height: 2.25rem; border: 1px solid #bbb; border-radius: 8px; background: none; font: inherit; }
 @media (max-width: 720px) { main { padding-bottom: 4.5rem; } }
 @media (prefers-color-scheme: dark) { .tabbar { background: #202225; border-color: #333; } }
 .now-current { text-align: center; padding: 1rem .5rem; border-radius: 12px; border: 1px solid #ddd; }
@@ -159,3 +168,4 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .now-blocks li { padding: .35rem 0; }
 .now-blocks li.current { font-weight: 700; }
 .now-blocks li.past { opacity: .5; }
+.note .focus-line { background: rgba(250, 204, 21, .3); }
