@@ -2,15 +2,14 @@
 
 ## Purpose
 
-On a phone the app has a bottom tab bar: Home (today's app), Lists, and later Now first on the
-left. A desktop browser has no tab bar. The Lists page here is the shell; its content comes with
+On a phone the app has a bottom tab bar: Now, Home (today's app) and Lists, in that order. A desktop browser has no tab bar. The Lists page here is the shell; its content comes with
 the Lists content ticket. (Ticket mu-5eme, epic mu-5tju.)
 
 ## Requirements
 
 ### Requirement: The tab bar is mobile only  {#r-540f}
 
-The client SHALL show a bottom tab bar with Home and Lists, in that order, on a viewport 720
+The client SHALL show a bottom tab bar with Now, Home and Lists, in that order, on a viewport 720
 pixels wide or less, and SHALL NOT show it on a wider one.
 
 #### Scenario: Phone width  {#s-8cd4}
@@ -30,7 +29,7 @@ pixels wide or less, and SHALL NOT show it on a wider one.
 ### Requirement: The tab is in the URL and each tab keeps its page  {#r-1680}
 
 The client SHALL show Lists for the address hash `!lists` (and `!lists/<list path>` for one list)
-and Home for every other page, and a tap on a tab SHALL open the page that tab last showed. The
+Now for `!now`, and Home for every other page, and a tap on a tab SHALL open the page that tab last showed. The
 last page, Lists included, reopens on a fresh start (spec lastpage).
 
 #### Scenario: Switching tabs keeps state  {#s-a2e8}
@@ -54,7 +53,7 @@ an empty state until lists exist.
 
 ### Requirement: One message sheet for every page  {#r-e44d}
 
-Home and Lists SHALL open the same message sheet (one component; the opening button may differ per
+Now, Home and Lists SHALL open the same message sheet (one component; the opening button may differ per
 page). It sends fire-and-forget to the notes aide with the page's path attached to the text, takes
 dictated text, submits on Enter (Shift+Enter is a new line), has a large Send button, and shows no
 reply.
