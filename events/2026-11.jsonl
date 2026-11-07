@@ -8,3 +8,4 @@
 {"actor":"external:orchestrator","at":"2026-11-07T16:52:14.280802840Z","from":"pending","task":"mu-q6e7","to":"open"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:02:26.068827837Z","from":"open","task":"mu-q6e7","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:02:26.335634342Z","queue":"reprioritized"}
+{"actor":"human","at":"2026-11-07T17:06:48.851Z","from":"","task":"mu-adm2","to":"pending"}
