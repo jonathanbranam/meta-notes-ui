@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.26.0, v1 in development.
+Status: v0.27.0, v1 in development.
 
 ## How it fits
 
@@ -175,6 +175,11 @@ look at them too. Production does not depend on it.
   --overdue --due`, `calendar` and `note daily --render` (never creates the note; all `execFile`, argument
   arrays) plus a read of the daily note. The view refetches (debounced 1 s)
   when the watcher reports a change.
+- **Week** (desktop header button; `#!week?start=<monday>&days=7|5|2`): a column per day, 15-minute
+  rows, from `GET /api/week` (the cascade is `shared/week.ts`; the page only renders). Range picker
+  (7 days, 5 weekdays, weekend) and previous/next week are in the URL; fill-ins, calendar events
+  and errors have their own styles and badges; a now line on today; tasks due per day in a
+  collapsible list; refetches on each live update. Spec: `design/specs/week-page.md`.
 - **Reopen last page**: the page you were on is kept in the browser's localStorage (never the server);
   a fresh start with no `#` in the URL opens it, else Today. A stored page that is gone opens Today.
 - **Alerts**: browser notifications at the time of a timed task due today

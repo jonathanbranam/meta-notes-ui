@@ -15,6 +15,7 @@ import { neighboursSteps } from "./specs/steps/neighbours.js";
 import { nowSteps } from "./specs/steps/now.js";
 import { listsSteps } from "./specs/steps/lists.js";
 import { weekSteps } from "./specs/steps/week.js";
+import { weekPageSteps } from "./specs/steps/weekpage.js";
 
 const steps = createSteps();
 accessSteps(steps);
@@ -28,6 +29,7 @@ tabsSteps(steps);
 nowSteps(steps);
 listsSteps(steps);
 weekSteps(steps);
+weekPageSteps(steps);
 treepaneSteps(steps);
 neighboursSteps(steps);
 pushSteps(steps);
