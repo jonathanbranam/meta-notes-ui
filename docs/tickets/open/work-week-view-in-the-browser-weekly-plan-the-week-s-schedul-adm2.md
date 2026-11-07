@@ -60,3 +60,18 @@ parsing with a really brief description, like missing start, missing end, duplic
 duplicate ends, or something very simple like that. Usually, there'll be a few of those scattered
 throughout the day, and the later parts of the day will be filled in, and some of the earlier parts
 will be missing."
+
+The human (verbatim), clarifying "the same decision logic": "Right, when I said the same decision
+logic, what I mean is, for each 15-minute block, we check. There's a cascading order of what we
+check, and the cascading order should be written once, defined once, and used everywhere. The way
+that gets treated in the UI could be different and will be different between future days and past
+days, but I think the ordering should be the same for both. 
+
+And it's unlikely, but we should also handle the case where there's a time log or an actual in the
+future. That should get a different kind of error UI treatment as well. I don't know how that would
+happen, but you never know. Software has bugs."
+
+Aide's reading (to confirm with the human): one cascade per 15-minute slot, defined once:
+Time Log > Actual > Plan > Calendar > empty. Past: Time Log/Actual are records; Plan/Calendar are
+fill-ins (marked style + icon). Future: Plan/Calendar normal; a Time Log or Actual in the future is
+an error (its own error style).
