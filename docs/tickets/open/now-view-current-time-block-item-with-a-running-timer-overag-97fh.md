@@ -73,3 +73,9 @@ It needs to be file system-aware, observing those changes and making updates liv
 
 (Aide: so the Now tab replaces the separate trip timer design in mu-ma6v: Start/Done on the
 "Drive to work" block is the trip timing. In the desktop browser, Now is a page, no tab bar.)
+
+## Go-ahead
+
+Aide asked whether to send the Now tab to the orchestrator to build. The human (Sat 2026-11-07,
+verbatim): "Yes, and this Now tab should be the first one on the left." Tab order on mobile: Now,
+Home, Lists.
