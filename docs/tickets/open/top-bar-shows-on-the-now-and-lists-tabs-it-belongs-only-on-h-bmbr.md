@@ -26,3 +26,13 @@ human's earlier "For now, we could leave all that just as it is in Home" (mu-5tj
 On the phone layout, Now and Lists show no top bar; Home still shows it; Lists' back button and the
 message button still work. Desktop browser (no tab bar): open question to the human, since there the
 top bar is the only way back to Home.
+
+## Brief (orchestrator, 2026-11-07)
+
+Approval: the human's words above, relayed by aide m-0197 ("build the phone part now").
+
+Phone layout only (where the bottom tab bar shows): hide the top bar on the Now and Lists tabs; Home unchanged. If the Message button lives in the top bar, keep a Message button on Now and Lists (same shared MessageSheet, page context as today). Lists keeps its back-to-all-lists button. Desktop unchanged until the human answers (aide is asking).
+
+Files likely: client/src/App.tsx, style.css, design/specs/tabs.md (+ steps). Check: a spec/test that the top bar is absent on Now and Lists at phone width and present on Home and on desktop; Message still opens on Now and Lists. Repo check green once.
+
+Model: Haiku. Out of scope (not yet): any desktop change.
