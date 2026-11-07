@@ -40,3 +40,6 @@ calendar events when an export exists; (2) future hours show the plan, past hour
 (Actual + Time Log) with the plan faint behind; (3) the week note's Goals and Plan collapsible at
 the top. On (2), the human (verbatim): "Let's simplify number two: anything that's in the past,
 don't show the plan." (1) and (3) not yet answered.
+On (1), calendar events, the human (verbatim): "Any period with a time block in plan would supersede
+anything on the calendar. Anything without a daily note or with no time block entered for that
+15-minute period should show what's in the calendar."
