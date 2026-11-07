@@ -267,3 +267,9 @@ none of the `- [x] plan complete ✅ ...` ceremony markers. The UI's task views 
 reminders) all come from `meta-notes tasks`, so they skip checklist lines as well. So list items
 written as plain checkboxes with no 📅 or 🛫 are not tasks; no folder filter, new syntax or ignored
 tag is needed. Caveat: the list commands must never give an item a 📅 or 🛫.
+
+From the human (Sat 2026-11-07, to aide, verbatim), on where list notes go: "List should follow the
+same, either quarterly or monthly. I think quarterly is more common. It should follow the same
+folder structure there that other notes follow. Daily notes follow."
+(Aide: daily notes are `plan/daily/26-Q4/2026-11-07 Sat.md`, so e.g.
+`resource/lists/26-Q4/2026-11-07 Walmart.md`.)
