@@ -18,3 +18,12 @@ tasks = ["mu-nehy"]
 
 [[tier]]
 tasks = ["mu-q6e7"]
+
+[[tier]]
+tasks = ["mu-5eme"]
+
+[[tier]]
+tasks = [
+    "mu-97fh",
+    "mu-xfm2",
+]
