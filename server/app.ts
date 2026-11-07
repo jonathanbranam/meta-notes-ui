@@ -42,7 +42,7 @@ export interface AppOptions {
   clientDir?: string;
   /** Wait this long (ms) after a failed login; default 1000. */
   failDelayMs?: number;
-  /** Send-to-advisor settings; without them there is no /api/message. */
+  /** Send-to-aide settings; without them there is no /api/message. */
   message?: MessageConfig;
   /** Web Push store; without it there is no /api/push route. */
   push?: PushConfig;

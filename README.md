@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.22.1, v1 in development.
+Status: v0.22.2, v1 in development.
 
 ## How it fits
 
@@ -35,7 +35,7 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
 
 - `--host` defaults to `127.0.0.1` (bind a LAN or Tailscale address for the
   phone); `--port` defaults to `0` (a free port).
-- `--bridle-url`, `--bridle-token-file` (and `--bridle-to`, default `external:advisor`), all
+- `--bridle-url`, `--bridle-token-file` (and `--bridle-to`, default `external:aide`), all
   or none, turn on a Message button: `POST /api/message {body}` sends the text to a bridle
   daemon as the human (`design/specs/message.md`). `/api/version` reports `message: true|false`.
 - `--push-contact` turns on Web Push (off without it): the server keeps a VAPID key pair in

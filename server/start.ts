@@ -47,7 +47,7 @@ export async function startServer(args: string[]): Promise<RunningServer> {
     throw new UsageError("--bridle-url and --bridle-token-file go together (--bridle-to is optional)");
   }
   const message = values["bridle-url"]
-    ? { url: values["bridle-url"], tokenFile: values["bridle-token-file"]!, to: values["bridle-to"] ?? "external:advisor" }
+    ? { url: values["bridle-url"], tokenFile: values["bridle-token-file"]!, to: values["bridle-to"] ?? "external:aide" }
     : undefined;
 
   const contact = values["push-contact"];
