@@ -20,3 +20,4 @@
 {"actor":"external:orchestrator","at":"2026-11-07T17:21:26.276737164Z","from":"open","task":"mu-xfm2","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:21:26.341289295Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:21:26.429718579Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-07T17:21:36.942407237Z","from":"planned","task":"mu-q6e7","to":"integrated"}

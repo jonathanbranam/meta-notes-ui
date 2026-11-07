@@ -2,11 +2,14 @@
 id = "mu-q6e7"
 title = "Message button says advisor and defaults to external:advisor; it should be the notes aide"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-07T16:51:43.597Z"
-updated_at = "2026-11-07T17:07:15.707158028Z"
+updated_at = "2026-11-07T17:21:41.487485631Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/aide-msg"
+commit = "3ef86b8"
+summary = "Message button reads 'Message to the aide' and defaults to external:aide; deploy template updated. v0.22.2, deployed."
 ticket = "q6e7"
 +++
 
@@ -24,3 +27,9 @@ Done on bridle/aide-msg (72d4ffd): default --bridle-to external:aide, UI 'Messag
 
 ### note · external:orchestrator · 2026-11-07T17:07:15.707Z
 orchestrator: checked the worker's unit finding. The installed user unit (~/.config/systemd/user/meta-notes-ui.service) and the running server already pass --bridle-to external:aide (active since 2026-11-07 17:06 UTC); nothing for the human to change there. Only the repo template deploy/meta-notes-ui.service (line 21) still has --bridle-to external:advisor. Change it to external:aide on this same branch before merge; it is in scope of the human's ask ('those messages should go to the Aide now').
+
+### note · external:orchestrator · 2026-11-07T17:21:36.942Z
+integrated: 3ef86b8 (branch bridle/aide-msg)
+
+### note · external:orchestrator · 2026-11-07T17:21:36.947Z
+cleanup: removed nothing
