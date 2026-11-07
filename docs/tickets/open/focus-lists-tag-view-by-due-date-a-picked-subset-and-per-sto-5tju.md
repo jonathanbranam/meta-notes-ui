@@ -257,3 +257,13 @@ There are a couple of approaches:
  Also, tasks without due dates are never picked up, so maybe I'm overthinking this. If the list is a
 normal list without a due date on it, that's probably enough. Please look into that and
 double-check for me."
+
+Aide check (2026-11-07, meta-notes 2.34.5), on "tasks without due dates are never picked up":
+confirmed, and stronger. `meta-notes conventions`: a checkbox line "is a **task** only when it has
+a due date (`📅 YYYY-MM-DD`, or a bare `📅` for undated) or a start date (`🛫 YYYY-MM-DD`). Other
+checkbox lines are checklist items and never appear in task queries." Checked checklist lines with
+`✅ <date>` stay out too: `meta-notes tasks --status all --all --date 2026-11-01..2026-11-07` lists
+none of the `- [x] plan complete ✅ ...` ceremony markers. The UI's task views (Today, tag view,
+reminders) all come from `meta-notes tasks`, so they skip checklist lines as well. So list items
+written as plain checkboxes with no 📅 or 🛫 are not tasks; no folder filter, new syntax or ignored
+tag is needed. Caveat: the list commands must never give an item a 📅 or 🛫.
