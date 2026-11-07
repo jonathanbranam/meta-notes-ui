@@ -28,3 +28,4 @@
 {"actor":"external:orchestrator","at":"2026-11-07T17:27:31.813240060Z","from":"planned","task":"mu-5eme","to":"integrated"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:27:41.013358017Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:30:41.833844114Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-07T17:36:37.357389612Z","from":"planned","task":"mu-97fh","to":"integrated"}
