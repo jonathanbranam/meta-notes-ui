@@ -97,3 +97,32 @@ The idea is I'm trying to plan Thursday and Friday. I want to see what I've alre
 those days, as well as my calendar. If, let's say, I've blocked out Thursday already, I want to see
 that. For Friday, let's say there's no daily note, I would just want to see my calendar plus the
 tasks in a collapsible block somewhere."
+
+Aide asked, before now with no Time Log entry: A = Actual, then Plan, then Calendar as fill-ins;
+B = Plan then Calendar only. The human (verbatim): "Yes. When there's no time log entry, we fall
+back to actual, then we fall back to the plan, and then the calendar. Agreed.
+
+There's just one style for that. If there's no time log, there's just one style. There should be a
+very small icon of some kind, or a single-letter indicator, or a two-letter indicator of the source
+of that. By default, we don't show the source because, by default, the source is in the past time
+log. If there's no time log, then we should show some sort of indicator of where this content came
+from.
+
+Same for the future. The default source is the time block, but we would show anything that came
+from the calendar as a different style. I think that is a different style as well, but it should
+probably indicate where it comes from. I think, also, not exactly sure, but yeah, I think A is
+basically correct."
+
+### Agreed so far (aide's summary)
+
+One cascade per 15-minute slot, defined once:
+- Before now: Time Log (default, no badge) > Actual > Plan > Calendar > empty. Non-Time-Log sources
+  share one fill-in style plus a tiny source badge (e.g. A, P, Cal).
+- After now: Time Block plan (default, no badge) > Calendar (own style + badge) > empty.
+- Errors: Time Log parse errors (missing start/end, duplicate starts/ends) in an error style with a
+  short label, the rest of the day shown normally; a Time Log or Actual in the future is its own
+  error style.
+- Tasks due each day: a collapsible list at the top of each day's column.
+- Ranges: 7 days, 5 weekdays, 2-day weekend; works on work and personal notes roots; desktop browser
+  first, live updates assumed like the rest of the UI.
+Open: the week note's Goals/Plan at the top (asked, not answered).
