@@ -2,11 +2,13 @@
 id = "mu-bmbr"
 title = "Top bar shows on the Now and Lists tabs; it belongs only on Home"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-07T19:46:12.975Z"
-updated_at = "2026-11-07T20:03:09.829852547Z"
+updated_at = "2026-11-07T20:03:46.708323764Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+commit = "6e37034"
+summary = "Phone: top bar only on Home; Now and Lists carry their own Message button. Desktop unchanged. v0.27.1, deployed."
 ticket = "bmbr"
 +++
 
@@ -28,3 +30,6 @@ Browser (headless Chrome, 390 px, throwaway dev:example server, stopped):
 - Lists back button: NOT clicked; the example root has no lists.
 
 Note: on a phone Now and Lists, the Menu, Today, Week, prev/next and Log out (when logged in) are no longer on screen. Log out is the one to decide on.
+
+### note · external:orchestrator · 2026-11-07T20:03:46.430Z
+integrated: 6e37034
