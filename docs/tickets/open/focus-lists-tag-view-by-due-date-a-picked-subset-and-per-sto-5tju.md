@@ -207,3 +207,22 @@ should be easy to hit in the user interface."
 From the human (Sat 2026-11-07, to aide, verbatim), on how a new list is filled: "A new list starts
 empty for now. To make it simple, let the agent fill it so we can make decisions on that later. The
 agent can read all my notes, search for tasks, and fill the list based on what I'm asking for."
+
+From the human (Sat 2026-11-07, to aide, verbatim), on groups, order and where a list lives:
+"That's right. The agent can do all the sorting for now. We'll handle manual sorting later.
+
+The capabilities that we need are:
+
+* categorization into sublists and subgroupings
+* ordering
+
+ The CLI needs to be able to:
+
+* have subgroups
+* specify the order of the subgroups
+* have list items within the subgroups
+
+ Those list items should also be orderable, not left to chance. The order in the notes repository
+should be the same order it shows up in the user interface. I'm thinking probably this is just an
+ephemeral note under resource somewhere, and we would just temporarily use it to track a specific
+shopping list."
