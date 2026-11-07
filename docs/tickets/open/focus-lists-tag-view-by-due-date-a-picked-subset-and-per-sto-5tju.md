@@ -118,3 +118,33 @@ I should be able to uncheck something. For example, maybe I grabbed the buns up 
 when I got to the back of the store, I realized I got the wrong kind of buns or something. I should
 be able to scroll to the bottom, see where the buns were, and uncheck them to remind myself to get
 the buns again."
+
+## More from the human (Sat 2026-11-07, to aide, verbatim)
+
+"And this is a different UI. Just to be clear, this is a whole different page within the current
+UI, a whole different screen experience. I've brought this up before. I don't know where we got
+with it, but we should add tab control along the bottom for mobile, right? This should be, I said
+it, different tabs across the bottom, and we've got some sort of control at the top for the Today
+node and a few other things.
+
+For now, we could leave all that just as it is in Home, but then we need a different page at the
+bottom for shopping lists or lists or something like that. From within there, there would be this
+set of lists of things, and it should always know the current thing. If I just open that up, it
+should open the current thing. If I haven't opened it recently, that should be metadata that
+should be noted in the repo somewhere, which is the current list, because that's part of the daily
+note. The app itself should also remember what I was looking at, right? When it opens, by default,
+it would go to the current thing if there should be an active shopping list type of thing. That's
+how you get to this interface.
+
+Also, at the upper left, it should have a button that takes you back to the list of all shopping
+lists. That would contain all the different shopping lists that I've created and have controls to
+create new lists and modify them.
+
+The way that this should work is undetermined. The way this data should be stored in the notes
+database, the notes file system, is not yet determined. That's probably one of the main things
+we're going to have to work out because currently tasks are spread all over the repo. That's an
+acceptable structure, but we may need to have a different structure somewhere to store this
+information. These lists should all be stored somehow as plain text within the notes repository."
+
+Aide: no ticket for the bottom tab bar existed before this (it is in the notes repo's
+`area/meta-notes/UI Now Screen.md`, 2026-10-10 and 2026-10-15, never ticketed here).
