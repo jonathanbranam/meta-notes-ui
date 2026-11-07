@@ -25,3 +25,6 @@ Context (aide): the notes root on vesta is in personal mode; meta-notes ticket m
 work and mobile app for personal") is the origin of this ask. Week plans are
 `plan/week/<YY-Qn>/<monday>.md`; each day's Time Block and Time Log are in the daily note. Design
 open; questions for the human on the thread.
+
+From the human (Sat 2026-11-07, to aide, verbatim): "The UI changes between desktop and mobile are going to be pretty significant. I don't have anything significantly different yet, but I don't really want a tab bar along the bottom in the browser."
+(Aide: the bottom tab bar is for mobile only; desktop gets its own navigation, not yet designed.)
