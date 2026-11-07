@@ -150,3 +150,12 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .lists .all-lists:disabled { visibility: hidden; }
 @media (max-width: 720px) { main { padding-bottom: 4.5rem; } }
 @media (prefers-color-scheme: dark) { .tabbar { background: #202225; border-color: #333; } }
+.now-current { text-align: center; padding: 1rem .5rem; border-radius: 12px; border: 1px solid #ddd; }
+.now-current.over { border-color: #dc2626; }
+.now-worked { font-size: 3rem; font-variant-numeric: tabular-nums; margin: .25rem 0; }
+.now-over { font-size: 1.5rem; font-weight: 700; color: #dc2626; margin: 0; font-variant-numeric: tabular-nums; }
+.now-action { display: block; width: 100%; min-height: 3.5rem; margin-top: .75rem; font: inherit; font-size: 1.25rem; font-weight: 700; text-align: center; border: 1px solid #bbb; border-radius: 8px; }
+.now-blocks { list-style: none; padding: 0; }
+.now-blocks li { padding: .35rem 0; }
+.now-blocks li.current { font-weight: 700; }
+.now-blocks li.past { opacity: .5; }

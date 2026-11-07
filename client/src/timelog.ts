@@ -47,15 +47,20 @@ export interface AppendReply {
  * is refused; with `closePrev` an open last entry is ended at `start`. Reused by the trip timer.
  */
 export async function appendTimeLog(path: string, what: string, start: string, log: LogEntry[], closePrev = true): Promise<AppendReply> {
-  const text = what.trim().startsWith("- ") ? what.trim() : `- ${what.trim()}`;
-  const last = log[log.length - 1];
-  const prev = last ? { prev: last.header, prevStart: last.start, prevOpen: last.end === "", closePrev: closePrev && last.end === "" } : { first: true };
   try {
-    const res = await fetch("/api/timelog/append", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ path, text, start, ...prev }) });
+    const res = await fetch("/api/timelog/append", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(appendBody(path, what, start, log, closePrev)) });
     return (await res.json()) as AppendReply;
   } catch {
     return { ok: false, error: "Cannot reach the server" };
   }
+}
+
+/** The body `POST /api/timelog/append` takes for `appendTimeLog`. */
+export function appendBody(path: string, what: string, start: string, log: LogEntry[], closePrev = true) {
+  const text = what.trim().startsWith("- ") ? what.trim() : `- ${what.trim()}`;
+  const last = log[log.length - 1];
+  const prev = last ? { prev: last.header, prevStart: last.start, prevOpen: last.end === "", closePrev: closePrev && last.end === "" } : { first: true };
+  return { path, text, start, ...prev };
 }
 
 /** An edited open entry must not keep an empty `* end:` line: the CLI wants no end line, or a time. */

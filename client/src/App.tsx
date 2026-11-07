@@ -17,7 +17,8 @@ import { tagFromPath } from "./tagview";
 import { ListsView } from "./ListsView";
 import { MessageSheet } from "./MessageSheet";
 import { TabBar } from "./TabBar";
-import { isMobileWidth, LISTS_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
+import { NowView } from "./NowView";
+import { isMobileWidth, LISTS_PATH, NOW_TAB_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -306,9 +307,10 @@ export function App() {
     q.addEventListener("change", on);
     return () => q.removeEventListener("change", on);
   }, []);
-  const [tabMem, setTabMem] = useState<TabMemory>(() => remember({ home: TODAY_PATH, lists: LISTS_PATH }, path));
+  const [tabMem, setTabMem] = useState<TabMemory>(() => remember({ now: NOW_TAB_PATH, home: TODAY_PATH, lists: LISTS_PATH }, path));
   useEffect(() => setTabMem((m) => remember(m, path)), [path]);
   const onLists = tabOf(path) === "lists";
+  const onNow = path === NOW_TAB_PATH;
   const [loggedIn, setLoggedIn] = useState(false);
   const [canMessage, setCanMessage] = useState(false);
   const [composing, setComposing] = useState(false);
@@ -359,7 +361,7 @@ export function App() {
   );
   const loadNote = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH || tabOf(p) === "lists" || !isNote(p)) return setNote(null);
+    if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || tabOf(p) === "lists" || !isNote(p)) return setNote(null);
     getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(p)}`)
       .then((n) => {
         setNote(n);
@@ -373,7 +375,7 @@ export function App() {
 
   const loadBacklinks = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH || tabOf(p) === "lists" || !isNote(p)) return setBacklinks([]);
+    if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || tabOf(p) === "lists" || !isNote(p)) return setBacklinks([]);
     getJson<BacklinksResponse>(`/api/backlinks?path=${encodeURIComponent(p)}`)
       .then((b) => setBacklinks(b.backlinks))
       .catch(() => setBacklinks([]));
@@ -552,6 +554,7 @@ export function App() {
           &gt;
         </button>
         <button onClick={openToday}>Today</button>
+        {!mobile && <button onClick={() => open(NOW_TAB_PATH)}>Now</button>}
         {canMessage && <button onClick={() => setComposing(true)}>Message</button>}
         {sentNote && <span className="hint">Message sent</span>}
         {loggedIn && (
@@ -574,7 +577,7 @@ export function App() {
           <button disabled={!near.next} onClick={() => near.next && open(near.next)} aria-label="Next note" title={near.next ?? undefined}>
             &rsaquo;
           </button>
-          <span className="title">{path === TODAY_PATH ? "Today" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
+          <span className="title">{path === TODAY_PATH ? "Today" : onNow ? "Now" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
         </div>
       </header>
       {stale && (
@@ -598,7 +601,9 @@ export function App() {
       <main>
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
-        {onLists ? (
+        {onNow ? (
+          <NowView today={todayState} canMessage={canMessage} send={(body) => postJson("/api/message", { body })} />
+        ) : onLists ? (
           <ListsView path={path} onAll={() => open(LISTS_PATH)} />
         ) : path === TODAY_PATH ? (
           <TodayView today={todayState} now={now} open={open} files={filePaths} />

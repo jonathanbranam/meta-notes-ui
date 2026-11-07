@@ -1,9 +1,12 @@
-/** The pages of the mobile bottom tab bar (design/specs/tabs.md). Now comes first when its ticket lands. */
-export type TabId = "home" | "lists";
+/** The pages of the mobile bottom tab bar (design/specs/tabs.md). Now comes first. */
+export type TabId = "now" | "home" | "lists";
+
+export const NOW_TAB_PATH = "!now";
 
 export const LISTS_PATH = "!lists";
 
 export const TABS: { id: TabId; label: string }[] = [
+  { id: "now", label: "Now" },
   { id: "home", label: "Home" },
   { id: "lists", label: "Lists" },
 ];
@@ -17,6 +20,7 @@ export function isMobileWidth(width: number): boolean {
 
 /** The tab a page (hash path) belongs to: `!lists` and `!lists/<list>` are Lists, everything else Home. */
 export function tabOf(path: string): TabId {
+  if (path === NOW_TAB_PATH) return "now";
   return path === LISTS_PATH || path.startsWith(`${LISTS_PATH}/`) ? "lists" : "home";
 }
 

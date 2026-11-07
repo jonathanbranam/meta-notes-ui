@@ -12,6 +12,7 @@ import { pushSteps } from "./specs/steps/push.js";
 import { menuSteps } from "./specs/steps/menu.js";
 import { tagviewSteps } from "./specs/steps/tagview.js";
 import { neighboursSteps } from "./specs/steps/neighbours.js";
+import { nowSteps } from "./specs/steps/now.js";
 
 const steps = createSteps();
 accessSteps(steps);
@@ -22,6 +23,7 @@ todaySteps(steps);
 messageSteps(steps);
 lastpageSteps(steps);
 tabsSteps(steps);
+nowSteps(steps);
 treepaneSteps(steps);
 neighboursSteps(steps);
 pushSteps(steps);

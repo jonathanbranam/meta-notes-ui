@@ -9,7 +9,7 @@ export function tabsSteps(steps: Steps) {
   steps.then(/^the tab bar shows$/, (w) => expect(w.bar).toBe(true));
   steps.then(/^the tab bar does not show$/, (w) => expect(w.bar).toBe(false));
   steps.when(/^the user opens "([^"]+)" on Home, then Lists, then taps Home$/, (w, page) => {
-    let mem: TabMemory = { home: "!today", lists: "!lists" };
+    let mem: TabMemory = { now: "!now", home: "!today", lists: "!lists" };
     mem = remember(mem, page);
     mem = remember(mem, "!lists");
     w.page = pageForTab(mem, "home");
