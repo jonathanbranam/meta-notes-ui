@@ -189,3 +189,17 @@ From the human (Sat 2026-11-07, to aide, verbatim), on the one-tap message from 
 (aide had offered a chat box with replies, or tap-to-talk): "Generally, I don't need the agent's
 reply to show up. I'm sending a message as fire-and-forget. In this instance, if I need to actually
 chat with the agent, I'll use remote control."
+
+From the human (Sat 2026-11-07, to aide, verbatim), on messages from the Lists tab:
+"The messages for this part should work the same as the other one, and we should really have one
+solution for how those messages get sent, like one user interface convention. The button itself
+could be different per page based on what's on that page.
+
+I'll still be using Wispr Flow. What I want from the messages button is to open up an input, a text
+input or something, a text area, whatever. I'll continue to use Wispr Flow. I'll hit the buttons on
+the mobile to start Wispr Flow, and then I'll narrate a bunch of what I need, and then I'll hit
+Enter or Submit.
+
+Enter from the keyboard should always submit if I hit that, like the default there. I don't
+remember how that works on mobile, actually. Maybe Enter does not submit, but the Submit button
+should be easy to hit in the user interface."
