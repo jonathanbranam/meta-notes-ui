@@ -1,5 +1,8 @@
 [[tier]]
-tasks = ["mu-97fh"]
+tasks = [
+    "mu-xfm2",
+    "mu-rb5u",
+]
 
 [[tier]]
-tasks = ["mu-xfm2"]
+tasks = ["mu-rwk3"]

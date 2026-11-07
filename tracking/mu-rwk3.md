@@ -2,9 +2,9 @@
 id = "mu-rwk3"
 title = "Week view page: desktop grid with fill-in and error styles, ranges 7/5/2"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-11-07T17:26:50.982Z"
-updated_at = "2026-11-07T17:26:59.207746521Z"
+updated_at = "2026-11-07T17:37:23.248100272Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "rwk3"
