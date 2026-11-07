@@ -3,7 +3,7 @@
 ## Purpose
 
 The human can send a message from the UI to one bridle agent (the notes
-advisor), as themselves, without leaving the UI. Send only: no replies, no
+aide), as themselves, without leaving the UI. Send only: no replies, no
 chat, no choice of recipient. The server calls the notes daemon with the
 human's token, which it reads from a file; the browser never sees it. Without
 the flags the server needs no bridle (rule works-without-bridle) and the UI
@@ -20,7 +20,7 @@ configured agent; the same login already edits every note.
 ### Requirement: Messaging is configured by three flags, all or none  {#r-77cc}
 
 The server SHALL take `--bridle-url`, `--bridle-token-file` and `--bridle-to`
-(default `external:advisor`), SHALL refuse to start with only some of them, and
+(default `external:aide`), SHALL refuse to start with only some of them, and
 SHALL report `message: false` at `/api/version` and have no `/api/message`
 route when they are absent.
 
@@ -39,6 +39,13 @@ route when they are absent.
 - **WHEN** the server is started with --bridle-url but no --bridle-token-file
 - **THEN** it fails with a usage error
 
+#### Scenario: Default recipient  {#s-0d5c}
+
+*Verification*: **executable**
+
+- **WHEN** the server is started with the bridle flags but no --bridle-to and a client posts the message "hello" with a fake daemon that accepts it
+- **THEN** the daemon received "hello" for "external:aide" with the human's token
+
 ### Requirement: A message is sent to the daemon as the human  {#r-456a}
 
 The server SHALL, on `POST /api/message {body}` behind the existing login,
@@ -52,14 +59,14 @@ failure, never the token.
 
 - **WHEN** a client posts the message "Please review the plan" with a fake daemon that accepts it
 - **THEN** the response status is 200
-- **AND** the daemon received "Please review the plan" for "external:advisor" with the human's token
+- **AND** the daemon received "Please review the plan" for "external:aide" with the human's token
 
 #### Scenario: Token read on each send  {#s-cb3f}
 
 *Verification*: **executable**
 
 - **WHEN** the token file changes to "rotated" and a client posts the message "again"
-- **THEN** the daemon received "again" for "external:advisor" with the token "rotated"
+- **THEN** the daemon received "again" for "external:aide" with the token "rotated"
 
 #### Scenario: Daemon refuses  {#s-bc64}
 
@@ -87,8 +94,8 @@ failure, never the token.
 
 ### Requirement: The UI sends from a top-bar button  {#r-3de7}
 
-The client SHALL show a top-bar button only when `/api/version` says
-`message: true`; it opens a sheet with a text box and Send, which closes with a
+The client SHALL show a top-bar button, labelled Message, only when `/api/version` says
+`message: true`; it opens a sheet with a text box (placeholder "Message to the aide") and Send, which closes with a
 short "sent" note on success and keeps the text and shows the error on failure.
 
 #### Scenario: Send from the sheet  {#s-43ef}

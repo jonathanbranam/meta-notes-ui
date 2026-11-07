@@ -49,7 +49,7 @@ async function appWithDaemon(w: World, status = 200, reply = "{}") {
     token: TOKEN,
     version: "0.0.0",
     subscribe: () => () => {},
-    message: { url, tokenFile: w.tokenFile, to: "external:advisor" },
+    message: { url, tokenFile: w.tokenFile, to: "external:aide" },
   });
 }
 
@@ -83,6 +83,22 @@ export function messageSteps(steps: Steps) {
   steps.when(/^a client posts the message "([^"]*)" with a fake daemon that accepts it$/, async (w, text) => {
     await appWithDaemon(w);
     w.res = await post(w, text);
+  });
+  steps.when(/^the server is started with the bridle flags but no --bridle-to and a client posts the message "([^"]*)" with a fake daemon that accepts it$/, async (w, text) => {
+    const url = await fakeDaemon(w, 200, "{}");
+    const dir = await mkdtemp(path.join(tmpdir(), "mnui-start-"));
+    const { root } = await makeFixtureRoot();
+    w.tokenFile = path.join(dir, "human");
+    await writeFile(w.tokenFile, HUMAN + "\n");
+    const uiToken = path.join(dir, "ui-token");
+    await writeFile(uiToken, TOKEN + "\n");
+    const running_ = await startServer(["--root", root, "--token-file", uiToken, "--bridle-url", url, "--bridle-token-file", w.tokenFile]);
+    running.push(running_);
+    w.res = await fetch(`${running_.info.url}/api/message`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${TOKEN}`, "content-type": "application/json" },
+      body: JSON.stringify({ body: text }),
+    });
   });
   steps.when(/^a client posts the message "([^"]*)" with a fake daemon that answers (\d+) "([^"]*)"$/, async (w, text, status, err) => {
     await appWithDaemon(w, Number(status), JSON.stringify({ error: err }));

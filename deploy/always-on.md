@@ -72,7 +72,7 @@ the PWA need nothing else from the server.
 ## Optional: the Message button
 
 The unit's `--bridle-url`, `--bridle-token-file` and `--bridle-to` flags let the
-Message button in the top bar send text to the notes advisor as the human: the
+Message button in the top bar send text to the notes aide as the human: the
 server posts to the notes daemon (`http://127.0.0.1:7404`) with the human's
 token, read from `/srv/shared/work/notes-work/.bridle/tokens/human` on each send
 (the browser never sees it). Give both `--bridle-url` and `--bridle-token-file`

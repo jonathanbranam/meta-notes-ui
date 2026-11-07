@@ -244,7 +244,7 @@ function Folder({ node, current, onOpen }: { node: TreeNode; current: string; on
   );
 }
 
-/** A sheet that sends one message to the notes advisor; keeps the text and shows the error on failure. */
+/** A sheet that sends one message to the notes aide; keeps the text and shows the error on failure. */
 function MessageSheet({ onClose, onSent }: { onClose: () => void; onSent: () => void }) {
   const [text, setText] = useState("");
   const [err, setErr] = useState("");
@@ -262,7 +262,7 @@ function MessageSheet({ onClose, onSent }: { onClose: () => void; onSent: () => 
         <textarea
           autoFocus
           rows={6}
-          placeholder="Message to the advisor"
+          placeholder="Message to the aide"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === "Escape" && onClose()}
