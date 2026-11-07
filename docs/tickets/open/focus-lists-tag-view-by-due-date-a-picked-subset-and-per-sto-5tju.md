@@ -203,3 +203,7 @@ Enter or Submit.
 Enter from the keyboard should always submit if I hit that, like the default there. I don't
 remember how that works on mobile, actually. Maybe Enter does not submit, but the Submit button
 should be easy to hit in the user interface."
+
+From the human (Sat 2026-11-07, to aide, verbatim), on how a new list is filled: "A new list starts
+empty for now. To make it simple, let the agent fill it so we can make decisions on that later. The
+agent can read all my notes, search for tasks, and fill the list based on what I'm asking for."
