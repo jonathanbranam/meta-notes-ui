@@ -2,9 +2,9 @@
 id = "mu-5eme"
 title = "Mobile bottom tab bar (Home, Lists) and one shared message sheet"
 kind = "feature"
-state = "pending"
+state = "open"
 created_at = "2026-11-07T17:09:04.858Z"
-updated_at = "2026-11-07T17:09:04.858Z"
+updated_at = "2026-11-07T17:09:33.180714047Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "5eme"
