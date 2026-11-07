@@ -148,3 +148,18 @@ information. These lists should all be stored somehow as plain text within the n
 
 Aide: no ticket for the bottom tab bar existed before this (it is in the notes repo's
 `area/meta-notes/UI Now Screen.md`, 2026-10-10 and 2026-10-15, never ticketed here).
+
+## More from the human (Sat 2026-11-07, to aide, verbatim): agent first
+
+"If I'm using the user interface only, then I'm not sure how this works, but it's kind of
+difficult. The easier thing to solve first is that list creation or the list filling goes through
+the agent. That way, we can kind of iterate more easily on the design.
+
+What I would do is talk to the aide at Notes and say, "I'm going to Walmart. Make me a list for
+this trip to Walmart." That agent needs to have instructions on how to do this as part of that
+repository's instructions. Those instructions on how to make a list should come from the meta-notes
+plugin, because the notes repo is just an instance of meta-notes. The meta-notes CLI should have
+commands for creating and managing these lists.
+
+The agent, or I in the first version, will be able to use the CLI for anything, and then we can
+figure out how to do this strictly from the UI later."
