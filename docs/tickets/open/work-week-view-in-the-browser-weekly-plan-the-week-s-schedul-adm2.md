@@ -75,3 +75,25 @@ Aide's reading (to confirm with the human): one cascade per 15-minute slot, defi
 Time Log > Actual > Plan > Calendar > empty. Past: Time Log/Actual are records; Plan/Calendar are
 fill-ins (marked style + icon). Future: Plan/Calendar normal; a Time Log or Actual in the future is
 an error (its own error style).
+
+The human (Sat 2026-11-07, verbatim), on the cascade: "Okay, let's work through this a little.
+
+1. Time log: Time log is the single authoritative list of exactly what I did. That's what I really
+want to see. The actual block is really just a summary for that block.
+
+ If I'm looking at my week and it's Wednesday (it's hump day), at the end of the day on Wednesday,
+I'm trying to plan my week. I'm trying to write some notes about what happened. I want to see
+Monday and Tuesday, and every part of Wednesday before now. Call it 4 pm on Wednesday. Everything up
+until 4 pm on Wednesday should show the time log. That's what should appear.
+
+Everything after 4 pm on Wednesday should show the time block for Wednesday because that should
+already be there. For Thursday and Friday, it would show, in order, the time block if it exists. If
+not, then it should show any calendar events, and I think it should show tasks that are due on that
+date somewhere. It's probably collapsible, but I want to see tasks that are due on that date. That
+could possibly be a different UI or something like a collapsible, hideable block on this UI,
+because I'm not exactly sure how to combine those two things. I would love to see that as well.
+
+The idea is I'm trying to plan Thursday and Friday. I want to see what I've already scheduled for
+those days, as well as my calendar. If, let's say, I've blocked out Thursday already, I want to see
+that. For Friday, let's say there's no daily note, I would just want to see my calendar plus the
+tasks in a collapsible block somewhere."
