@@ -85,3 +85,8 @@ Source notes (aide on notes, m-0112, 2026-11-07): the human's requirements draft
 2026-10-31 Lowe's + Walmart trips is `area/meta-notes/UI Shopping List.md` in the notes repo;
 store layouts are in `resource/locations/Muncie.md`. The multi-step-in-a-place idea is in
 `area/meta-notes/UI Now Screen.md`.
+
+For the multi-step-in-a-place idea (meta-notes aide, m-0113): meta-notes tickets mn-5zm3
+(context-aware nudges), mn-5wam (live view origin), mn-nm28 (learn how long things take); shipped
+CLI pieces: checkin, task trees (`task show --tree`, `task add --under`), Time Log `* note:` lines.
+Also the notes root's `project/life-app`, the human's own plan for the app.
