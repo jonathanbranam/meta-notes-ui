@@ -43,3 +43,20 @@ don't show the plan." (1) and (3) not yet answered.
 On (1), calendar events, the human (verbatim): "Any period with a time block in plan would supersede
 anything on the calendar. Anything without a daily note or with no time block entered for that
 15-minute period should show what's in the calendar."
+
+Aide asked: a past slot with nothing in Actual or the Time Log: blank, or the calendar event faint?
+The human (verbatim): "Good callout. For something in the past with nothing in actual and no time
+log, follow the same decision logic, but indicate it because it's in the past. I wanted to see it
+rendered in a different style or have an icon associated with it to make it clear that this is not
+a record of what happened, but rather a fill-in from the calendar.
+
+Something else to note is that the time log for today or even yesterday sometimes has errors in it.
+The parsing and display should be resilient to kinds of errors like two starts in the same time
+log, a start without an end, or two ends. It should figure out where those errors are, but show
+everything else normally.
+
+Blocks that have an error in them should show, again, in a different style and indicate error
+parsing with a really brief description, like missing start, missing end, duplicate starts,
+duplicate ends, or something very simple like that. Usually, there'll be a few of those scattered
+throughout the day, and the later parts of the day will be filled in, and some of the earlier parts
+will be missing."
