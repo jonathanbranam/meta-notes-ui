@@ -19,6 +19,8 @@ import { locateLine, sourcePath, type ListSource } from "./lists";
 import { MessageSheet } from "./MessageSheet";
 import { TabBar } from "./TabBar";
 import { NowView } from "./NowView";
+import { WeekView } from "./WeekView";
+import { parseWeekPath, WEEK_PATH, weekPath } from "./week";
 import { isMobileWidth, LISTS_PATH, listOf, NOW_TAB_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
@@ -284,7 +286,7 @@ export function App() {
   const [target, setTarget] = useState(() => parseHash(startHash(decodeURIComponent(location.hash.slice(1)), readLastPage(), TODAY_PATH)));
   const path = target.path;
   // The stored page a fresh start opened, until the tree shows whether it still exists.
-  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH && !tagFromPath(path) && tabOf(path) === "home" ? path : null);
+  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH && !path.startsWith(WEEK_PATH) && !tagFromPath(path) && tabOf(path) === "home" ? path : null);
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
@@ -313,6 +315,7 @@ export function App() {
   useEffect(() => setTabMem((m) => remember(m, path)), [path]);
   const onLists = tabOf(path) === "lists";
   const onNow = path === NOW_TAB_PATH;
+  const onWeek = path === WEEK_PATH || path.startsWith(`${WEEK_PATH}?`);
   const [loggedIn, setLoggedIn] = useState(false);
   const [canMessage, setCanMessage] = useState(false);
   const [composing, setComposing] = useState(false);
@@ -363,7 +366,7 @@ export function App() {
   );
   const loadNote = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || tabOf(p) === "lists" || !isNote(p)) return setNote(null);
+    if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || p.startsWith(WEEK_PATH) || tabOf(p) === "lists" || !isNote(p)) return setNote(null);
     getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(p)}`)
       .then((n) => {
         setNote(n);
@@ -377,7 +380,7 @@ export function App() {
 
   const loadBacklinks = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || tabOf(p) === "lists" || !isNote(p)) return setBacklinks([]);
+    if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || p.startsWith(WEEK_PATH) || tabOf(p) === "lists" || !isNote(p)) return setBacklinks([]);
     getJson<BacklinksResponse>(`/api/backlinks?path=${encodeURIComponent(p)}`)
       .then((b) => setBacklinks(b.backlinks))
       .catch(() => setBacklinks([]));
@@ -406,7 +409,8 @@ export function App() {
   }, [focus, note, path]);
 
   const open = useCallback((p: string) => {
-    location.hash = encodeURIComponent(p).replace(/%2F/g, "/");
+    // the week page keeps a readable query in the hash: `#!week?start=...&days=5`
+    location.hash = encodeURIComponent(p).replace(/%2F/g, "/").replace(/%3F/g, "?").replace(/%3D/g, "=").replace(/%26/g, "&");
     setTarget({ path: p });
     setDrawer(false);
     setQuick(false);
@@ -579,6 +583,7 @@ export function App() {
         </button>
         <button onClick={openToday}>Today</button>
         {!mobile && <button onClick={() => open(NOW_TAB_PATH)}>Now</button>}
+        {!mobile && <button onClick={() => open(weekPath(parseWeekPath(WEEK_PATH, clock(now).today)))}>Week</button>}
         {canMessage && <button onClick={() => setComposing(true)}>Message</button>}
         {sentNote && <span className="hint">Message sent</span>}
         {loggedIn && (
@@ -601,7 +606,7 @@ export function App() {
           <button disabled={!near.next} onClick={() => near.next && open(near.next)} aria-label="Next note" title={near.next ?? undefined}>
             &rsaquo;
           </button>
-          <span className="title">{path === TODAY_PATH ? "Today" : onNow ? "Now" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
+          <span className="title">{path === TODAY_PATH ? "Today" : onNow ? "Now" : onWeek ? "Week" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
         </div>
       </header>
       {stale && (
@@ -625,7 +630,9 @@ export function App() {
       <main>
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
-        {onNow ? (
+        {onWeek ? (
+          <WeekView page={parseWeekPath(path, today)} today={today} nowMin={nowMinutes} refreshKey={refreshKey} go={open} />
+        ) : onNow ? (
           <NowView today={todayState} canMessage={canMessage} send={(body) => postJson("/api/message", { body })} />
         ) : onLists ? (
           <ListsView path={path} refreshKey={refreshKey} go={goList} openSource={openSource} />
