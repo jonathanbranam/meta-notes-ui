@@ -26,6 +26,69 @@ pixels wide or less, and SHALL NOT show it on a wider one.
 - **WHEN** the viewport is 1280 pixels wide
 - **THEN** the tab bar does not show
 
+### Requirement: On a phone the top bar is for Home only  {#r-8c4f}
+
+On a phone (the tab bar's width) the top bar SHALL show on Home and SHALL NOT show on Now or Lists;
+on a wider viewport it SHALL show on every page. The Message button SHALL sit in the top bar where
+the bar shows, and on the page itself on Now and Lists on a phone, opening the same message sheet.
+(Ticket mu-bmbr.)
+
+#### Scenario: Now on a phone  {#s-3b53}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 390 pixels wide
+- **AND** the user is on the Now tab
+- **THEN** the top bar does not show
+
+#### Scenario: Lists on a phone  {#s-831f}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 390 pixels wide
+- **AND** the user is on the Lists tab
+- **THEN** the top bar does not show
+
+#### Scenario: Home on a phone  {#s-4532}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 390 pixels wide
+- **AND** the user is on the Home tab
+- **THEN** the top bar shows
+
+#### Scenario: Now on a desktop  {#s-d5c31}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 1280 pixels wide
+- **AND** the user is on the Now tab
+- **THEN** the top bar shows
+
+#### Scenario: Message on Now on a phone  {#s-0b36}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 390 pixels wide
+- **AND** the user is on the Now tab
+- **THEN** the Message button is on the page, not in the top bar
+
+#### Scenario: Message on Lists on a phone  {#s-3f33}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 390 pixels wide
+- **AND** the user is on the Lists tab
+- **THEN** the Message button is on the page, not in the top bar
+
+#### Scenario: Message on Home on a phone  {#s-e849}
+
+*Verification*: **executable**
+
+- **WHEN** the viewport is 390 pixels wide
+- **AND** the user is on the Home tab
+- **THEN** the Message button is in the top bar
+
 ### Requirement: The tab is in the URL and each tab keeps its page  {#r-1680}
 
 The client SHALL show Lists for the address hash `!lists` (and `!lists/<list path>` for one list)

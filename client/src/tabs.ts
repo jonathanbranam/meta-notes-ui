@@ -27,6 +27,16 @@ export function tabOf(path: string): TabId {
   return path === LISTS_PATH || path.startsWith(`${LISTS_PATH}/`) ? "lists" : "home";
 }
 
+/** Whether the top bar shows: on a phone only on Home (tabs spec); on a wider screen on every page. */
+export function topBarShows(mobile: boolean, tab: TabId): boolean {
+  return !mobile || tab === "home";
+}
+
+/** Where the Message button sits: in the top bar when it shows, else on the page itself. */
+export function messageSite(mobile: boolean, tab: TabId): "bar" | "page" {
+  return topBarShows(mobile, tab) ? "bar" : "page";
+}
+
 /** The list path a Lists page shows, or null for the all-lists page. */
 export function listOf(path: string): string | null {
   return path.startsWith(`${LISTS_PATH}/`) ? path.slice(LISTS_PATH.length + 1) || null : null;

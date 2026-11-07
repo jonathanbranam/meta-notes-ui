@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { expect, test } from "vitest";
 import { MessageSheet } from "./MessageSheet";
 import { TabBar } from "./TabBar";
-import { isMobileWidth, LISTS_PATH, messageBody, pageForTab, remember, submitsOnKey, tabOf, type TabMemory } from "./tabs";
+import { isMobileWidth, LISTS_PATH, messageBody, messageSite, pageForTab, remember, submitsOnKey, tabOf, topBarShows, type TabMemory } from "./tabs";
 
 test("a phone viewport gets the tab bar, a desktop one does not", () => {
   expect(isMobileWidth(390)).toBe(true);
@@ -49,4 +49,19 @@ test("the shared sheet renders a Send button and the aide placeholder", () => {
   const html = renderToString(createElement(MessageSheet, { context: "!today", send: async () => ({ ok: true }), onClose: () => {}, onSent: () => {} }));
   expect(html).toContain("Message to the aide");
   expect(html).toContain("Send");
+});
+
+test("on a phone the top bar is for Home only; a desktop keeps it everywhere", () => {
+  expect(topBarShows(true, "home")).toBe(true);
+  expect(topBarShows(true, "now")).toBe(false);
+  expect(topBarShows(true, "lists")).toBe(false);
+  expect(topBarShows(false, "now")).toBe(true);
+  expect(topBarShows(false, "lists")).toBe(true);
+});
+
+test("the Message button is in the top bar, or on the page where the bar is hidden", () => {
+  expect(messageSite(true, "home")).toBe("bar");
+  expect(messageSite(true, "now")).toBe("page");
+  expect(messageSite(true, "lists")).toBe("page");
+  expect(messageSite(false, "now")).toBe("bar");
 });
