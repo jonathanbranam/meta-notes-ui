@@ -273,3 +273,43 @@ same, either quarterly or monthly. I think quarterly is more common. It should f
 folder structure there that other notes follow. Daily notes follow."
 (Aide: daily notes are `plan/daily/26-Q4/2026-11-07 Sat.md`, so e.g.
 `resource/lists/26-Q4/2026-11-07 Walmart.md`.)
+
+## Tracing list items to their tasks
+
+From the human (Sat 2026-11-07, to aide, verbatim): "Tell me how we're going to trace items back to
+the tasks that they come from. That needs to be stored in the list as a link and either a line
+number or some sort of description, probably by copying the line text from the original task."
+
+Aide's proposal (not yet approved): each item carries a `[[wiki link]]` to the task's note, the line
+number as a hint, and the task's text copied exactly; meta-notes already finds tasks by
+`task update <file> --expect <text>` (line only to disambiguate; refuses on mismatch). The copy goes
+on an indented plain bullet under the item, not on the checkbox line, because a copied 📅 on the
+checkbox line would make the item a task. Alternative held back: a permanent block ID (`^id`) on the
+source task (sturdier, but edits task lines and meta-notes lacks it).
+
+From the human (Sat 2026-11-07, to aide, verbatim): "And in the user interface, there should be a
+link button from the list that takes me back to the home (back to the current MadJax UI solution),
+opens that exact file, and scrolls to that line in the file."
+(Aide: "MadJax" is likely dictation for "meta-notes"; the Home tab, the current note viewer.)
+
+From the human (Sat 2026-11-07, to aide, verbatim), on item wording: "Another clarification: the
+list item should be very, very brief, even if the original task is much longer. If that makes
+sense, the original list item might say something about deciding how many soups I need and then
+getting them at Walmart.
+
+When making the actual Walmart thing, if it's got a decision with it or it's a little unclear, the
+agent should either clarify it with me or make a suggestion. It should just say something like "3
+soups for work," "4 bag salads for work," or "2 Caesar salads," something like that. It should be
+very brief. If the original task is wordy and long, this should be simply the information I need to
+know to grab it off the shelves."
+(Aide: this is for the agent instructions that ship with meta-notes, and fits the copied source
+text living on its own indented line, so the checkbox line holds only the short item.)
+
+From the human (Sat 2026-11-07, to aide, verbatim): "Yeah, the agent should ask me, but I think the
+agent should also go ahead and add it to the list. We can always change it. I'd rather have the item
+added to the list so that I don't overlook it if I happen to miss the message from the agent."
+
+Aide asked whether guessed items carry a "?" (e.g. "3 soups for work ?") so they stand out in the
+store. The human (verbatim): "That's fine? Is good."
+The human (verbatim), clarifying: "Sorry, that was a transcription error. Adding a question mark to
+the item is a good suggestion."
