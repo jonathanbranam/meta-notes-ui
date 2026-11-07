@@ -90,3 +90,31 @@ For the multi-step-in-a-place idea (meta-notes aide, m-0113): meta-notes tickets
 (context-aware nudges), mn-5wam (live view origin), mn-nm28 (learn how long things take); shipped
 CLI pieces: checkin, task trees (`task show --tree`, `task add --under`), Time Log `* note:` lines.
 Also the notes root's `project/life-app`, the human's own plan for the app.
+
+## More from the human (Sat 2026-11-07, to aide, verbatim)
+
+"I'll pull from this list. I have a master list of things I might want to get in any of these
+stores, and then I'm going to say, "Hey, I'm going to Walmart." Let's make a list for Walmart, and
+then I want to see exactly a list of things in Walmart.
+
+I want it to look and work similarly to the Reminders app on iPhone. For the shopping list, I'd
+like it to be organized, or at least organizable, into buckets and groups. For example:
+
+* Bread stuffs go together.
+* International foods are in an aisle.
+* Soft drinks and chips are nearby.
+* Dairies together.
+
+ At a minimum, we want to be able to group things by store location, and I would use that kind of
+grouping for other stores. If there's no grouping, a flat list is also fine.
+
+I want to check things off as I get them, of course. What happens when it's checked off is
+something I'm not sure about, but I think it should disappear from the current list so I can see
+exactly what's left to get. I do want to maybe have it so that, if you scroll down to the bottom,
+there's a list of things I've already gotten. That list would contain all the things I've checked
+off.
+
+I should be able to uncheck something. For example, maybe I grabbed the buns up front, but then
+when I got to the back of the store, I realized I got the wrong kind of buns or something. I should
+be able to scroll to the bottom, see where the buns were, and uncheck them to remind myself to get
+the buns again."
