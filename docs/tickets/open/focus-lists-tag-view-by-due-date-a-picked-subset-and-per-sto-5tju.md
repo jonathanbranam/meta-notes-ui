@@ -308,3 +308,6 @@ text living on its own indented line, so the checkbox line holds only the short 
 From the human (Sat 2026-11-07, to aide, verbatim): "Yeah, the agent should ask me, but I think the
 agent should also go ahead and add it to the list. We can always change it. I'd rather have the item
 added to the list so that I don't overlook it if I happen to miss the message from the agent."
+
+Aide asked whether guessed items carry a "?" (e.g. "3 soups for work ?") so they stand out in the
+store. The human (verbatim): "That's fine? Is good."
