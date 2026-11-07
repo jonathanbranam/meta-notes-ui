@@ -17,6 +17,7 @@ import { listTree } from "./tree.js";
 import { tagTaskRoutes } from "./tagtasks.js";
 import { listRoutes } from "./lists.js";
 import { todayRoutes } from "./today.js";
+import { weekRoutes } from "./week.js";
 
 const exec = promisify(execFile);
 export const COOKIE = "mn_ui_token";
@@ -227,6 +228,7 @@ export function createApp(opts: AppOptions): Hono {
   if (opts.message) messageRoutes(app, opts.message);
   if (opts.push) pushRoutes(app, opts.push);
   todayRoutes(app, root);
+  weekRoutes(app, root);
   listRoutes(app, root);
   tagTaskRoutes(app, root);
 

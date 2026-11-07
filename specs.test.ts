@@ -14,6 +14,7 @@ import { tagviewSteps } from "./specs/steps/tagview.js";
 import { neighboursSteps } from "./specs/steps/neighbours.js";
 import { nowSteps } from "./specs/steps/now.js";
 import { listsSteps } from "./specs/steps/lists.js";
+import { weekSteps } from "./specs/steps/week.js";
 
 const steps = createSteps();
 accessSteps(steps);
@@ -26,6 +27,7 @@ lastpageSteps(steps);
 tabsSteps(steps);
 nowSteps(steps);
 listsSteps(steps);
+weekSteps(steps);
 treepaneSteps(steps);
 neighboursSteps(steps);
 pushSteps(steps);
