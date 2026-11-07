@@ -24,4 +24,5 @@ human's earlier "For now, we could leave all that just as it is in Home" (mu-5tj
 ## Check
 
 On the phone layout, Now and Lists show no top bar; Home still shows it; Lists' back button and the
-message button still work. Same for the Now and Lists pages in the desktop browser.
+message button still work. Desktop browser (no tab bar): open question to the human, since there the
+top bar is the only way back to Home.
