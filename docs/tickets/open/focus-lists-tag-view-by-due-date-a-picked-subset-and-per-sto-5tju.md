@@ -163,3 +163,24 @@ commands for creating and managing these lists.
 
 The agent, or I in the first version, will be able to use the CLI for anything, and then we can
 figure out how to do this strictly from the UI later."
+
+## More from the human (Sat 2026-11-07, to aide, verbatim): tabs now, message from the list
+
+"I want to keep shaping this and working on the design for a little while. You asked, "When I'm
+done with the store, what happens?" Yes, if I'm done with the store trip, anything I didn't get
+stays unchecked in the master list, and anything that I did finish off obviously gets checked off
+in the master list. 
+
+So sorry. The UI bottom tabs come now in the UI, but what I mean is that list management (such as
+creating lists, adding and removing things from lists), some of that could be done from the CLI
+for now. There are some other things here.
+
+From within the UI, I need to be able to do two things:
+
+1. Send a message. We have that. We have a button for that on the other side, in the other app,
+but I need a one-tap way to send a message to the agent, to the aide at Notes, while I'm in the
+shopping list UI. We'll work on how that works exactly, but it should be as low friction as
+possible for that.
+2. Through that interface, I can pretty easily add things to the list and chat with the agent."
+
+Aide: the storage choice (mn-yznt, A/B/C) is not decided; the human is still shaping the design.
