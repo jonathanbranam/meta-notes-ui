@@ -10,7 +10,7 @@ meta-notes vim command does. (Ticket h4rr.)
 
 ### Requirement: Every note page steps to its neighbours  {#r-de86}
 
-The top bar SHALL show previous and next buttons on every page. On a note they
+The top bar SHALL show previous and next buttons on every page the bar shows on (spec tabs). On a note they
 SHALL open the neighbouring .md file in the same folder, in sorted order. A
 button SHALL be disabled when there is no note in that direction. They SHALL
 never create a note.

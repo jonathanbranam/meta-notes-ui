@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.27.0, v1 in development.
+Status: v0.27.1, v1 in development.
 
 ## How it fits
 
@@ -184,7 +184,7 @@ look at them too. Production does not depend on it.
   a fresh start with no `#` in the URL opens it, else Today. A stored page that is gone opens Today.
 - **Alerts**: browser notifications at the time of a timed task due today
   (`⏰ HH:MM`) and at each planned Time Block row (not empty, `no plan` or
-  struck out), while a tab is open. "Enable alerts" in the top-bar Menu (on every page; spec: `design/specs/menu.md`) asks for
+  struck out), while a tab is open. "Enable alerts" in the top-bar Menu (on every page the bar shows on; spec: `design/specs/menu.md`) asks for
   permission. A fired alert shows at the top of the page with **Snooze 10
   min** and **Dismiss**. All timers are `setTimeout`s in the browser; the
   server never polls. Push to a closed phone is later (the phone bridge).

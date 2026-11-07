@@ -21,7 +21,7 @@ import { TabBar } from "./TabBar";
 import { NowView } from "./NowView";
 import { WeekView } from "./WeekView";
 import { parseWeekPath, WEEK_PATH, weekPath } from "./week";
-import { isMobileWidth, LISTS_PATH, listOf, NOW_TAB_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
+import { isMobileWidth, LISTS_PATH, listOf, messageSite, NOW_TAB_PATH, pageForTab, remember, tabOf, topBarShows, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -315,6 +315,9 @@ export function App() {
   useEffect(() => setTabMem((m) => remember(m, path)), [path]);
   const onLists = tabOf(path) === "lists";
   const onNow = path === NOW_TAB_PATH;
+  // On a phone the top bar is for Home only; Now and Lists put the Message button on the page (tabs spec).
+  const barShows = topBarShows(mobile, tabOf(path));
+  const messageOnPage = messageSite(mobile, tabOf(path)) === "page";
   const onWeek = path === WEEK_PATH || path.startsWith(`${WEEK_PATH}?`);
   const [loggedIn, setLoggedIn] = useState(false);
   const [canMessage, setCanMessage] = useState(false);
@@ -571,7 +574,7 @@ export function App() {
       className={pane.collapsed ? "app tree-collapsed" : "app"}
       style={{ "--tree-w": `${pane.width}px` } as CSSProperties}
     >
-      <header>
+      <header className={barShows ? undefined : "bar-off"}>
         <button className="menu" onClick={() => setDrawer(!drawer)} aria-label="Files">
           ☰
         </button>
@@ -584,8 +587,8 @@ export function App() {
         <button onClick={openToday}>Today</button>
         {!mobile && <button onClick={() => open(NOW_TAB_PATH)}>Now</button>}
         {!mobile && <button onClick={() => open(weekPath(parseWeekPath(WEEK_PATH, clock(now).today)))}>Week</button>}
-        {canMessage && <button onClick={() => setComposing(true)}>Message</button>}
-        {sentNote && <span className="hint">Message sent</span>}
+        {canMessage && !messageOnPage && <button onClick={() => setComposing(true)}>Message</button>}
+        {sentNote && !messageOnPage && <span className="hint">Message sent</span>}
         {loggedIn && (
           <form method="post" action="/logout">
             <button type="submit">Log out</button>
@@ -630,6 +633,12 @@ export function App() {
       <main>
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
+        {messageOnPage && canMessage && (
+          <p className="page-actions">
+            <button onClick={() => setComposing(true)}>Message</button>
+            {sentNote && <span className="hint">Message sent</span>}
+          </p>
+        )}
         {onWeek ? (
           <WeekView page={parseWeekPath(path, today)} today={today} nowMin={nowMinutes} refreshKey={refreshKey} go={open} />
         ) : onNow ? (

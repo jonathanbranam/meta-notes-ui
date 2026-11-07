@@ -40,6 +40,7 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
 .note img { max-width: 100%; }
 .error { color: #c0392b; }
 .hint { color: #888; }
+.page-actions { margin: 0 0 .75rem; }
 .overlay { position: fixed; inset: 0; background: #0006; display: flex; justify-content: center; align-items: flex-start; padding-top: 10vh; }
 .quick { background: #fff; width: min(36rem, 94vw); border-radius: 8px; padding: .5rem; max-height: 70vh; overflow: auto; }
 .quick textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .5rem; }
@@ -51,6 +52,7 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
   .tree-collapse, .tree-expand, .tree-resize { display: none !important; }
   .app.tree-collapsed .drawer { display: block; }
   header { grid-column: 1; }
+  header.bar-off { display: none; }
   header .menu { display: inline-block; }
   .drawer { position: fixed; top: 0; bottom: 0; left: 0; width: 82vw; max-width: 20rem; z-index: 10; transform: translateX(-100%); transition: transform .15s; padding-top: 3rem; }
   .drawer.open { transform: none; }

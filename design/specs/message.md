@@ -95,7 +95,7 @@ failure, never the token.
 ### Requirement: The UI sends from a top-bar button  {#r-3de7}
 
 The client SHALL show a top-bar button, labelled Message, only when `/api/version` says
-`message: true`; it opens the one message sheet (spec tabs, shared with Lists; Enter sends) with a text box (placeholder "Message to the aide") and Send, which closes with a
+`message: true` (on a phone on Now and Lists, where the bar is hidden, a Message button on the page; spec tabs); it opens the one message sheet (spec tabs, shared with Lists; Enter sends) with a text box (placeholder "Message to the aide") and Send, which closes with a
 short "sent" note on success and keeps the text and shows the error on failure.
 
 #### Scenario: Send from the sheet  {#s-43ef}
