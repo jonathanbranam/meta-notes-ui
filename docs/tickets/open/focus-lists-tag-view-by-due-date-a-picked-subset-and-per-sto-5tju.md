@@ -313,3 +313,13 @@ Aide asked whether guessed items carry a "?" (e.g. "3 soups for work ?") so they
 store. The human (verbatim): "That's fine? Is good."
 The human (verbatim), clarifying: "Sorry, that was a transcription error. Adding a question mark to
 the item is a good suggestion."
+
+From the human (Sat 2026-11-07, to aide, verbatim): "The UI changes between desktop and mobile are going to be pretty significant. I don't have anything significantly different yet, but I don't really want a tab bar along the bottom in the browser."
+(Aide: the bottom tab bar is for mobile only; desktop gets its own navigation, not yet designed.)
+
+## Go-ahead
+
+From the human (Sat 2026-11-07, to aide, verbatim): "Yeah, start the work on the shopping list
+between all of meta-notes, the UI, and everything." This approves the design as shaped above in
+this ticket (storage settles mn-yznt: one note per list under `resource/lists/<YY-Qn>/`, plain
+undated checkboxes in ordered groups, source traced by link + line + copied text).
