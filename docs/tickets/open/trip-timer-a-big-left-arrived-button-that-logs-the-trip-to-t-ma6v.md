@@ -53,3 +53,11 @@ Each tap is one `time-log append` (Left starts "- Drive", Arrived closes it).
 
 Builds after gr8c's Time Log task (mu-xng2) and after the human has seen the
 UI on the always-on server (mkkt) and picked a design.
+
+## Superseded (2026-11-07, via aide)
+
+The human, on the Now view (mu-97fh), verbatim: "This is how I want to manage the basics of trip
+timing. I think I want to be able to say, "hit this in the morning," at the exact minute I'm leaving
+from the house, and then I could hit it again when I arrive at work. There's nothing else fancy
+here. Don't do anything else special for tracking driving, but this should be a way to track that."
+So neither design A nor B here is to be built; trip timing is Start/Done on the Now tab.

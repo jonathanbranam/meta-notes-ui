@@ -59,3 +59,17 @@ So: blocks = consecutive Time Block rows with the same Plan; overage from the bl
 Start button when nothing runs; Done appends the Time Log entry (start/end) and starts the next
 block at once; Done also sends a message to `external:aide` on notes (same message path as the
 Message button); Actual column untouched for now.
+
+From the human (Sat 2026-11-07, to aide, verbatim), asked where Now lives: "Yes, it's a new bottom
+tab next to Home and Lists. This is how I want to manage the basics of trip timing. I think I want
+to be able to say, "hit this in the morning," at the exact minute I'm leaving from the house, and
+then I could hit it again when I arrive at work.
+
+There's nothing else fancy here. Don't do anything else special for tracking driving, but this
+should be a way to track that.
+
+What else? This user interface needs to respond to changes in both the time log and the time block.
+It needs to be file system-aware, observing those changes and making updates live."
+
+(Aide: so the Now tab replaces the separate trip timer design in mu-ma6v: Start/Done on the
+"Drive to work" block is the trip timing. In the desktop browser, Now is a page, no tab bar.)
