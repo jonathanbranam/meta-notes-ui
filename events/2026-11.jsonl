@@ -26,3 +26,4 @@
 {"actor":"external:orchestrator","at":"2026-11-07T17:26:58.749737960Z","from":"pending","task":"mu-rb5u","to":"open"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:26:59.207746521Z","from":"pending","task":"mu-rwk3","to":"open"}
 {"actor":"external:orchestrator","at":"2026-11-07T17:27:31.813240060Z","from":"planned","task":"mu-5eme","to":"integrated"}
+{"actor":"external:orchestrator","at":"2026-11-07T17:27:41.013358017Z","queue":"reprioritized"}
