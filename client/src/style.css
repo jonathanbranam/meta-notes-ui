@@ -142,3 +142,11 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .tagtasks li { display: flex; gap: .6rem; align-items: flex-start; padding: .4rem 0; }
 .tagtasks input { width: 1.4rem; height: 1.4rem; flex: none; }
 .tagtasks li.overdue { color: #c0392b; }
+
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 4; display: flex; background: #f4f4f6; border-top: 1px solid #ddd; padding-bottom: env(safe-area-inset-bottom); }
+.tabbar button { flex: 1 1 0; text-align: center; min-height: 3.25rem; border: 0; background: none; font: inherit; color: inherit; }
+.tabbar button.active { font-weight: 700; color: #2563eb; }
+.message-sheet .send { width: 100%; min-height: 3.25rem; margin-top: .5rem; font: inherit; font-weight: 600; border: 1px solid #bbb; border-radius: 8px; }
+.lists .all-lists:disabled { visibility: hidden; }
+@media (max-width: 720px) { main { padding-bottom: 4.5rem; } }
+@media (prefers-color-scheme: dark) { .tabbar { background: #202225; border-color: #333; } }

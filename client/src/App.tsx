@@ -14,6 +14,10 @@ import { Menu } from "./Menu";
 import { dayLink } from "./menu";
 import { TagView } from "./TagView";
 import { tagFromPath } from "./tagview";
+import { ListsView } from "./ListsView";
+import { MessageSheet } from "./MessageSheet";
+import { TabBar } from "./TabBar";
+import { isMobileWidth, LISTS_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -244,38 +248,6 @@ function Folder({ node, current, onOpen }: { node: TreeNode; current: string; on
   );
 }
 
-/** A sheet that sends one message to the notes aide; keeps the text and shows the error on failure. */
-function MessageSheet({ onClose, onSent }: { onClose: () => void; onSent: () => void }) {
-  const [text, setText] = useState("");
-  const [err, setErr] = useState("");
-  const [busy, setBusy] = useState(false);
-  const send = async () => {
-    setBusy(true);
-    const r = await postJson("/api/message", { body: text });
-    setBusy(false);
-    if (r.ok) onSent();
-    else setErr(r.error ?? "Cannot send the message");
-  };
-  return (
-    <div className="overlay" onClick={onClose}>
-      <div className="quick" onClick={(e) => e.stopPropagation()}>
-        <textarea
-          autoFocus
-          rows={6}
-          placeholder="Message to the aide"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => e.key === "Escape" && onClose()}
-        />
-        {err && <p className="error">{err}</p>}
-        <button disabled={busy || !text.trim()} onClick={send}>
-          Send
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function QuickOpen({ files, onOpen, onClose }: { files: TreeNode[]; onOpen: (p: string) => void; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const hits = useMemo(() => quickOpen(files, query), [files, query]);
@@ -309,7 +281,7 @@ export function App() {
   const [target, setTarget] = useState(() => parseHash(startHash(decodeURIComponent(location.hash.slice(1)), readLastPage(), TODAY_PATH)));
   const path = target.path;
   // The stored page a fresh start opened, until the tree shows whether it still exists.
-  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH && !tagFromPath(path) ? path : null);
+  const unchecked = useRef(!location.hash.slice(1) && path !== TODAY_PATH && !tagFromPath(path) && tabOf(path) === "home" ? path : null);
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [error, setError] = useState("");
   const [drawer, setDrawer] = useState(false);
@@ -326,6 +298,17 @@ export function App() {
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
   };
+  // The bottom tab bar is for a phone only; each tab keeps the page it last showed.
+  const [mobile, setMobile] = useState(() => isMobileWidth(window.innerWidth));
+  useEffect(() => {
+    const q = window.matchMedia("(max-width: 720px)");
+    const on = () => setMobile(q.matches);
+    q.addEventListener("change", on);
+    return () => q.removeEventListener("change", on);
+  }, []);
+  const [tabMem, setTabMem] = useState<TabMemory>(() => remember({ home: TODAY_PATH, lists: LISTS_PATH }, path));
+  useEffect(() => setTabMem((m) => remember(m, path)), [path]);
+  const onLists = tabOf(path) === "lists";
   const [loggedIn, setLoggedIn] = useState(false);
   const [canMessage, setCanMessage] = useState(false);
   const [composing, setComposing] = useState(false);
@@ -376,7 +359,7 @@ export function App() {
   );
   const loadNote = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH || !isNote(p)) return setNote(null);
+    if (!p || p === TODAY_PATH || tabOf(p) === "lists" || !isNote(p)) return setNote(null);
     getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(p)}`)
       .then((n) => {
         setNote(n);
@@ -390,7 +373,7 @@ export function App() {
 
   const loadBacklinks = useCallback(() => {
     const p = pathRef.current;
-    if (!p || p === TODAY_PATH || !isNote(p)) return setBacklinks([]);
+    if (!p || p === TODAY_PATH || tabOf(p) === "lists" || !isNote(p)) return setBacklinks([]);
     getJson<BacklinksResponse>(`/api/backlinks?path=${encodeURIComponent(p)}`)
       .then((b) => setBacklinks(b.backlinks))
       .catch(() => setBacklinks([]));
@@ -591,7 +574,7 @@ export function App() {
           <button disabled={!near.next} onClick={() => near.next && open(near.next)} aria-label="Next note" title={near.next ?? undefined}>
             &rsaquo;
           </button>
-          <span className="title">{path === TODAY_PATH ? "Today" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
+          <span className="title">{path === TODAY_PATH ? "Today" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
         </div>
       </header>
       {stale && (
@@ -615,7 +598,9 @@ export function App() {
       <main>
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
-        {path === TODAY_PATH ? (
+        {onLists ? (
+          <ListsView path={path} onAll={() => open(LISTS_PATH)} />
+        ) : path === TODAY_PATH ? (
           <TodayView today={todayState} now={now} open={open} files={filePaths} />
         ) : tagFromPath(path) ? (
           <TagView tag={tagFromPath(path)!} refreshKey={refreshKey} open={open} ctxFor={(p) => ({ path: p, files: filePaths, today, nowMinutes, tagAliases })} />
@@ -666,6 +651,8 @@ export function App() {
       </main>
       {composing && (
         <MessageSheet
+          context={path}
+          send={(body) => postJson("/api/message", { body })}
           onClose={() => setComposing(false)}
           onSent={() => {
             setComposing(false);
@@ -674,6 +661,7 @@ export function App() {
           }}
         />
       )}
+      {mobile && <TabBar active={tabOf(path)} onPick={(t) => open(pageForTab(tabMem, t))} />}
       {quick && <QuickOpen files={files} onOpen={open} onClose={() => setQuick(false)} />}
     </div>
   );
