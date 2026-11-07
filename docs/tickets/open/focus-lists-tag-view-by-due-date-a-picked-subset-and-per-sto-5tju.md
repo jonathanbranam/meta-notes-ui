@@ -226,3 +226,34 @@ The capabilities that we need are:
 should be the same order it shows up in the user interface. I'm thinking probably this is just an
 ephemeral note under resource somewhere, and we would just temporarily use it to track a specific
 shopping list."
+
+From the human (Sat 2026-11-07, to aide, verbatim), on tasks vs list items:
+"Tasks are the master list. That's right. We would only create these temporary lists, like "This is
+what I'm doing today." Lists would be separate, and I think they would use a format and design in
+the notes database that is distinct from the tasks design, because I don't want to have duplicate
+tasks.
+
+For this shopping list thing, there should always be a master item somewhere that indicates, "Hey,
+we're buying soup today for Walmart." That's the thing that follows the task format and that
+officially tracks that that task is done, and then the item in the list is a temporary thing. I'm
+not saying by temporary that it will be deleted. I just mean that when I'm done with this list to
+Walmart, this trip to Walmart, everything in that list will be marked either done or canceled. It
+won't live on after this trip to Walmart.
+
+I don't want the meta-notes CLI to list these ephemeral shopping list items the same as tasks.
+There are a couple of approaches:
+
+* My default approach is to say that we don't filter based on folder or directories, but I might be
+  willing to reconsider that. If we reconsider that, I'm not sure. There would be a folder under
+  resource for all of these, by the way, not just flat in resource, of course. It would be like
+  resource/lists or something. That's all I can think of at the moment.
+* If we use a different format, like a different text, it would still be text-based, but you choose
+  something that won't overlap with the current tasks format. We could change the square brackets
+  to something else or, in some other way, make this not match the current search that detects
+  tasks.
+* A specific tag that gets ignored. For example, we have the tag later, and that gets ignored in the
+  normal tasks list. That would be another potential option.
+
+ Also, tasks without due dates are never picked up, so maybe I'm overthinking this. If the list is a
+normal list without a due date on it, that's probably enough. Please look into that and
+double-check for me."
