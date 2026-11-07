@@ -126,3 +126,10 @@ One cascade per 15-minute slot, defined once:
 - Ranges: 7 days, 5 weekdays, 2-day weekend; works on work and personal notes roots; desktop browser
   first, live updates assumed like the rest of the UI.
 Open: the week note's Goals/Plan at the top (asked, not answered).
+
+## Go-ahead
+
+The human (Sat 2026-11-07, verbatim): "Yeah, I don't know. I don't think goals and plans need to be
+in this UI. Let's say no for now. And I approve the rest of it. Let's go ahead and start building
+this, and as I work on it and see how it works, I'll have further feedback."
+So: no week-note Goals/Plan in this view; everything in "Agreed so far" above is approved.
