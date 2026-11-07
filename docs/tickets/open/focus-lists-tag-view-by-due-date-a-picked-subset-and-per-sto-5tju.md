@@ -184,3 +184,8 @@ possible for that.
 2. Through that interface, I can pretty easily add things to the list and chat with the agent."
 
 Aide: the storage choice (mn-yznt, A/B/C) is not decided; the human is still shaping the design.
+
+From the human (Sat 2026-11-07, to aide, verbatim), on the one-tap message from the Lists tab
+(aide had offered a chat box with replies, or tap-to-talk): "Generally, I don't need the agent's
+reply to show up. I'm sending a message as fire-and-forget. In this instance, if I need to actually
+chat with the agent, I'll use remote control."
