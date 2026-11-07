@@ -53,3 +53,30 @@ Open questions for the human: (a) pick by due-today or by a `#now` tag? (b) shou
 the parent's tag? (c) does "decided to get today" mean due today, or something else?
 
 Split into child tickets once the design is agreed.
+
+## More from the human (Sat 2026-11-07, to aide on meta-notes-ui, verbatim)
+
+"There are two major topics. The first one is for the UI that I use on my phone. This would work.
+All this should work in the browser as well, very similarly, but there are some things that I do
+commonly on my phone, which would be the design priority.
+
+For this, I guess there are two subpoints here:
+
+* A shopping list or a to-do list for a specific time or event. I do want it to be a little more
+  flexible than just a shopping list, but also, in terms of shopping, we might have a specific
+  implementation that is designed for shopping specifically. One of the things for shopping in
+  particular is that the store has a layout, and I would like to try to group things based on the
+  store layout. That's unique for shopping.
+* The overall generic concept that I want to have built is that I'm doing a task. I'm in a place
+  doing a thing, and that thing has multiple steps. There should be a brief on this. Actually, you
+  can ask either MetaNotes Aid and/or a note on Aid on the notes project for a better brief,
+  because I think both of them might have this. I'll try to get that sent over as well.
+
+Okay, let's go just with the shopping list idea to start with. For the shopping list, I have a
+bunch of things on a list to get at Walmart or Lowe's. Some things can be purchased at either
+store, so that's something that I want to retain in this solution.
+
+Also, I don't always know in advance which thing I'm going to get where. In this case, those two
+stores are right next to each other in Muncie. Even if they're not, sometimes I go on a shopping
+trip, and I might go to Walmart, Target, Lowe's, and Meijer, or something like that. Or we might go
+to Kohl's and Target for shopping because they're nearby. There's a list of things I want to get."
