@@ -34,3 +34,9 @@ and this should work as well as at home. I'm specifically doing this at work, so
 configurable as either 7-day, 5-day, or 2-day for the weekend. Those would be the defaults: 7, 5,
 like 7 weekdays and weekend."
 (Aide: works on any notes root, work or personal; day ranges: 7 days, 5 weekdays, 2-day weekend.)
+
+Aide's questions: (1) a calendar-style grid, a column per day, Time Block blocks as boxes, plus
+calendar events when an export exists; (2) future hours show the plan, past hours what happened
+(Actual + Time Log) with the plan faint behind; (3) the week note's Goals and Plan collapsible at
+the top. On (2), the human (verbatim): "Let's simplify number two: anything that's in the past,
+don't show the plan." (1) and (3) not yet answered.
