@@ -43,3 +43,19 @@ Context (aide): this is the "Now" screen from the human's notes, `area/meta-note
 checkin skill (`meta-notes checkin`, fills the Time Block Actual), `meta-notes time-log append`.
 Related here: mu-ma6v (trip timer, Left/Arrived buttons writing the Time Log). Out of scope now, per
 the human: changing what I'm doing, editing. Design open; questions on the thread.
+
+## Decisions (Sat 2026-11-07, via aide)
+
+Aide's questions: (1) overage: A = over at the block's planned end on the clock, B = over after the
+planned length counted from my start; (2) with nothing running, show the current block with a big
+Start button, then Done chains block to block; (3) Done writes only the Time Log for now, not the
+Time Block's Actual cells.
+
+The human (verbatim): "Red means you're behind schedule. That would be A from your list. I agree
+with point 2, and yes, I agree with point 3. I think when I'm done with something, it should send a
+message to the aide at notes, as well as filling in the time log itself."
+
+So: blocks = consecutive Time Block rows with the same Plan; overage from the block's planned end;
+Start button when nothing runs; Done appends the Time Log entry (start/end) and starts the next
+block at once; Done also sends a message to `external:aide` on notes (same message path as the
+Message button); Actual column untouched for now.
