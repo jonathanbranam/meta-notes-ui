@@ -304,3 +304,7 @@ very brief. If the original task is wordy and long, this should be simply the in
 know to grab it off the shelves."
 (Aide: this is for the agent instructions that ship with meta-notes, and fits the copied source
 text living on its own indented line, so the checkbox line holds only the short item.)
+
+From the human (Sat 2026-11-07, to aide, verbatim): "Yeah, the agent should ask me, but I think the
+agent should also go ahead and add it to the list. We can always change it. I'd rather have the item
+added to the list so that I don't overlook it if I happen to miss the message from the agent."
