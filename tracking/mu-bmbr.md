@@ -2,9 +2,9 @@
 id = "mu-bmbr"
 title = "Top bar shows on the Now and Lists tabs; it belongs only on Home"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-11-07T19:46:12.975Z"
-updated_at = "2026-11-07T19:46:50.354758787Z"
+updated_at = "2026-11-07T19:57:29.263850682Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "bmbr"

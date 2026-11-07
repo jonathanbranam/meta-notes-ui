@@ -6,3 +6,6 @@ tasks = [
 
 [[tier]]
 tasks = ["mu-rwk3"]
+
+[[tier]]
+tasks = ["mu-bmbr"]
