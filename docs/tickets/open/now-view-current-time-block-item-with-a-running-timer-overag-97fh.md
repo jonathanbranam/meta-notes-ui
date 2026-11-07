@@ -7,7 +7,7 @@ created_by: external:aide
 repos: [meta-notes-ui]
 changes: []
 specs: []
-blocked_by: []
+blocked_by: [mu-5eme]
 related: [mu-ma6v, mu-adm2, mu-5eme]
 ---
 
@@ -79,3 +79,17 @@ It needs to be file system-aware, observing those changes and making updates liv
 Aide asked whether to send the Now tab to the orchestrator to build. The human (Sat 2026-11-07,
 verbatim): "Yes, and this Now tab should be the first one on the left." Tab order on mobile: Now,
 Home, Lists.
+
+## Brief (orchestrator, 2026-11-07)
+
+Approval: the human's go above ("Yes, and this Now tab should be the first one on the left."), relayed by aide m-0187.
+
+Build the Now view as decided above. Read the Time Block and Time Log through the meta-notes CLI the server already uses (`meta-notes` time-block/time-log commands; Done writes with `meta-notes time-log append`), never by hand-parsing notes. Live updates: re-read when the daily note's Time Log or Time Block changes (reuse the server's existing file watching/push if it has one). Done's message goes through the same server path as the Message button (to `--bridle-to`, external:aide), text like "Done: Drive to work, 7:50-8:04 (4 min over). Now: work, until 10:00."
+
+Where: the first tab on mobile (order Now, Home, Lists; the tab bar comes from mu-5eme, so this is blocked by it); a page in the desktop browser, no tab bar.
+
+Acceptance: tests with fixture daily notes for block grouping (consecutive rows, same Plan), timer and overage from the planned end, Start with nothing running, Done appending exactly one Time Log entry and starting the next block, the message text, and a live refresh after a file change. Repo check green once; mobile screenshot on the ticket.
+
+Model: Sonnet.
+
+Out of scope (not yet): changing or editing what's running, writing the Time Block Actual column, anything special for driving (mu-ma6v superseded).

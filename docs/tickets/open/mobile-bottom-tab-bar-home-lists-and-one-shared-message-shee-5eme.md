@@ -1,6 +1,6 @@
 ---
 id: mu-5eme
-title: Mobile bottom tab bar (Home, Lists) and one shared message sheet
+title: Mobile bottom tab bar (Now, Home, Lists) and one shared message sheet
 kind: feature
 created: 2026-11-07
 created_by: external:orchestrator
@@ -21,7 +21,7 @@ The navigation shell for Lists, so the Lists content (separate ticket, needs the
 
 ## What to build
 
-1. **Bottom tab bar, mobile only**: Home (today's app, unchanged) and Lists (new). No tab bar in a desktop browser (the human: "I don't really want a tab bar along the bottom in the browser"); desktop keeps today's navigation for now. The tab is in the URL so reload and back work.
+1. **Bottom tab bar, mobile only**: tab order Now, Home, Lists (the human, 2026-11-07, via aide m-0187: "this Now tab should be the first one on the left"). Home is today's app, unchanged; Lists is new; Now comes with mu-97fh (blocked by this ticket), so leave its slot first and the bar easy to extend. No tab bar in a desktop browser (the human: "I don't really want a tab bar along the bottom in the browser"); desktop keeps today's navigation for now. The tab is in the URL so reload and back work.
 2. **Lists page shell**: top-left button back to "all lists"; an empty state until the Lists content ticket lands. The app remembers the last page and list it showed.
 3. **One message convention**: the existing message button's sheet becomes one shared component used by Home and Lists (the button may differ per page; the sheet does not). Fire-and-forget to the notes aide (the server's `--bridle-to`; external:aide), page context attached (on Lists: the list's path once known), text area that takes Wispr Flow dictation, Enter submits, a big easy-to-hit Send button, no reply shown.
 
