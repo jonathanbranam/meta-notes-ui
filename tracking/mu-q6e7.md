@@ -2,9 +2,9 @@
 id = "mu-q6e7"
 title = "Message button says advisor and defaults to external:advisor; it should be the notes aide"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-11-07T16:51:43.597Z"
-updated_at = "2026-11-07T16:52:14.824772992Z"
+updated_at = "2026-11-07T17:02:26.068827837Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "q6e7"
