@@ -13,6 +13,7 @@ import { menuSteps } from "./specs/steps/menu.js";
 import { tagviewSteps } from "./specs/steps/tagview.js";
 import { neighboursSteps } from "./specs/steps/neighbours.js";
 import { nowSteps } from "./specs/steps/now.js";
+import { listsSteps } from "./specs/steps/lists.js";
 
 const steps = createSteps();
 accessSteps(steps);
@@ -24,6 +25,7 @@ messageSteps(steps);
 lastpageSteps(steps);
 tabsSteps(steps);
 nowSteps(steps);
+listsSteps(steps);
 treepaneSteps(steps);
 neighboursSteps(steps);
 pushSteps(steps);

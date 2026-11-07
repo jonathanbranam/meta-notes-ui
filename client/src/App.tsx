@@ -15,10 +15,11 @@ import { dayLink } from "./menu";
 import { TagView } from "./TagView";
 import { tagFromPath } from "./tagview";
 import { ListsView } from "./ListsView";
+import { locateLine, sourcePath, type ListSource } from "./lists";
 import { MessageSheet } from "./MessageSheet";
 import { TabBar } from "./TabBar";
 import { NowView } from "./NowView";
-import { isMobileWidth, LISTS_PATH, NOW_TAB_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
+import { isMobileWidth, LISTS_PATH, listOf, NOW_TAB_PATH, pageForTab, remember, tabOf, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -142,6 +143,7 @@ function block(Tag: "p" | "li" | "table") {
     return (
       <Tag
         {...(rest as object)}
+        data-line={from}
         onDoubleClick={(e: React.MouseEvent) => {
           e.stopPropagation();
           api.start(from, to);
@@ -381,6 +383,28 @@ export function App() {
       .catch(() => setBacklinks([]));
   }, []);
 
+  // Opens a list item's source task on Home, scrolled to its line once the note shows.
+  const [focus, setFocus] = useState<{ path: string; src: ListSource } | null>(null);
+  const goList = useCallback((p: string, replace?: boolean) => {
+    if (replace) history.replaceState(null, "", `#${encodeURIComponent(p).replace(/%2F/g, "/")}`);
+    else location.hash = encodeURIComponent(p).replace(/%2F/g, "/");
+    setTarget({ path: p });
+  }, []);
+  const openSource = useCallback((src: ListSource) => {
+    const p = sourcePath(src);
+    setFocus({ path: p, src });
+    location.hash = encodeURIComponent(p).replace(/%2F/g, "/");
+    setTarget({ path: p });
+  }, []);
+  useEffect(() => {
+    if (!focus || !note || note.path !== path || focus.path !== path) return;
+    const line = locateLine(note.text, focus.src);
+    const el = document.querySelector<HTMLElement>(`article.note [data-line="${line}"]`);
+    el?.scrollIntoView({ block: "center" });
+    el?.classList.add("focus-line");
+    setFocus(null);
+  }, [focus, note, path]);
+
   const open = useCallback((p: string) => {
     location.hash = encodeURIComponent(p).replace(/%2F/g, "/");
     setTarget({ path: p });
@@ -604,7 +628,7 @@ export function App() {
         {onNow ? (
           <NowView today={todayState} canMessage={canMessage} send={(body) => postJson("/api/message", { body })} />
         ) : onLists ? (
-          <ListsView path={path} onAll={() => open(LISTS_PATH)} />
+          <ListsView path={path} refreshKey={refreshKey} go={goList} openSource={openSource} />
         ) : path === TODAY_PATH ? (
           <TodayView today={todayState} now={now} open={open} files={filePaths} />
         ) : tagFromPath(path) ? (
@@ -656,7 +680,7 @@ export function App() {
       </main>
       {composing && (
         <MessageSheet
-          context={path}
+          context={listOf(path) ?? path}
           send={(body) => postJson("/api/message", { body })}
           onClose={() => setComposing(false)}
           onSent={() => {
