@@ -311,3 +311,5 @@ added to the list so that I don't overlook it if I happen to miss the message fr
 
 Aide asked whether guessed items carry a "?" (e.g. "3 soups for work ?") so they stand out in the
 store. The human (verbatim): "That's fine? Is good."
+The human (verbatim), clarifying: "Sorry, that was a transcription error. Adding a question mark to
+the item is a good suggestion."
