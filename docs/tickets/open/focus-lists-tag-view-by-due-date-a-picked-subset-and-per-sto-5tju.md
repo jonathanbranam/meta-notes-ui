@@ -273,3 +273,21 @@ same, either quarterly or monthly. I think quarterly is more common. It should f
 folder structure there that other notes follow. Daily notes follow."
 (Aide: daily notes are `plan/daily/26-Q4/2026-11-07 Sat.md`, so e.g.
 `resource/lists/26-Q4/2026-11-07 Walmart.md`.)
+
+## Tracing list items to their tasks
+
+From the human (Sat 2026-11-07, to aide, verbatim): "Tell me how we're going to trace items back to
+the tasks that they come from. That needs to be stored in the list as a link and either a line
+number or some sort of description, probably by copying the line text from the original task."
+
+Aide's proposal (not yet approved): each item carries a `[[wiki link]]` to the task's note, the line
+number as a hint, and the task's text copied exactly; meta-notes already finds tasks by
+`task update <file> --expect <text>` (line only to disambiguate; refuses on mismatch). The copy goes
+on an indented plain bullet under the item, not on the checkbox line, because a copied 📅 on the
+checkbox line would make the item a task. Alternative held back: a permanent block ID (`^id`) on the
+source task (sturdier, but edits task lines and meta-notes lacks it).
+
+From the human (Sat 2026-11-07, to aide, verbatim): "And in the user interface, there should be a
+link button from the list that takes me back to the home (back to the current MadJax UI solution),
+opens that exact file, and scrolls to that line in the file."
+(Aide: "MadJax" is likely dictation for "meta-notes"; the Home tab, the current note viewer.)
