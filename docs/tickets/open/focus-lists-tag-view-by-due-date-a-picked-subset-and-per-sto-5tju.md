@@ -80,3 +80,8 @@ Also, I don't always know in advance which thing I'm going to get where. In this
 stores are right next to each other in Muncie. Even if they're not, sometimes I go on a shopping
 trip, and I might go to Walmart, Target, Lowe's, and Meijer, or something like that. Or we might go
 to Kohl's and Target for shopping because they're nearby. There's a list of things I want to get."
+
+Source notes (aide on notes, m-0112, 2026-11-07): the human's requirements draft from the
+2026-10-31 Lowe's + Walmart trips is `area/meta-notes/UI Shopping List.md` in the notes repo;
+store layouts are in `resource/locations/Muncie.md`. The multi-step-in-a-place idea is in
+`area/meta-notes/UI Now Screen.md`.
