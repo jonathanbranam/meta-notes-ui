@@ -141,3 +141,9 @@ from = "mu-bmbr"
 to = "mu-97fh"
 kind = "related"
 created_at = "2026-11-07T19:46:20.236Z"
+
+[[edge]]
+from = "mu-cm7j"
+to = "mu-tr69"
+kind = "blocks"
+created_at = "2026-11-08T13:41:00.282Z"

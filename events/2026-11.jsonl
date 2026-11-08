@@ -42,3 +42,5 @@
 {"actor":"external:orchestrator","at":"2026-11-07T20:03:46.430348721Z","from":"planned","task":"mu-bmbr","to":"integrated"}
 {"actor":"human","at":"2026-11-08T13:40:01.647Z","from":"","task":"mu-cm7j","to":"pending"}
 {"actor":"human","at":"2026-11-08T13:40:10.654Z","from":"","task":"mu-tr69","to":"pending"}
+{"actor":"external:orchestrator","at":"2026-11-08T13:40:42.519055977Z","from":"pending","task":"mu-cm7j","to":"open"}
+{"actor":"external:orchestrator","at":"2026-11-08T13:40:43.176915294Z","from":"pending","task":"mu-tr69","to":"open"}
