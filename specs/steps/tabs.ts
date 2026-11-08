@@ -7,7 +7,7 @@ export function tabsSteps(steps: Steps) {
     w.bar = isMobileWidth(Number(n));
     w.mobile = w.bar;
   });
-  steps.when(/^the user is on the (Now|Home|Lists) tab$/, (w, name) => {
+  steps.when(/^the user is on the (Now|Home|Lists|Tasks) tab$/, (w, name) => {
     w.tab = name.toLowerCase() as TabId;
   });
   steps.then(/^the top bar shows$/, (w) => expect(topBarShows(w.mobile, w.tab)).toBe(true));
@@ -17,7 +17,7 @@ export function tabsSteps(steps: Steps) {
   steps.then(/^the tab bar shows$/, (w) => expect(w.bar).toBe(true));
   steps.then(/^the tab bar does not show$/, (w) => expect(w.bar).toBe(false));
   steps.when(/^the user opens "([^"]+)" on Home, then Lists, then taps Home$/, (w, page) => {
-    let mem: TabMemory = { now: "!now", home: "!today", lists: "!lists" };
+    let mem: TabMemory = { now: "!now", home: "!today", lists: "!lists", tasks: "!tasks" };
     mem = remember(mem, page);
     mem = remember(mem, "!lists");
     w.page = pageForTab(mem, "home");

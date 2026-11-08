@@ -10,7 +10,7 @@ test("a phone viewport gets the tab bar, a desktop one does not", () => {
   expect(isMobileWidth(1280)).toBe(false);
 });
 
-test("the tab bar renders Now, Home and Lists in that order and marks the active one", () => {
+test("the tab bar renders Now, Home, Lists and Tasks in that order and marks the active one", () => {
   const html = renderToString(createElement(TabBar, { active: "lists", onPick: () => {} }));
   expect(html.indexOf("Now")).toBeLessThan(html.indexOf("Home"));
   expect(html.indexOf("Home")).toBeGreaterThan(-1);
@@ -27,7 +27,7 @@ test("tabs map from the page", () => {
 });
 
 test("switching tabs returns to where each tab was", () => {
-  let mem: TabMemory = { now: "!now", home: "!today", lists: LISTS_PATH };
+  let mem: TabMemory = { now: "!now", home: "!today", lists: LISTS_PATH, tasks: "!tasks" };
   mem = remember(mem, "Projects/Plan.md");
   mem = remember(mem, "!lists/a.md");
   expect(pageForTab(mem, "home")).toBe("Projects/Plan.md");

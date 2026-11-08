@@ -12,7 +12,7 @@ link to each other. (Ticket mu-nehy.)
 ### Requirement: The menu holds the alerts control  {#r-0965}
 
 The top bar SHALL show a Menu button at its right end on every page the bar shows on (every page but Now and Lists on a phone; spec tabs). Its
-dropdown SHALL hold an alerts item, then Open, New, Reload and Daily. The
+dropdown SHALL hold an alerts item, then Open, New, Reload, Daily and Tasks. The
 alerts item SHALL read "Enable alerts" when this device is not subscribed and
 "Alerts off" when it is. It SHALL be absent when the server has push off.
 

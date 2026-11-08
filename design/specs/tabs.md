@@ -2,14 +2,14 @@
 
 ## Purpose
 
-On a phone the app has a bottom tab bar: Now, Home (today's app) and Lists, in that order. A desktop browser has no tab bar. The Lists page here is the shell; its content comes with
+On a phone the app has a bottom tab bar: Now, Home (today's app), Lists and Tasks (spec tasks-page), in that order. A desktop browser has no tab bar. The Lists page here is the shell; its content comes with
 the Lists content ticket. (Ticket mu-5eme, epic mu-5tju.)
 
 ## Requirements
 
 ### Requirement: The tab bar is mobile only  {#r-540f}
 
-The client SHALL show a bottom tab bar with Now, Home and Lists, in that order, on a viewport 720
+The client SHALL show a bottom tab bar with Now, Home, Lists and Tasks, in that order, on a viewport 720
 pixels wide or less, and SHALL NOT show it on a wider one.
 
 #### Scenario: Phone width  {#s-8cd4}
