@@ -54,3 +54,4 @@
 {"actor":"external:orchestrator","at":"2026-11-08T16:45:36.489082093Z","from":"pending","task":"mu-ajk2","to":"open"}
 {"actor":"external:orchestrator","at":"2026-11-08T16:56:12.155184981Z","from":"open","task":"mu-ajk2","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-08T16:56:12.219961952Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-08T17:05:17.424433436Z","from":"planned","task":"mu-ajk2","to":"integrated"}
