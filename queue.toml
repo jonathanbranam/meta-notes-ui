@@ -9,3 +9,9 @@ tasks = ["mu-rwk3"]
 
 [[tier]]
 tasks = ["mu-bmbr"]
+
+[[tier]]
+tasks = ["mu-cm7j"]
+
+[[tier]]
+tasks = ["mu-tr69"]
