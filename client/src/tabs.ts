@@ -1,7 +1,9 @@
-/** The pages of the mobile bottom tab bar (design/specs/tabs.md). Now comes first. */
-export type TabId = "now" | "home" | "lists";
+/** The pages of the mobile bottom tab bar (design/specs/tabs.md). Now comes first, Tasks last. */
+export type TabId = "now" | "home" | "lists" | "tasks";
 
 export const NOW_TAB_PATH = "!now";
+
+export const TASKS_TAB_PATH = "!tasks";
 
 export const LISTS_PATH = "!lists";
 
@@ -12,6 +14,7 @@ export const TABS: { id: TabId; label: string }[] = [
   { id: "now", label: "Now" },
   { id: "home", label: "Home" },
   { id: "lists", label: "Lists" },
+  { id: "tasks", label: "Tasks" },
 ];
 
 /** The widest viewport that counts as a phone; the CSS breakpoint is the same number. */
@@ -24,6 +27,7 @@ export function isMobileWidth(width: number): boolean {
 /** The tab a page (hash path) belongs to: `!lists` and `!lists/<list>` are Lists, everything else Home. */
 export function tabOf(path: string): TabId {
   if (path === NOW_TAB_PATH) return "now";
+  if (path === TASKS_TAB_PATH) return "tasks";
   return path === LISTS_PATH || path.startsWith(`${LISTS_PATH}/`) ? "lists" : "home";
 }
 

@@ -11,6 +11,7 @@ import { treepaneSteps } from "./specs/steps/treepane.js";
 import { pushSteps } from "./specs/steps/push.js";
 import { menuSteps } from "./specs/steps/menu.js";
 import { tagviewSteps } from "./specs/steps/tagview.js";
+import { tasksPageSteps } from "./specs/steps/taskspage.js";
 import { neighboursSteps } from "./specs/steps/neighbours.js";
 import { nowSteps } from "./specs/steps/now.js";
 import { listsSteps } from "./specs/steps/lists.js";
@@ -35,5 +36,6 @@ neighboursSteps(steps);
 pushSteps(steps);
 menuSteps(steps);
 tagviewSteps(steps);
+tasksPageSteps(steps);
 
 await registerBridleSpecs({ steps });

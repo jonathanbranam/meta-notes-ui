@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.28.0, v1 in development.
+Status: v0.29.0, v1 in development.
 
 ## How it fits
 
@@ -88,6 +88,9 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
   lacks it). A tag links to its task view: `#tag/<tag>` lists every open task with that tag across
   all notes (`GET /api/tasks?tag=`, from `meta-notes tasks --tag`) with a box to check each off and a Cancel button
   (`design/specs/tagview.md`).
+- The Tasks page (`#!tasks`: the last tab on a phone, a Tasks item in the Menu) lists every dated open task
+  (`GET /api/tasks/due`, from `meta-notes tasks --overdue --due --future`) as Overdue, Due today and Upcoming,
+  each with a box and a Cancel button (`design/specs/tasks-page.md`).
 - Checkbox lines (`- [c]`) with a `📅` or `🛫` date are tasks; without one
   they are checklist items (class `checklist`) and show the same status.
   Both show their status and chips for `📅 ⏳ 🛫 ✅ ⏰ 🔁`

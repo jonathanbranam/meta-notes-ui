@@ -13,6 +13,7 @@ import { dailyPath, neighbours } from "./neighbours";
 import { Menu } from "./Menu";
 import { dayLink } from "./menu";
 import { TagView } from "./TagView";
+import { TasksView } from "./TasksView";
 import { tagFromPath } from "./tagview";
 import { ListsView } from "./ListsView";
 import { locateLine, sourcePath, type ListSource } from "./lists";
@@ -21,7 +22,7 @@ import { TabBar } from "./TabBar";
 import { NowView } from "./NowView";
 import { WeekView } from "./WeekView";
 import { parseWeekPath, WEEK_PATH, weekPath } from "./week";
-import { isMobileWidth, LISTS_PATH, listOf, messageSite, NOW_TAB_PATH, pageForTab, remember, tabOf, topBarShows, type TabMemory } from "./tabs";
+import { isMobileWidth, LISTS_PATH, listOf, messageSite, NOW_TAB_PATH, pageForTab, remember, TASKS_TAB_PATH, tabOf, topBarShows, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
@@ -311,10 +312,11 @@ export function App() {
     q.addEventListener("change", on);
     return () => q.removeEventListener("change", on);
   }, []);
-  const [tabMem, setTabMem] = useState<TabMemory>(() => remember({ now: NOW_TAB_PATH, home: TODAY_PATH, lists: LISTS_PATH }, path));
+  const [tabMem, setTabMem] = useState<TabMemory>(() => remember({ now: NOW_TAB_PATH, home: TODAY_PATH, lists: LISTS_PATH, tasks: TASKS_TAB_PATH }, path));
   useEffect(() => setTabMem((m) => remember(m, path)), [path]);
   const onLists = tabOf(path) === "lists";
   const onNow = path === NOW_TAB_PATH;
+  const onTasks = path === TASKS_TAB_PATH;
   // On a phone the top bar is for Home only; Now and Lists put the Message button on the page (tabs spec).
   const barShows = topBarShows(mobile, tabOf(path));
   const messageOnPage = messageSite(mobile, tabOf(path)) === "page";
@@ -600,6 +602,7 @@ export function App() {
             { label: "New", run: newNote },
             { label: "Reload", run: () => location.reload() },
             { label: "Daily", run: openDaily },
+            { label: "Tasks", run: () => open(TASKS_TAB_PATH) },
           ]}
         />
         <div className="titlebar">
@@ -609,7 +612,7 @@ export function App() {
           <button disabled={!near.next} onClick={() => near.next && open(near.next)} aria-label="Next note" title={near.next ?? undefined}>
             &rsaquo;
           </button>
-          <span className="title">{path === TODAY_PATH ? "Today" : onNow ? "Now" : onWeek ? "Week" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
+          <span className="title">{path === TODAY_PATH ? "Today" : onNow ? "Now" : onWeek ? "Week" : onTasks ? "Tasks" : onLists ? "Lists" : tagFromPath(path) ? `#${tagFromPath(path)}` : path.replace(/\.md$/, "") || "meta-notes"}</span>
         </div>
       </header>
       {stale && (
@@ -643,6 +646,8 @@ export function App() {
           <WeekView page={parseWeekPath(path, today)} today={today} nowMin={nowMinutes} refreshKey={refreshKey} go={open} />
         ) : onNow ? (
           <NowView today={todayState} canMessage={canMessage} send={(body) => postJson("/api/message", { body })} />
+        ) : onTasks ? (
+          <TasksView today={today} refreshKey={refreshKey} open={open} ctxFor={(p) => ({ path: p, files: filePaths, today, nowMinutes, tagAliases })} />
         ) : onLists ? (
           <ListsView path={path} refreshKey={refreshKey} go={goList} openSource={openSource} />
         ) : path === TODAY_PATH ? (
