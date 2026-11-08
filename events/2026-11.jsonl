@@ -40,3 +40,4 @@
 {"actor":"external:orchestrator","at":"2026-11-07T19:57:29.263850682Z","from":"open","task":"mu-bmbr","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-07T19:57:29.564264092Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-11-07T20:03:46.430348721Z","from":"planned","task":"mu-bmbr","to":"integrated"}
+{"actor":"human","at":"2026-11-08T13:40:01.647Z","from":"","task":"mu-cm7j","to":"pending"}
