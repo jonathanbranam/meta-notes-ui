@@ -137,16 +137,19 @@ export function createApp(opts: AppOptions): Hono {
     const bearer = c.req.header("authorization")?.replace(/^Bearer /i, "");
     if (c.req.method === "GET" && url.pathname === "/" && url.searchParams.has("token")) {
       if (!tokenMatches(token, url.searchParams.get("token") ?? "")) return c.text("unauthorized", 401);
+      // Lax, not Strict: a token link followed from another site must keep the cookie on the 302 back here.
       setCookie(c, COOKIE, token, {
         httpOnly: true,
-        sameSite: "Strict",
+        sameSite: "Lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 365,
       });
       return c.redirect("/");
     }
-    if (!tokenMatches(token, getCookie(c, COOKIE)) && !tokenMatches(token, bearer)) {
-      deleteCookie(c, COOKIE);
+    const sentCookie = getCookie(c, COOKIE);
+    if (!tokenMatches(token, sentCookie) && !tokenMatches(token, bearer)) {
+      // Clear only a cookie the browser sent and that is wrong; a request without one leaves it alone.
+      if (sentCookie !== undefined) deleteCookie(c, COOKIE);
       return c.text("unauthorized", 401);
     }
     await next();
