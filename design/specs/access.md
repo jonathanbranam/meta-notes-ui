@@ -78,6 +78,30 @@ SHALL accept it as a bearer header or a cookie set by one `?token=` visit.
 - **THEN** the response status is 401
 - **AND** it sets no cookie
 
+#### Scenario: The visit URL sets a SameSite=Lax token cookie  {#s-41b3}
+
+*Verification*: **executable**
+
+- **WHEN** a client visits "/?token=s3cret-token"
+- **THEN** the response redirects to "/"
+- **AND** it sets a SameSite=Lax token cookie
+
+#### Scenario: A request with no token cookie leaves the cookie alone  {#s-4530}
+
+*Verification*: **executable**
+
+- **WHEN** a client requests "/api/tree" without a token
+- **THEN** the response status is 401
+- **AND** it does not touch the token cookie
+
+#### Scenario: A wrong token cookie is cleared  {#s-e05a}
+
+*Verification*: **executable**
+
+- **WHEN** a client requests "/api/tree" with the token cookie "nope"
+- **THEN** the response status is 401
+- **AND** it clears the token cookie
+
 #### Scenario: The built client is behind the token too  {#s-c815}
 
 *Verification*: **executable**

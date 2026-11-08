@@ -8,6 +8,7 @@ import { makeFixtureRoot } from "../../server/fixture.js";
 import { startServer, UsageError, type RunningServer } from "../../server/start.js";
 import { createLogin, loginFile } from "../../server/login.js";
 import { loadToken } from "../../server/token.js";
+import { COOKIE } from "../../server/app.js";
 
 const TOKEN = "s3cret-token";
 
@@ -50,6 +51,10 @@ export function accessSteps(steps: Steps) {
   steps.when(/^a client requests "([^"]+)" without a token$/, (w, url) => get(w, url));
   steps.when(/^a client requests "([^"]+)" with the token "([^"]+)"$/, (w, url, t) => get(w, url, t));
   steps.when(/^a client requests "([^"]+)" with the right token$/, (w, url) => get(w, url, TOKEN));
+  steps.when(/^a client requests "([^"]+)" with the token cookie "([^"]+)"$/, async (w, url, t) => {
+    const app = await appFor(w);
+    w.res = await app.request(url, { headers: { cookie: `${COOKIE}=${t}` } });
+  });
   steps.when(/^a client requests the note "([^"]+)" with the right token$/, (w, p) =>
     get(w, `/api/note?path=${encodeURIComponent(p)}`, TOKEN),
   );
@@ -78,6 +83,20 @@ export function accessSteps(steps: Steps) {
     const cookie = w.res.headers.get("set-cookie") ?? "";
     expect(cookie).toContain("HttpOnly");
     w.cookie = cookie.split(";")[0];
+  });
+  steps.then(/^it sets a SameSite=Lax token cookie$/, (w) => {
+    const cookie = w.res.headers.get("set-cookie") ?? "";
+    expect(cookie).toMatch(new RegExp(`^${COOKIE}=${TOKEN};`));
+    expect(cookie).toContain("HttpOnly");
+    expect(cookie).toContain("SameSite=Lax");
+  });
+  steps.then(/^it does not touch the token cookie$/, (w) => {
+    expect(w.res.headers.get("set-cookie") ?? "").not.toContain(COOKIE);
+  });
+  steps.then(/^it clears the token cookie$/, (w) => {
+    const cookie = w.res.headers.get("set-cookie") ?? "";
+    expect(cookie).toMatch(new RegExp(`^${COOKIE}=;`));
+    expect(cookie).toContain("Max-Age=0");
   });
   steps.then(/^it sets no cookie$/, (w) => {
     expect(w.res.headers.get("set-cookie") ?? "").not.toMatch(/mn_ui_token=[^;]/);
