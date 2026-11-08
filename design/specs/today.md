@@ -42,6 +42,50 @@ calendar` needs it). `meta-notes calendar --json` failing gives no agenda.
 - **WHEN** the Today view is requested for a root with a calendar export holding an event today
 - **THEN** the Today view lists the event "Fixture standup" today
 
+### Requirement: A due task is marked done or canceled from the Today view  {#r-f537}
+
+The Today view SHALL show a box that marks each due or overdue task done and a
+Cancel control that cancels it. Both SHALL go through `POST /api/task` with the
+task's note, line and text as listed (rule writes-through-the-cli), carrying
+the status `x` or `-`, and the task SHALL then leave the Today view. A refused
+change (the line changed meanwhile) SHALL show an error and leave the note as it is.
+
+#### Scenario: Mark a due task done  {#s-97ff}
+
+*Verification*: **executable**
+
+- **WHEN** the Today view is requested with the right token
+- **AND** the due task "Call the dentist" in "area/health.md" is marked done from the Today view
+- **THEN** the note "area/health.md" holds a line starting "- [x] Call the dentist"
+- **AND** the Today view no longer lists the task "Call the dentist" in "area/health.md"
+
+#### Scenario: Cancel a due task  {#s-0203}
+
+*Verification*: **executable**
+
+- **WHEN** the Today view is requested with the right token
+- **AND** the due task "Call the dentist" in "area/health.md" is canceled from the Today view
+- **THEN** the note "area/health.md" holds a line starting "- [-] Call the dentist"
+- **AND** the Today view no longer lists the task "Call the dentist" in "area/health.md"
+
+#### Scenario: A stale task is refused  {#s-c046}
+
+*Verification*: **executable**
+
+- **WHEN** the Today view is requested with the right token
+- **AND** the note "area/health.md" changes "Call the dentist" to "Call the dentist soon"
+- **AND** the due task "Call the dentist" in "area/health.md" is marked done from the Today view
+- **THEN** the edit is refused as a conflict showing "soon"
+- **AND** the note "area/health.md" holds a line starting "- [ ] Call the dentist soon"
+
+#### Scenario: The rows at phone and desktop width  {#s-585d}
+
+*Verification*: **non-executable**
+
+- **WHEN** the Today view is shown at 390px wide and at desktop width
+- **THEN** each due task has its box and its Cancel control on the row, and the Cancel control is at least 2.25rem tall
+- **AND** after a box is checked or Cancel is pressed the row leaves the list without a reload
+
 ### Requirement: The Today view never writes  {#r-c42c}
 
 The Today view SHALL NOT create or change any note; when today's daily note

@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.27.1, v1 in development.
+Status: v0.28.0, v1 in development.
 
 ## How it fits
 
@@ -86,7 +86,7 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
   aliases folded: `data-tag` is the canonical tag, from `tag_aliases` in
   `meta-notes conventions --json` (`/api/tag-aliases`; unfolded if the CLI
   lacks it). A tag links to its task view: `#tag/<tag>` lists every open task with that tag across
-  all notes (`GET /api/tasks?tag=`, from `meta-notes tasks --tag`) with a box to check each off
+  all notes (`GET /api/tasks?tag=`, from `meta-notes tasks --tag`) with a box to check each off and a Cancel button
   (`design/specs/tagview.md`).
 - Checkbox lines (`- [c]`) with a `📅` or `🛫` date are tasks; without one
   they are checklist items (class `checklist`) and show the same status.
@@ -169,7 +169,7 @@ look at them too. Production does not depend on it.
   creates a note (`client/src/neighbours.ts`, `design/specs/neighbours.md`).
 
 - **Today** (header button; `#!today`): today's Time Block with the current
-  row and the next planned row marked, open tasks due today or overdue, and
+  row and the next planned row marked, open tasks due today or overdue (each with a box to mark it done and a Cancel button; `design/specs/today.md`), and
   the day's calendar agenda when `meta-notes calendar` is set up (a calendar export in `.meta-notes-cache/ics/` and the root's `.venv`) (otherwise
   the section is absent). `GET /api/today` gathers it: `meta-notes tasks
   --overdue --due`, `calendar` and `note daily --render` (never creates the note; all `execFile`, argument

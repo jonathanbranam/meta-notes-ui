@@ -10,6 +10,7 @@ import { createApp } from "../../server/app.js";
 import { EXAMPLE_ROOT, makeExampleRoot } from "../../server/example.js";
 import { inlineSegments } from "../../client/src/markdown";
 import { buildAlerts, currentRow, isPlanned, parseTimeBlock } from "../../shared/today.js";
+import { taskStatusBody } from "../../client/src/taskstatus";
 
 const run = promisify(execFile);
 const TOKEN = "today-token";
@@ -119,6 +120,32 @@ export function todaySteps(steps: Steps) {
   });
   steps.then(/^the Today view lists the task "([^"]+)" at "([^"]+)"$/, (w, text, time) => {
     expect(w.today.tasks.some((t: TodayTask) => t.text.includes(text) && t.time === time)).toBe(true);
+  });
+
+  // Check off or cancel a due task as the Today view does: the line as listed, through /api/task.
+  const setFromToday = async (w: World, text: string, file: string, status: "x" | "-") => {
+    const app = await appFor(w);
+    const t = (w.today as TodayResponse).tasks.find((x) => x.text.includes(text) && x.file === file)!;
+    expect(t).toBeDefined();
+    const res = await app.request("/api/task", {
+      method: "POST",
+      headers: { authorization: `Bearer ${TOKEN}`, "content-type": "application/json" },
+      body: JSON.stringify(taskStatusBody(t, status)),
+    });
+    w.status = res.status;
+    w.body = await res.json();
+  };
+  steps.when(/^the due task "([^"]+)" in "([^"]+)" is marked done from the Today view$/, (w, text, file) => setFromToday(w, text, file, "x"));
+  steps.when(/^the due task "([^"]+)" in "([^"]+)" is canceled from the Today view$/, (w, text, file) => setFromToday(w, text, file, "-"));
+  steps.when(/^the note "([^"]+)" changes "([^"]+)" to "([^"]+)"$/, async (w, p, from, to) => {
+    await appFor(w);
+    const file = path.join(w.root, p);
+    await writeFile(file, (await readFile(file, "utf8")).replace(from, to));
+  });
+  steps.then(/^the Today view no longer lists the task "([^"]+)" in "([^"]+)"$/, async (w, text, file) => {
+    await getAll(w, ["/api/today"], TOKEN);
+    const today = (await w.responses[0].json()) as TodayResponse;
+    expect(today.tasks.some((t: TodayTask) => t.text.includes(text) && t.file === file)).toBe(false);
   });
 
   steps.when(/^the Today view is requested for a root with a calendar export holding an event today$/, async (w) => {

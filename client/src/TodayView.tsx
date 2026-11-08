@@ -1,9 +1,11 @@
 import { AddTask } from "./AddTask";
 import { TimeLogPanel } from "./TimeLog";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { TodayResponse } from "../../shared/types";
 import { EditableCell, RowsEditor } from "./TimeCell";
-import { inlineSegments, type RenderContext } from "./markdown";
+import { Inline } from "./Inline";
+import { TaskRow } from "./TaskRow";
+import type { RenderContext } from "./markdown";
 import { isPushSubscribed } from "./push";
 import { buildAlerts, currentRow, parseTimeBlock, type Alert } from "../../shared/today";
 
@@ -35,20 +37,21 @@ export function useToday(refreshKey: number, now: Date) {
   const done = useRef(new Set<string>());
   const snoozes = useRef(new Map<string, number>());
 
+  const load = useCallback(() => {
+    fetch("/api/today")
+      .then((r) => (r.ok ? (r.json() as Promise<TodayResponse>) : Promise.reject(new Error(`${r.status}`))))
+      .then((d) => {
+        setData(d);
+        setError("");
+      })
+      .catch(() => setError("Cannot load today"));
+  }, []);
+
   useEffect(() => {
     // Debounced: each fetch runs the CLI, and edits come in bursts.
     const t = setTimeout(load, refreshKey === 0 ? 0 : 1000);
     return () => clearTimeout(t);
-    function load() {
-      fetch("/api/today")
-        .then((r) => (r.ok ? (r.json() as Promise<TodayResponse>) : Promise.reject(new Error(`${r.status}`))))
-        .then((d) => {
-          setData(d);
-          setError("");
-        })
-        .catch(() => setError("Cannot load today"));
-    }
-  }, [refreshKey, day]);
+  }, [refreshKey, day, load]);
 
   const fire = useCallback((a: Alert) => {
     setFired((f) => [...f.filter((x) => x.id !== a.id), a]);
@@ -83,7 +86,7 @@ export function useToday(refreshKey: number, now: Date) {
     snoozes.current.set(a.id, window.setTimeout(() => fire(a), SNOOZE_MIN * 60_000));
   };
 
-  return { data, error, fired, alerts, dismiss, snooze };
+  return { data, error, fired, alerts, dismiss, snooze, reload: load };
 }
 
 export function FiredAlerts({ fired, dismiss, snooze }: Pick<ReturnType<typeof useToday>, "fired" | "dismiss" | "snooze">) {
@@ -98,26 +101,6 @@ export function FiredAlerts({ fired, dismiss, snooze }: Pick<ReturnType<typeof u
         </li>
       ))}
     </ul>
-  );
-}
-
-/** One line of text with its wiki links and URLs as links; a wiki link opens its note in the app. */
-export function Inline({ text, ctx, open }: { text: string; ctx: RenderContext; open: (p: string) => void }) {
-  return (
-    <>
-      {inlineSegments(text, ctx).map((s, i) => {
-        const node = s.url ? (
-          <a href={s.url} target="_blank" rel="noopener noreferrer">{s.text}</a>
-        ) : s.href ? (
-          <a href={s.href} className="wikilink" onClick={() => open(decodeURIComponent(s.href!.slice(1).split("#")[0]))}>{s.text}</a>
-        ) : s.missing ? (
-          <span className="wikilink missing" title="No such note">{s.text}</span>
-        ) : (
-          s.text
-        );
-        return s.struck ? <del key={i}>{node}</del> : <Fragment key={i}>{node}</Fragment>;
-      })}
-    </>
   );
 }
 
@@ -174,9 +157,7 @@ export function TodayView({ today, now, open, files }: { today: ReturnType<typeo
       ) : (
         <ul className="duetasks">
           {data.tasks.map((t) => (
-            <li key={`${t.file}:${t.line}`} className={t.due && t.due < day ? "overdue" : ""}>
-              <Inline text={t.text.replace(/^\s*- \[.\]\s*/, "")} ctx={ctxFor(t.file)} open={open} /> <a href={`#${encodeURIComponent(t.file).replace(/%2F/g, "/")}`} onClick={() => open(t.file)}>{t.file.replace(/\.md$/, "")}</a>
-            </li>
+            <TaskRow key={`${t.file}:${t.line}`} task={t} overdue={Boolean(t.due && t.due < day)} ctx={ctxFor(t.file)} open={open} onChanged={today.reload} />
           ))}
         </ul>
       )}

@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import type { TagTasksResponse } from "../../shared/types";
-import { Inline } from "./TodayView";
-import { taskLabel } from "./tagview";
+import { TaskRow } from "./TaskRow";
 import type { RenderContext } from "./markdown";
 
-/** Every open task with a tag, across all notes; the box checks it off through the same `/api/task` as a note page. */
+/** Every open task with a tag, across all notes; each row is the shared task row (done or canceled through `/api/task`, as on a note page). */
 export function TagView({ tag, refreshKey, open, ctxFor }: { tag: string; refreshKey: number; open: (p: string) => void; ctxFor: (path: string) => RenderContext }) {
   const [data, setData] = useState<TagTasksResponse | null>(null);
   const [error, setError] = useState("");
@@ -26,13 +25,6 @@ export function TagView({ tag, refreshKey, open, ctxFor }: { tag: string; refres
     return () => clearTimeout(t);
   }, [load, refreshKey]);
 
-  const check = async (file: string, line: number, text: string) => {
-    const res = await fetch("/api/task", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ path: file, line, expect: text, status: "x" }) });
-    const r = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-    if (!r.ok) setError(r.error ?? "Cannot update the task");
-    load();
-  };
-
   return (
     <article className="note tagview">
       <h2>#{tag}</h2>
@@ -44,13 +36,7 @@ export function TagView({ tag, refreshKey, open, ctxFor }: { tag: string; refres
       ) : (
         <ul className="tagtasks">
           {data.tasks.map((t) => (
-            <li key={`${t.file}:${t.line}`} className={t.due && t.due < ctxFor(t.file).today ? "overdue" : ""}>
-              <input type="checkbox" aria-label="Check off" checked={false} onChange={() => void check(t.file, t.line, t.text)} />
-              <span>
-                <Inline text={taskLabel(t.text)} ctx={ctxFor(t.file)} open={open} />{" "}
-                <a href={`#${encodeURIComponent(t.file).replace(/%2F/g, "/")}`} onClick={() => open(t.file)}>{t.file.replace(/\.md$/, "")}</a>
-              </span>
-            </li>
+            <TaskRow key={`${t.file}:${t.line}`} task={t} overdue={Boolean(t.due && t.due < ctxFor(t.file).today)} ctx={ctxFor(t.file)} open={open} onChanged={load} />
           ))}
         </ul>
       )}
