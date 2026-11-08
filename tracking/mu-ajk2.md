@@ -2,9 +2,9 @@
 id = "mu-ajk2"
 title = "Login token cookie is wiped on a request that arrives without it"
 kind = "fix"
-state = "open"
+state = "planned"
 created_at = "2026-11-08T16:45:28.899Z"
-updated_at = "2026-11-08T16:45:36.489082093Z"
+updated_at = "2026-11-08T16:56:12.155184981Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "ajk2"

@@ -15,3 +15,6 @@ tasks = ["mu-cm7j"]
 
 [[tier]]
 tasks = ["mu-tr69"]
+
+[[tier]]
+tasks = ["mu-ajk2"]
