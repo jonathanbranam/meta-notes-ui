@@ -86,10 +86,16 @@ change (the line changed meanwhile) SHALL show an error and leave the note as it
 - **THEN** each due task has its box and its Cancel control on the row, and the Cancel control is at least 2.25rem tall
 - **AND** after a box is checked or Cancel is pressed the row leaves the list without a reload
 
-### Requirement: The Today view never writes  {#r-c42c}
+### Requirement: The Today view never creates a note  {#r-c42c}
 
-The Today view SHALL NOT create or change any note; when today's daily note
-does not exist it shows that, and the human creates it on purpose.
+The Today view SHALL NOT create a note; when today's daily note does not exist
+it shows that, and the human creates it on purpose. Its changes to existing
+notes go through the same routes as the rest of the app, each carrying
+`--expect` (rule writes-through-the-cli): a due-list row's done or cancel
+through `POST /api/task` (r-f537); the Time Block cells and rows through
+`POST /api/timeblock` and `POST /api/timeblock/replace`; the Time Log through
+`POST /api/timelog/append` and `POST /api/timelog/update`; and the add-task
+form through `POST /api/task/add`.
 
 #### Scenario: No daily note yet  {#s-2dca}
 
