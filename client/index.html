@@ -7,6 +7,15 @@
     <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials" />
     <link rel="icon" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
+    <script>
+      // Theme before first paint (same rule as src/theme.ts).
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem("mn-theme"); } catch (e) {}
+        var dark = t === "dark" || (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
     <title>meta-notes</title>
   </head>
   <body>
