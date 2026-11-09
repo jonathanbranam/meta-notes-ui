@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { TagTasksResponse, TodayTask } from "../../shared/types";
 import { TaskRow } from "./TaskRow";
 import type { RenderContext } from "./markdown";
-import { groupTasks } from "./taskspage";
+import { groupTasks } from "./tasks-page";
 
 /** Dated open tasks across all notes: Overdue, Due today, Upcoming. Each row is the shared task row (done or canceled through `/api/task`). */
 export function TasksView({ today, refreshKey, open, ctxFor }: { today: string; refreshKey: number; open: (p: string) => void; ctxFor: (path: string) => RenderContext }) {

@@ -9,13 +9,13 @@ import type { BacklinksResponse, ChangeEvent, NoteResponse, TagAliasesResponse }
 import { createBacklinks } from "./backlinks.js";
 import { editRoutes, runMetaNotes } from "./edits.js";
 import { messageRoutes, type MessageConfig } from "./message.js";
-import { pushRoutes, type PushConfig } from "./pushroutes.js";
+import { pushRoutes, type PushConfig } from "./push-routes.js";
 import { confine, PathError } from "./paths.js";
 import { createLoginStore, SESSION_MS, verifyLogin, type LoginStore } from "./login.js";
 import { tokenMatches } from "./token.js";
 import { listTree } from "./tree.js";
-import { dueTaskRoutes } from "./duetasks.js";
-import { tagTaskRoutes } from "./tagtasks.js";
+import { dueTaskRoutes } from "./due-tasks.js";
+import { tagTaskRoutes } from "./tag-tasks.js";
 import { listRoutes } from "./lists.js";
 import { todayRoutes } from "./today.js";
 import { weekRoutes } from "./week.js";

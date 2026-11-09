@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import { blocksOf, closedEntry, labelOf, logMinutes, nowState, stopwatch } from "./now";
 import { parseTimeBlock } from "../../shared/today";
-import { parseTimeLog } from "./timelog";
+import { parseTimeLog } from "./time-log";
 
 test("log times: plain, tilde, am/pm", () => {
   expect([logMinutes("07:50"), logMinutes("~07:50"), logMinutes("1:05pm"), logMinutes("x")]).toEqual([470, 470, 785, null]);

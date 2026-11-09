@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { appendTimeLog, clock, dropEmptyEnd, parseTimeLog, type LogEntry } from "./timelog";
+import { appendTimeLog, clock, dropEmptyEnd, parseTimeLog, type LogEntry } from "./time-log";
 
 /** What an edit route says went wrong, as one line. */
 function why(r: { error?: string; current?: unknown }): string {

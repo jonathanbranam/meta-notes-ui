@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
-import { clampTreeWidth, readTreePane, writeTreePane } from "../../client/src/treepane";
+import { clampTreeWidth, readTreePane, writeTreePane } from "../../client/src/tree-pane";
 
 /** A stand-in for the browser's localStorage, so the spec can "reload" by reading it again. */
 function fakeStorage() {

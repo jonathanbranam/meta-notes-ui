@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { startHash } from "./lastpage";
+import { startHash } from "./last-page";
 
 const TODAY = "!today";
 

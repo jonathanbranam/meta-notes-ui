@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dropEmptyEnd, parseTimeLog } from "./timelog";
+import { dropEmptyEnd, parseTimeLog } from "./time-log";
 
 const note = "# D\n\n### Log\n\n- a #x:\n  * start: 08:30\n  * end: 09:00\n- b:\n  * start: ~09:00\n  * end:\n\n### Time Block\n";
 

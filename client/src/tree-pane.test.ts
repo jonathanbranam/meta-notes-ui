@@ -1,5 +1,5 @@
 import { beforeEach, expect, test } from "vitest";
-import { clampTreeWidth, readTreePane, TREE_DEFAULT, TREE_MAX, TREE_MIN, writeTreePane } from "./treepane";
+import { clampTreeWidth, readTreePane, TREE_DEFAULT, TREE_MAX, TREE_MIN, writeTreePane } from "./tree-pane";
 
 function fakeStorage() {
   const m = new Map<string, string>();

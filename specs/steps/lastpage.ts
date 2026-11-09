@@ -1,7 +1,7 @@
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
 import { TODAY_PATH } from "../../client/src/TodayView";
-import { startHash } from "../../client/src/lastpage";
+import { startHash } from "../../client/src/last-page";
 
 export function lastpageSteps(steps: Steps) {
   steps.when(/^the app starts with no page in the URL and the page "([^"]+)" is stored$/, (w, stored) => {

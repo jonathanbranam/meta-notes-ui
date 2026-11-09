@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { TodayTask } from "../../shared/types";
 import { Inline } from "./Inline";
 import type { RenderContext } from "./markdown";
-import { taskLabel } from "./tagview";
-import { taskStatusBody } from "./taskstatus";
+import { taskLabel } from "./tag-view";
+import { taskStatusBody } from "./task-status";
 
 /** One open task: a box that marks it done, a Cancel button, and its note. The Today view, the tag view and the Tasks page share it. */
 export function TaskRow({ task, overdue, ctx, open, onChanged }: { task: TodayTask; overdue: boolean; ctx: RenderContext; open: (p: string) => void; onChanged: () => void }) {

@@ -1,7 +1,7 @@
 # Web Push to the phone
 
 Status: approved by the human 2026-10-13 and built (ticket mu-nqwt, v0.20.0). Written for a 10-minute read.
-Build notes: the three routes live in `server/pushroutes.ts` (like `server/message.ts`); the scheduler sends a late
+Build notes: the three routes live in `server/push-routes.ts` (like `server/message.ts`); the scheduler sends a late
 alert as it finds it, on any re-plan, not only at start.
 
 ## What this is

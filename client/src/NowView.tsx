@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { closedEntry, doneMessage, hm, labelOf, nowState, shortTime, stopwatch, timers } from "./now";
-import { appendTimeLog, parseTimeLog } from "./timelog";
+import { appendTimeLog, parseTimeLog } from "./time-log";
 import type { useToday } from "./TodayView";
 import type { SendFn } from "./MessageSheet";
 

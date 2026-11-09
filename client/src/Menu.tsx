@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import { alertsItem, closesMenu, type PushState } from "./menu";
+import { alertsItem, closesMenu, type PushState } from "./menu-items";
 import { disablePush, enablePush, pushAvailable, syncPush } from "./push";
 
 /** The top bar's dropdown: the alerts control, then `items`; every pick closes the menu. */

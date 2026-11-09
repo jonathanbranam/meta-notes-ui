@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { groupTasks } from "./taskspage";
+import { groupTasks } from "./tasks-page";
 
 const t = (due: string | null, time: string | null = null) => ({ file: "a.md", line: 1, text: "x", due, time });
 

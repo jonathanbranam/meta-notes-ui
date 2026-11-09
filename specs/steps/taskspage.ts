@@ -3,7 +3,7 @@ import type { Steps } from "vitest-bridle";
 import type { TodayTask } from "../../shared/types.js";
 import { createApp } from "../../server/app.js";
 import { makeExampleRoot } from "../../server/example.js";
-import { groupTasks, TASKS_PATH, type TaskGroups } from "../../client/src/taskspage";
+import { groupTasks, TASKS_PATH, type TaskGroups } from "../../client/src/tasks-page";
 import { tabOf } from "../../client/src/tabs";
 
 const TOKEN = "tasks-page-token";
