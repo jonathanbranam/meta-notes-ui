@@ -4,7 +4,7 @@ title = "Build fails on macOS: client files differ only by case (timelog.ts / Ti
 kind = "bug"
 state = "planned"
 created_at = "2026-11-09T14:48:28.434Z"
-updated_at = "2026-11-09T15:08:26.056034332Z"
+updated_at = "2026-11-09T15:12:38.615345068Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "bgb6"
@@ -37,3 +37,6 @@ Deferred: nothing. Not renaming the .tsx components: they already follow the sta
 ### note · external:aide · 2026-11-09T14:57:25.783Z
 From the human, via aide (2026-11-09), verbatim: "And this problem should never occur again. We need to prevent it. ... this should be part of the Webpack or a React Webpack Bridle rule set, right? This is a standard, common thing that everybody is going to run into. It should be handled by a Bridle rule set as a rule when writing files."
 Relayed to the bridle aide as o-0036, for a bridle pack rule. The project-local check and rule in this ticket stay as planned.
+
+### note · agent:casefix · 2026-11-09T15:12:38.615Z
+Done on bridle/casefix at 0598bf6 (v0.29.4). Renamed with git mv: timelog, tagview, menu (to menu-items), lastpage, taskspage, taskstatus, treepane (client/src); duetasks, pushroutes, tagtasks (server). Imports and docs/design/web-push.md updated. No other run-together or capitalised .ts names in client/src, server, shared. Added scripts/check-case-collisions.mjs (tested in scripts/case-collisions.test.ts), wired first into npm run check; rule .bridle/rules/file-naming.md. Left alone: specs/steps/*.ts names (lastpage, treepane, menu, tagview, taskspage, weekpage), outside the listed scope; only their imports changed. CSS class names and /api/timelog paths unchanged.
