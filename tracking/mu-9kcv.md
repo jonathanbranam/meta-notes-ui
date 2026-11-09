@@ -2,9 +2,9 @@
 id = "mu-9kcv"
 title = "Menu option to override light/dark: system, light, dark"
 kind = "feature"
-state = "open"
+state = "planned"
 created_at = "2026-11-09T17:22:20.984Z"
-updated_at = "2026-11-09T17:23:34.756631360Z"
+updated_at = "2026-11-09T17:34:30.486815565Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9kcv"

@@ -2,9 +2,9 @@
 id = "mu-y9xa"
 title = "Week view is unreadable on a dark background"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-11-09T17:20:34.912Z"
-updated_at = "2026-11-09T17:23:34.030555614Z"
+updated_at = "2026-11-09T17:34:30.130759397Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "y9xa"

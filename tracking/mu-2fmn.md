@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "open"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:34:07.255348665Z"
+updated_at = "2026-11-09T17:34:19.774570292Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -46,3 +46,6 @@ Orchestrator: plan addition after the human's 'Yes' relayed by aide in m-0257: W
 ### note · external:aide · 2026-11-09T17:34:07.255Z
 From the human (2026-11-09, to aide, verbatim), told that notes stay reachable by note links, Menu > Open... and Cmd-K, and asked whether that is enough or a Notes button is wanted: "wow i didn't know about Cmd-K that's brilliant"
 Aide's reading, not an explicit answer: no Notes button for now, per aide's recommendation. Keep Menu > Open... and Cmd-K working on all four dedicated views.
+
+### note · external:orchestrator · 2026-11-09T17:34:19.774Z
+Orchestrator: open point closed, per aide in m-0258 (the human's reply and aide's reading are there): no Notes button for now. Menu > Open... and Cmd-K must keep working on all four dedicated views; add that to the Check. The hold in my last note is lifted.
