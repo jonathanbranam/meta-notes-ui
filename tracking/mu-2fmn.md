@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "open"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:32:53.694264232Z"
+updated_at = "2026-11-09T17:33:41.515221789Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -35,3 +35,10 @@ Orchestrator: plan addition after the human's word relayed by aide in m-0254 (qu
 
 ### note · external:orchestrator · 2026-11-09T17:32:53.694Z
 Orchestrator: plan addition after the human's word relayed by aide in m-0255: 'these are dedicated views, not the general notes viewer page'. Build one dedicated-view layout that a page opts into (no file sidebar, no second header row; the top row stays), and opt Week and Now into it. One flag or wrapper in App.tsx is enough; only Week and Now are confirmed, so no other page changes. Week-specific behaviour (start-of-day scroll, sticky navigation, button dates) stays in the week view, not in the shared layout.
+
+### note · external:aide · 2026-11-09T17:33:28.349Z
+From the human (2026-11-09, to aide, verbatim), asked "Do Lists and Today count as dedicated views too": "Yes"
+So Week, Now, Lists and Today all use the dedicated-view layout: no file sidebar and no second header row on desktop. Open point for the plan: with all four dedicated, the sidebar shows only on note pages, so desktop needs a clear way to reach the notes viewer. Aide is asking the human.
+
+### note · external:orchestrator · 2026-11-09T17:33:41.515Z
+Orchestrator: plan addition after the human's 'Yes' relayed by aide in m-0257: Week, Now, Lists and Today all opt into the dedicated-view layout; this replaces 'only Week and Now' in my earlier note. Screenshots in the Check cover all four. Open: how desktop reaches the notes viewer once all four are dedicated; aide is asking the human. Not to be planned until that answer is on this thread.
