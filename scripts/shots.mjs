@@ -58,6 +58,9 @@ try {
       const name = route.replace(/^#!?/, "").replace(/[^\w.-]+/g, "_") || "home";
       await page.goto(`${url}/${route.startsWith("#") ? route : "#" + route}`);
       await page.waitForSelector("main");
+      // Wait for the page's content, not a fixed time: the week grid, and no "Loading...".
+      if (route.includes("!week")) await page.waitForSelector(".wk-grid");
+      await page.waitForFunction(() => !document.querySelector("main")?.textContent?.includes("Loading..."));
       await page.waitForTimeout(500);
       const shot = async (tree) => {
         const file = path.join(out, `${name}-${size}${values.dark ? "-dark" : ""}-tree-${tree}.png`);

@@ -5,7 +5,7 @@ import type { Steps } from "vitest-bridle";
 import type { WeekDay, WeekResponse } from "../../server/week.js";
 import type { Slot } from "../../shared/week.js";
 import { WeekGrid } from "../../client/src/WeekView";
-import { addDays, parseWeekPath, stepWeek, firstDay, weekPath } from "../../client/src/week";
+import { addDays, openSlot, parseWeekPath, stepLabel, stepWeek, firstDay, weekPath, clockLabel } from "../../client/src/week";
 
 type World = Record<string, any>;
 
@@ -107,5 +107,21 @@ export function weekPageSteps(steps: Steps) {
     const col = w.html.split('data-date="2026-11-07"')[1];
     expect(col).toContain("wk-now");
     expect(addDays("2026-11-07", 0)).toBe("2026-11-07");
+  });
+  steps.when(/^the page is "([^"]+)"$/, (w, path) => {
+    w.page = parseWeekPath(path, "2026-11-07");
+  });
+  steps.then(/^the previous button reads "([^"]+)" and the next button reads "([^"]+)"$/, (w, prev, next) => {
+    expect(stepLabel(w.page, -1)).toBe(prev);
+    expect(stepLabel(w.page, 1)).toBe(next);
+  });
+  steps.when(/^the earliest box of the week starts at 9:00 AM$/, (w) => {
+    w.days = [day("2026-11-06", [{ at: 540, kind: "plan", text: "A" }]), day("2026-11-07", [{ at: 600, kind: "plan", text: "B" }])];
+  });
+  steps.when(/^the week has no boxes$/, (w) => {
+    w.days = [day("2026-11-06")];
+  });
+  steps.then(/^the grid opens at (\d+:\d+ [AP]M)$/, (w, label) => {
+    expect(clockLabel(openSlot(w.days) * 15)).toBe(label);
   });
 }

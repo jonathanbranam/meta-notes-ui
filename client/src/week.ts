@@ -96,3 +96,24 @@ export function clockLabel(minutes: number): string {
 }
 
 export const slotIndex = (minutes: number) => minutes / SLOT;
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** The dates a step button goes to: "Nov 9 - 13", or "Oct 26 - Nov 1" across months (ASCII). */
+export function stepLabel(p: WeekPage, n: -1 | 1): string {
+  const first = firstDay(stepWeek(p, n));
+  const a = parse(first);
+  const b = parse(addDays(first, p.days === 7 ? 6 : p.days === 5 ? 4 : 1));
+  const from = `${MONTHS[a.getMonth()]} ${a.getDate()}`;
+  return a.getMonth() === b.getMonth() ? `${from} - ${b.getDate()}` : `${from} - ${MONTHS[b.getMonth()]} ${b.getDate()}`;
+}
+
+/** The slot index the grid opens at: just above the earliest box, or 7 AM on an empty week. */
+export function openSlot(days: { slots: Slot[] }[]): number {
+  let first = Infinity;
+  for (const d of days) {
+    const i = d.slots.findIndex((s) => s.kind !== "empty");
+    if (i >= 0 && i < first) first = i;
+  }
+  return first === Infinity ? slotIndex(7 * 60) : Math.max(0, first - 2);
+}
