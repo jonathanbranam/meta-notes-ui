@@ -61,3 +61,4 @@
 {"actor":"external:orchestrator","at":"2026-11-09T00:08:15.003269055Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-11-09T00:24:01.864379484Z","from":"planned","task":"mu-mq38","to":"integrated"}
 {"actor":"external:aide","at":"2026-11-09T02:05:25.047821264Z","from":"claimed","task":"mu-q8f8","to":"integrated"}
+{"actor":"human","at":"2026-11-09T02:05:54.841Z","from":"","task":"mu-cber","to":"pending"}
