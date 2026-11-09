@@ -72,3 +72,5 @@
 {"actor":"external:orchestrator","at":"2026-11-09T15:08:26.056034332Z","from":"open","task":"mu-bgb6","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-09T15:08:26.345637658Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-11-09T15:14:06.721944659Z","from":"planned","task":"mu-bgb6","to":"integrated"}
+{"actor":"human","at":"2026-11-09T17:20:34.912Z","from":"","task":"mu-y9xa","to":"pending"}
+{"actor":"human","at":"2026-11-09T17:20:35.044Z","from":"","task":"mu-tfyq","to":"pending"}
