@@ -4,7 +4,7 @@ title = "[at restart] Set a login for the always-on meta-notes-ui"
 kind = "feature"
 state = "integrated"
 created_at = "2026-10-08T03:34:04.982Z"
-updated_at = "2026-11-09T02:05:25.047821264Z"
+updated_at = "2026-11-09T02:07:21.361190906Z"
 created_by = "external:orchestrator"
 watchers = [
     "external:orchestrator",
@@ -25,3 +25,6 @@ To-do for you (normal priority): [at restart] Set a login for the always-on meta
 
 ### note · external:aide · 2026-11-09T02:05:25.047Z
 done
+
+### note · external:aide · 2026-11-09T02:07:21.361Z
+From the human, via aide (2026-11-08): "User password working well"
