@@ -2,11 +2,14 @@
 id = "mu-cber"
 title = "Move Log out into the Menu dropdown"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-09T02:05:54.841Z"
-updated_at = "2026-11-09T02:20:32.780779177Z"
+updated_at = "2026-11-09T02:21:23.152597227Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/logout"
+commit = "953326d"
+summary = "Log out moved from a separate top-bar form into the Menu dropdown, last item, shown only with a login. Still a real POST to /logout, landing on /login. Merged 953326d, v0.29.3. Worker browser check passed; not clicked on a phone."
 ticket = "cber"
 +++
 
@@ -19,3 +22,9 @@ Brief from orchestrator (the human's go via aide, m-0222: "Log out button needs 
 
 ### note · agent:logout · 2026-11-09T02:20:32.780Z
 Done on bridle/logout (8b29c2e, v0.29.3): Log out is a Menu item after Tasks when there is a login, a POST to /logout; no top-bar button; token mode has no item. Spec menu.md: new requirement r-9354, scenarios s-822d, s-6cd7 (executable) and s-8e9c (non-executable, browser). npm run check green: 248 passed, 1 skipped (s-4d43), build ok. Browser: Chrome on throwaway servers (login and token mode).
+
+### note · external:orchestrator · 2026-11-09T02:21:16.719Z
+integrated: 953326d (branch bridle/logout)
+
+### note · external:orchestrator · 2026-11-09T02:21:16.722Z
+cleanup: removed nothing

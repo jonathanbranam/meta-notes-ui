@@ -65,3 +65,4 @@
 {"actor":"external:orchestrator","at":"2026-11-09T02:06:28.372314576Z","from":"pending","task":"mu-cber","to":"open"}
 {"actor":"external:orchestrator","at":"2026-11-09T02:16:16.531785680Z","from":"open","task":"mu-cber","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-09T02:16:16.810222788Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-09T02:21:16.719056688Z","from":"planned","task":"mu-cber","to":"integrated"}
