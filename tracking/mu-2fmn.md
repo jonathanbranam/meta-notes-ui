@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "planned"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:45:29.296371989Z"
+updated_at = "2026-11-09T17:52:35.240997253Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -55,3 +55,8 @@ From the human (2026-11-09, to aide, verbatim), confirming the earlier reading: 
 
 ### note · external:orchestrator · 2026-11-09T17:43:01.233Z
 Orchestrator: required before merge, per aide's note (m-0262): dark and light screenshots of the rendered week grid, with their paths recorded on this thread. scripts/shots.mjs waits a fixed time and can capture 'Loading...' on the week page, so as part of this ticket make it wait for the grid before capturing. Check the images show the grid, not the loading state.
+
+### note · agent:dedicated · 2026-11-09T17:52:35.240Z
+Screenshots (desktop 1400x900, throwaway server port 0, copy of examples/notes): /tmp/mu2fmn-shots/ -
+week-open-{light,dark}.png (opens at 7 AM, bar + date headers + step buttons with dates), week-scrolled-{light,dark}.png (scrolled 500px, bar and headers still in view), now-, lists-, today-, note-{light,dark}.png (note keeps sidebar and header row; others have neither). I looked at each week/now/lists/today image and the dark note; light note not opened.
+Not checked: the example week has no boxes, so "opens above the earliest box" and the box styles are unit-tested only; Menu > Open... and Cmd-K not clicked in a browser (they do not depend on the sidebar); phone layout not screenshotted. Seen, not changed: the today day-name link in the week header is default blue, hard to read in dark. No CHANGELOG file exists in the repo, so none updated. Commit 0339edc.
