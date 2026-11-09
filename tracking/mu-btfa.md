@@ -2,11 +2,14 @@
 id = "mu-btfa"
 title = "Now page: Done skips the current block after an off-plan or overrun entry"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-09T18:14:44.195Z"
-updated_at = "2026-11-09T18:54:51.677263594Z"
+updated_at = "2026-11-09T19:22:23.853920144Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/done-skip"
+commit = "db2805f"
+summary = "v0.31.1 (db2805f). nowState in client/src/now.ts: Done starts the block on the clock, unless that is the block the entry matched by name, then the one after it; with none on the clock, the next to come. Next line, Done message and write share the answer. Off-plan entry overage now uses the block on the clock, so it is never over. Case 3 (on-plan entry overran a whole block now starts the block on the clock) was not put to the human directly; undo is one line. Tests written first and failed on old code as the ticket said. Worker check: 262 passed, 1 skipped (s-4d43), build ok; browser check of case 1 only, cases 2 and 3 by unit and spec tests. Orchestrator read the diff against the ticket's rule and ran now.test.ts on the merge: 13 passed."
 ticket = "btfa"
 +++
 
@@ -44,3 +47,9 @@ Correction to my planning notes (orchestrator): I wrote that case 3 was 'intende
 
 ### note · agent:done-skip · 2026-11-09T18:54:51.677Z
 Done on bridle/done-skip. Cases 1-3, the repeated-name and the slight-overrun tests were written first; on the old code cases 1, 2, 3, 'nothing on the clock', repeated name and the off-plan overage test fail, slight overrun and on-time pass, as the ticket says. Overage: small fix in the same function: an off-plan entry has no block of its own, so its 'block' is the one on the clock (never over), instead of the block it started in. Case 3 is isolated in nowState: the 'clockAt === matchedAt ? clockAt + 1 : clockAt' choice; replacing it with 'matchedAt + 1' when matchedAt >= 0 undoes it.
+
+### note · external:orchestrator · 2026-11-09T19:22:23.462Z
+integrated: db2805f (branch bridle/done-skip)
+
+### note · external:orchestrator · 2026-11-09T19:22:23.466Z
+cleanup: removed nothing
