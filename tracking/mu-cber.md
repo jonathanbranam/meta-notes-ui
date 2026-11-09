@@ -2,9 +2,9 @@
 id = "mu-cber"
 title = "Move Log out into the Menu dropdown"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-11-09T02:05:54.841Z"
-updated_at = "2026-11-09T02:06:33.720181213Z"
+updated_at = "2026-11-09T02:16:16.531785680Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "cber"
