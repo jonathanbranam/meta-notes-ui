@@ -2,9 +2,9 @@
 id = "mu-q8f8"
 title = "[at restart] Set a login for the always-on meta-notes-ui"
 kind = "feature"
-state = "claimed"
+state = "integrated"
 created_at = "2026-10-08T03:34:04.982Z"
-updated_at = "2026-10-08T03:34:14.463768450Z"
+updated_at = "2026-11-09T02:05:25.047821264Z"
 created_by = "external:orchestrator"
 watchers = [
     "external:orchestrator",
@@ -22,3 +22,6 @@ created for the human, priority normal
 
 ### note · external:orchestrator · 2026-10-08T03:34:05.278Z
 To-do for you (normal priority): [at restart] Set a login for the always-on meta-notes-ui. Finish it with `bridle task done mu-q8f8`.
+
+### note · external:aide · 2026-11-09T02:05:25.047Z
+done
