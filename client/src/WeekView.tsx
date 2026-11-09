@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { WeekResponse } from "../../server/week";
 import { SLOT } from "../../shared/week";
-import { boxClass, boxes, clockLabel, firstDay, RANGES, stepWeek, weekPath, type WeekPage } from "./week";
+import { boxClass, boxes, clockLabel, firstDay, openSlot, RANGES, stepLabel, stepWeek, weekPath, type WeekPage } from "./week";
 
 /** A task line without its checkbox and its date marks. */
 export const taskLabel = (text: string) => text.replace(/^- \[.\]\s*/, "").replace(/\s*[\u23F0\u{1F4C5}\u23F3\u{1F6EB}].*$/u, "");
@@ -72,6 +72,26 @@ export function WeekView({ page, today, nowMin, refreshKey, go }: { page: WeekPa
   const [week, setWeek] = useState<WeekResponse | null>(null);
   const [error, setError] = useState("");
   const start = firstDay(page);
+  const root = useRef<HTMLElement>(null);
+  const scrolledFor = useRef("");
+  const ready = !!(week && week.start === start && week.days.length === page.days);
+  // Open at the start of the day, once per page shown; a live refresh (refreshKey) leaves the scroll alone.
+  useLayoutEffect(() => {
+    const el = root.current;
+    const key = `${start}:${page.days}`;
+    if (!ready || !week || !el || scrolledFor.current === key) return;
+    scrolledFor.current = key;
+    const scroller = el.closest("main");
+    const col = el.querySelector(".wk-col");
+    const bar = el.querySelector(".wk-bar");
+    const head = el.querySelector(".wk-head");
+    const hour = el.querySelector(".wk-hour");
+    if (!scroller || !col || !bar || !head || !hour) return;
+    const row = hour.getBoundingClientRect().height / 4;
+    const target = col.getBoundingClientRect().top + row * openSlot(week.days);
+    const covered = scroller.getBoundingClientRect().top + parseFloat(getComputedStyle(scroller).paddingTop) + bar.getBoundingClientRect().height + head.getBoundingClientRect().height;
+    scroller.scrollTop += target - covered;
+  }, [ready, week, start, page.days]);
   useEffect(() => {
     let live = true;
     fetch(`/api/week?start=${start}&days=${page.days}`)
@@ -87,10 +107,10 @@ export function WeekView({ page, today, nowMin, refreshKey, go }: { page: WeekPa
     };
   }, [start, page.days, refreshKey]);
   return (
-    <section className="wk">
+    <section className="wk" ref={root}>
       <div className="wk-bar">
-        <button onClick={() => go(weekPath(stepWeek(page, -1)))} aria-label="Previous week">&lsaquo; Week</button>
-        <button onClick={() => go(weekPath(stepWeek(page, 1)))} aria-label="Next week">Week &rsaquo;</button>
+        <button onClick={() => go(weekPath(stepWeek(page, -1)))} aria-label="Previous week">&lsaquo; {stepLabel(page, -1)}</button>
+        <button onClick={() => go(weekPath(stepWeek(page, 1)))} aria-label="Next week">{stepLabel(page, 1)} &rsaquo;</button>
         <span className="wk-ranges" role="group" aria-label="Days shown">
           {RANGES.map((r) => (
             <button key={r.days} className={r.days === page.days ? "on" : ""} aria-pressed={r.days === page.days} onClick={() => go(weekPath({ ...page, days: r.days }))}>
@@ -101,8 +121,8 @@ export function WeekView({ page, today, nowMin, refreshKey, go }: { page: WeekPa
         <span className="hint">{start}</span>
       </div>
       {error && <p className="error">{error}</p>}
-      {!error && !(week && week.start === start && week.days.length === page.days) && <p className="hint">Loading...</p>}
-      {week && week.start === start && week.days.length === page.days && <WeekGrid week={week} today={today} nowMin={nowMin} />}
+      {!error && !ready && <p className="hint">Loading...</p>}
+      {ready && week && <WeekGrid week={week} today={today} nowMin={nowMin} />}
     </section>
   );
 }

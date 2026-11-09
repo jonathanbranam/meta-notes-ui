@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
-import { isMobileWidth, messageBody, messageSite, pageForTab, remember, submitsOnKey, topBarShows, type TabId, type TabMemory } from "../../client/src/tabs";
+import { isDedicated, isMobileWidth, messageBody, messageSite, pageForTab, remember, submitsOnKey, topBarShows, type TabId, type TabMemory } from "../../client/src/tabs";
 
 export function tabsSteps(steps: Steps) {
   steps.when(/^the viewport is (\d+) pixels wide$/, (w, n) => {
@@ -33,4 +33,9 @@ export function tabsSteps(steps: Steps) {
     w.submitted = submitsOnKey({ key: "Enter", shiftKey: false });
   });
   steps.then(/^the message is submitted$/, (w) => expect(w.submitted).toBe(true));
+  steps.when(/^the user is on the page "([^"]+)"$/, (w, page) => {
+    w.page = page;
+  });
+  steps.then(/^the page is a dedicated view$/, (w) => expect(isDedicated(w.page)).toBe(true));
+  steps.then(/^the page is not a dedicated view$/, (w) => expect(isDedicated(w.page)).toBe(false));
 }

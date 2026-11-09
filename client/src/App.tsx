@@ -22,7 +22,7 @@ import { TabBar } from "./TabBar";
 import { NowView } from "./NowView";
 import { WeekView } from "./WeekView";
 import { parseWeekPath, WEEK_PATH, weekPath } from "./week";
-import { isMobileWidth, LISTS_PATH, listOf, messageSite, NOW_TAB_PATH, pageForTab, remember, TASKS_TAB_PATH, tabOf, topBarShows, type TabMemory } from "./tabs";
+import { isDedicated, isMobileWidth, LISTS_PATH, listOf, messageSite, NOW_TAB_PATH, pageForTab, remember, TASKS_TAB_PATH, tabOf, topBarShows, type TabMemory } from "./tabs";
 import { FiredAlerts, TODAY_PATH, TodayView, useToday } from "./TodayView";
 import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, quickOpen, resolveFile, stripFrontmatter } from "./notes";
 import { readLastPage, startHash, writeLastPage } from "./last-page";
@@ -599,7 +599,7 @@ export function App() {
 
   return (
     <div
-      className={pane.collapsed ? "app tree-collapsed" : "app"}
+      className={`${pane.collapsed ? "app tree-collapsed" : "app"}${isDedicated(path) ? " dedicated" : ""}`}
       style={{ "--tree-w": `${pane.width}px` } as CSSProperties}
     >
       <header className={barShows ? undefined : "bar-off"}>

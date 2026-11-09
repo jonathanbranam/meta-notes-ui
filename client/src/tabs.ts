@@ -69,3 +69,11 @@ export function messageBody(text: string, context: string): string {
 export function submitsOnKey(e: { key: string; shiftKey: boolean; isComposing?: boolean }): boolean {
   return e.key === "Enter" && !e.shiftKey && !e.isComposing;
 }
+
+/**
+ * A dedicated view (Today, Now, Week, Lists) is a page of its own: on a desktop it has no file sidebar
+ * and no second header row. Notes, tags, files and Tasks keep the notes viewer's shell.
+ */
+export function isDedicated(path: string): boolean {
+  return path === "!today" || path === NOW_TAB_PATH || path === "!week" || path.startsWith("!week?") || tabOf(path) === "lists";
+}

@@ -134,3 +134,24 @@ reply.
 
 - **WHEN** the user presses Enter without Shift in the sheet
 - **THEN** the message is submitted
+
+### Requirement: Today, Now, Week and Lists are dedicated views on a desktop  {#r-3a15}
+
+The client SHALL show Today, Now, Week and Lists as dedicated views: on a viewport wider than 720
+pixels they have no file sidebar and no second header row (history buttons and page title), and the
+top row (Today, Now, Week, Menu) stays. A note, a tag page, a file or Tasks SHALL keep the sidebar and
+the second header row. Menu > Open... and Cmd-K reach any note from a dedicated view. (Ticket mu-2fmn.)
+
+#### Scenario: A dedicated view  {#s-1210}
+
+*Verification*: **executable**
+
+- **WHEN** the user is on the page "!week?start=2026-11-02&days=5"
+- **THEN** the page is a dedicated view
+
+#### Scenario: A note page  {#s-be22}
+
+*Verification*: **executable**
+
+- **WHEN** the user is on the page "notes/a.md"
+- **THEN** the page is not a dedicated view

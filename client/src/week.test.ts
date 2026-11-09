@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Slot } from "../../shared/week";
-import { boxes, clockLabel, mondayOf, parseWeekPath } from "./week";
+import { boxes, clockLabel, mondayOf, openSlot, parseWeekPath, stepLabel } from "./week";
 
 const s = (at: number, text: string): Slot => ({ at, kind: "plan", text });
 const empty = (at: number): Slot => ({ at, kind: "empty", text: "" });
@@ -20,5 +20,14 @@ describe("week page helpers", () => {
   it("labels a time", () => {
     expect(clockLabel(0)).toBe("12:00 AM");
     expect(clockLabel(13 * 60 + 15)).toBe("1:15 PM");
+  });
+  it("shows the dates a step button goes to, across a month", () => {
+    const p = parseWeekPath("!week?start=2026-11-02&days=7", "2026-11-07");
+    expect(stepLabel(p, -1)).toBe("Oct 26 - Nov 1");
+    expect(stepLabel(p, 1)).toBe("Nov 9 - 15");
+  });
+  it("opens two slots above the earliest box, or at 7 AM", () => {
+    expect(openSlot([{ slots: [empty(0), empty(15), s(30, "A")] }])).toBe(0);
+    expect(openSlot([{ slots: [] }])).toBe(28);
   });
 });

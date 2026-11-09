@@ -175,12 +175,13 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 
 /* Week page (design/specs/week-page.md): one class per style, so each is easy to change. */
 .wk { --wk-row: 14px; padding: .5rem; }
-.wk-bar { display: flex; gap: .5rem; align-items: center; margin-bottom: .5rem; }
+.wk-bar { position: sticky; top: 0; z-index: 4; height: 2.75rem; box-sizing: border-box; background: #fff; display: flex; gap: .5rem; align-items: center; }
 .wk-bar button { border: 1px solid #bbb; border-radius: 6px; background: none; font: inherit; padding: .25rem .6rem; }
 .wk-ranges { display: inline-flex; gap: .25rem; margin-left: 1rem; }
 .wk-ranges button.on { background: #2563eb; border-color: #2563eb; color: #fff; }
+main:has(> .wk) { padding-top: 0; }
 .wk-grid { display: grid; grid-template-columns: 4.5rem repeat(var(--wk-days), minmax(0, 1fr)); gap: 0 2px; }
-.wk-head { position: sticky; top: 0; z-index: 3; background: #fff; border-bottom: 1px solid #ccc; padding: .25rem; font-size: .85rem; }
+.wk-head { position: sticky; top: 2.75rem; z-index: 3; background: #fff; border-bottom: 1px solid #ccc; padding: .25rem; font-size: .85rem; }
 .wk-head.wk-today { background: #eef4ff; }
 .wk-dayname { font-weight: 600; }
 .wk-allday { font-size: .75rem; opacity: .8; }
@@ -201,10 +202,12 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .wk-badge { font-size: .62rem; font-weight: 700; border: 1px solid currentColor; border-radius: 3px; padding: 0 2px; margin-right: .3rem; opacity: .75; }
 .wk-now { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid #e11; z-index: 2; pointer-events: none; }
 @media (prefers-color-scheme: dark) {
+  .wk-bar { background: #202225; }
   .wk-bar button { border-color: #555; color: #e6e6e6; }
   .wk-ranges button.on { background: #2f4f9e; border-color: #3d63c0; color: #f0f4ff; }
   .wk-head { background: #202225; border-bottom-color: #333; color: #e6e6e6; }
   .wk-head.wk-today { background: #1f2c47; }
+  .wk-head a { color: #8ab4ff; }
   .wk-col { border-left-color: #333;
     background: repeating-linear-gradient(to bottom, #2a2c30 0, #2a2c30 1px, transparent 1px, transparent calc(var(--wk-row) * 4)); }
   .wk-log { background: #243552; border-color: #36518a; color: #dbe6fa; }
@@ -214,4 +217,11 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
   .wk-error { background: #4a2326; border-color: #a8474d; color: #f5c6c8; }
   .wk-future-error { background: #3d2540; border-color: #9a5a9f; color: #eccdef; }
   .wk-now { border-top-color: #ff5a5a; }
+}
+
+/* Dedicated views (isDedicated in tabs.ts): no file sidebar and no second header row on a desktop. */
+@media (min-width: 721px) {
+  .app.dedicated, .app.dedicated.tree-collapsed { grid-template-columns: 1fr; }
+  .app.dedicated .drawer, .app.dedicated .tree-resize, .app.dedicated .tree-expand, .app.dedicated header .titlebar { display: none; }
+  .app.dedicated header, .app.dedicated main { grid-column: 1; }
 }

@@ -110,3 +110,46 @@ count, and SHALL draw a now line in today's column only.
 
 - **WHEN** the grid draws 2026-11-06 and 2026-11-07 and today is 2026-11-07
 - **THEN** only the column of 2026-11-07 has a now line
+
+### Requirement: The step buttons show their dates and the grid opens at the start of the day  {#r-de21}
+
+The previous and next buttons SHALL show the dates of the page they go to, following the range:
+the Monday to Sunday, the Monday to Friday, or the Saturday and Sunday. The grid SHALL open scrolled
+to two slots above the earliest box of the week, or to 7 AM on a week with none, once per page
+shown and not again on a live update. The range bar stays in view with the day headers below it
+while the grid scrolls. (Ticket mu-2fmn.)
+
+#### Scenario: Buttons for 7 days  {#s-f6b8}
+
+*Verification*: **executable**
+
+- **WHEN** the page is "!week?start=2026-11-02&days=7"
+- **THEN** the previous button reads "Oct 26 - Nov 1" and the next button reads "Nov 9 - 15"
+
+#### Scenario: Buttons for weekdays  {#s-ea28}
+
+*Verification*: **executable**
+
+- **WHEN** the page is "!week?start=2026-11-02&days=5"
+- **THEN** the previous button reads "Oct 26 - 30" and the next button reads "Nov 9 - 13"
+
+#### Scenario: Buttons for the weekend  {#s-e5ef}
+
+*Verification*: **executable**
+
+- **WHEN** the page is "!week?start=2026-11-02&days=2"
+- **THEN** the previous button reads "Oct 31 - Nov 1" and the next button reads "Nov 14 - 15"
+
+#### Scenario: Opens above the earliest box  {#s-b14a}
+
+*Verification*: **executable**
+
+- **WHEN** the earliest box of the week starts at 9:00 AM
+- **THEN** the grid opens at 8:30 AM
+
+#### Scenario: Opens at 7 AM on an empty week  {#s-939a}
+
+*Verification*: **executable**
+
+- **WHEN** the week has no boxes
+- **THEN** the grid opens at 7:00 AM
