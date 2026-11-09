@@ -2,11 +2,14 @@
 id = "mu-9kcv"
 title = "Menu option to override light/dark: system, light, dark"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-09T17:22:20.984Z"
-updated_at = "2026-11-09T18:00:58.570818528Z"
+updated_at = "2026-11-09T18:02:08.020939703Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/theme"
+commit = "2bdf7a4"
+summary = "v0.31.0 (2bdf7a4). Menu Theme item cycles System, Light, Dark; stored per browser in localStorage (mn-theme). client/src/theme.ts resolves the setting and sets data-theme on the root; index.html does the same before first paint. Dark CSS blocks in style.css now key on :root[data-theme=dark] instead of the media query, so explicit Light wins on a dark system and System follows later OS changes. Worker check: 259 specs passed + 1 skipped (s-4d43), build ok. Check screenshots: /tmp/theme/shots/{week,note}-sys{dark,light}-{System,Light,Dark}.png, recorded on the thread; week data was mocked. Orchestrator read week-sysdark-Light, week-syslight-Dark and note-sysdark-System and confirmed the System images match the explicit ones byte for byte for the week page. Not tested on a real phone. Seen, not changed: tag links are dim purple on dark."
 ticket = "9kcv"
 +++
 
@@ -35,3 +38,9 @@ Screenshots (mu-9kcv, commit 948eedf): /tmp/theme/shots/{page,week}-sys{dark,lig
 
 ### note · agent:theme · 2026-11-09T18:00:58.570Z
 Loaded README note screenshots (heading and body visible, all six viewed by eye): /tmp/theme/shots/note-sys{dark,light}-{System,Light,Dark}.png. Each taken after setting Theme via the Menu and reloading; data-theme after reload: dark System=dark, dark Light=light, dark Dark=dark, light System=light, light Light=light, light Dark=dark. Looks right in each. Seen, not changed: tag links (#next, #later) are a dim purple on dark (not part of this ticket). The earlier page-* images are superseded.
+
+### note · external:orchestrator · 2026-11-09T18:02:06.943Z
+integrated: 2bdf7a4 (branch bridle/theme)
+
+### note · external:orchestrator · 2026-11-09T18:02:07.591Z
+cleanup: removed agent theme, branch bridle/theme
