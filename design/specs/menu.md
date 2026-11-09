@@ -108,3 +108,45 @@ that note SHALL show a button back to Today. No other note shows either.
 
 - **WHEN** the user is on "a.md" and today's daily note is "plan/daily/26-Q4/2026-10-13 Tue.md"
 - **THEN** there is no link
+
+### Requirement: The menu holds a theme setting  {#r-21c3}
+
+The menu SHALL hold a Theme item showing the current setting (System, Light or Dark); each click SHALL
+change it to the next, in that order, wrapping. The page SHALL show the dark styles for Dark, and for
+System when the system is dark; an explicit Light SHALL win on a dark system. The choice SHALL apply at
+once, on every page, before first paint, and survive a reload (kept per browser).
+
+#### Scenario: The item cycles  {#s-fd83}
+
+*Verification*: **executable**
+
+- **WHEN** the theme is "system" and the Theme item is clicked three times
+- **THEN** the settings shown are "Theme: Light", "Theme: Dark", "Theme: System"
+
+#### Scenario: Light wins on a dark system  {#s-4bab}
+
+*Verification*: **executable**
+
+- **WHEN** the setting is "light" and the system is dark
+- **THEN** the page theme is "light"
+
+#### Scenario: System follows the system  {#s-1e39}
+
+*Verification*: **executable**
+
+- **WHEN** the setting is "system" and the system is dark
+- **THEN** the page theme is "dark"
+
+#### Scenario: Dark on a light system  {#s-6c97}
+
+*Verification*: **executable**
+
+- **WHEN** the setting is "dark" and the system is light
+- **THEN** the page theme is "dark"
+
+#### Scenario: Choosing in a browser  {#s-2524}
+
+*Verification*: **non-executable**
+
+- **WHEN** the user clicks Theme until it reads Light, then reloads, on a dark system
+- **THEN** the page is light before and after the reload, with no flash of dark

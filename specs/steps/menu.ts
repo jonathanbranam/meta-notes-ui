@@ -1,5 +1,6 @@
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
+import { nextTheme, resolveTheme, themeLabel, type Theme } from "../../client/src/theme";
 import { alertsItem, closesMenu, dayLink, logoutItem } from "../../client/src/menu-items";
 
 export function menuSteps(steps: Steps) {
@@ -59,5 +60,19 @@ export function menuSteps(steps: Steps) {
   });
   steps.then(/^there is no link$/, (w) => {
     expect(w.link).toBeNull();
+  });
+
+  steps.when(/^the theme is "([a-z]+)" and the Theme item is clicked three times$/, (w, t) => {
+    let cur = t as Theme;
+    w.labels = [0, 1, 2].map(() => themeLabel((cur = nextTheme(cur))).replace("Theme: ", ""));
+  });
+  steps.then(/^the settings shown are "Theme: Light", "Theme: Dark", "Theme: System"$/, (w) => {
+    expect(w.labels).toEqual(["Light", "Dark", "System"]);
+  });
+  steps.when(/^the setting is "([a-z]+)" and the system is (dark|light)$/, (w, t, sys) => {
+    w.page = resolveTheme(t as Theme, sys === "dark");
+  });
+  steps.then(/^the page theme is "([a-z]+)"$/, (w, t) => {
+    expect(w.page).toBe(t);
   });
 }

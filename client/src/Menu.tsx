@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { alertsItem, closesMenu, type PushState } from "./menu-items";
+import { nextTheme, setTheme, storedTheme, themeLabel } from "./theme";
 import { disablePush, enablePush, pushAvailable, syncPush } from "./push";
 
 /** The top bar's dropdown: the alerts control, then `items`; every pick closes the menu. */
@@ -8,6 +9,7 @@ export function Menu({ items }: { items: { label: string; run: () => void }[] })
   const [push, setPush] = useState<PushState>("off");
   const [pushError, setPushError] = useState("");
   const [perm, setPerm] = useState(() => (typeof Notification === "undefined" ? "unsupported" : Notification.permission));
+  const [theme, setThemeState] = useState(storedTheme);
   const box = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,6 +60,9 @@ export function Menu({ items }: { items: { label: string; run: () => void }[] })
             <button role="menuitem" disabled={!alerts.action} onClick={pick(runAlerts)}>{alerts.label}</button>
           </li>
         )}
+        <li role="none">
+          <button role="menuitem" onClick={pick(() => { const t = nextTheme(theme); setTheme(t); setThemeState(t); })}>{themeLabel(theme)}</button>
+        </li>
         {items.map((it) => (
           <li key={it.label} role="none">
             <button role="menuitem" onClick={pick(it.run)}>{it.label}</button>

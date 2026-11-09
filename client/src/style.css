@@ -1,6 +1,6 @@
 * { box-sizing: border-box; }
 body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1c1c1e; background: #fff; }
-@media (prefers-color-scheme: dark) {
+:root[data-theme="dark"] {
   body { color: #e6e6e6; background: #17181a; }
   header, .drawer, .tree-expand { background: #202225 !important; border-color: #333 !important; color: #e6e6e6 !important; }
   .quick { background: #202225 !important; }
@@ -31,7 +31,7 @@ header button { border: 1px solid #bbb; border-radius: 6px; }
 .tree button { width: 100%; }
 .file.current { font-weight: 700; }
 .folder { color: #666; }
-@media (prefers-color-scheme: dark) { .folder, .tree button { color: #e6e6e6; } }
+:root[data-theme="dark"] { .folder, .tree button { color: #e6e6e6; } }
 main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
 .note { max-width: 50rem; }
 .note table { border-collapse: collapse; }
@@ -85,7 +85,7 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
 .timeblock tr.now td { background: #fff3c4; font-weight: 600; }
 .timeblock del { opacity: .6; }
 .backlinks { margin-top: 2rem; border-top: 1px solid #ddd; font-size: .9rem; }
-@media (prefers-color-scheme: dark) {
+:root[data-theme="dark"] {
   .note a.wikilink { color: #7aa7ff; }
   .props, .chip { background: #2a2c30; }
   .chip.overdue { background: #4a2523; color: #ff8b82; }
@@ -136,7 +136,7 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .menu-items { position: absolute; right: 0; top: 100%; z-index: 10; min-width: 12rem; margin: .25rem 0 0; padding: .25rem; list-style: none; background: #fff; color: #1c1c1e; border: 1px solid #bbb; border-radius: 6px; box-shadow: 0 4px 12px #0003; }
 .menu-items button { display: block; width: 100%; padding: .6rem .75rem; border: 0 !important; }
 .menu-items button:disabled { opacity: .6; cursor: default; }
-@media (prefers-color-scheme: dark) { .menu-items { background: #202225; color: #e6e6e6; border-color: #333; } }
+:root[data-theme="dark"] { .menu-items { background: #202225; color: #e6e6e6; border-color: #333; } }
 
 .note a.tag { text-decoration: none; }
 .tagtasks, .duetasks { list-style: none; padding: 0; }
@@ -161,7 +161,7 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .lists .item.canceled { opacity: .5; }
 .lists .item .source { flex: none; min-height: 2.25rem; border: 1px solid #bbb; border-radius: 8px; background: none; font: inherit; }
 @media (max-width: 720px) { main { padding-bottom: 4.5rem; } }
-@media (prefers-color-scheme: dark) { .tabbar { background: #202225; border-color: #333; } }
+:root[data-theme="dark"] { .tabbar { background: #202225; border-color: #333; } }
 .now-current { text-align: center; padding: 1rem .5rem; border-radius: 12px; border: 1px solid #ddd; }
 .now-current.over { border-color: #dc2626; }
 .now-worked { font-size: 3rem; font-variant-numeric: tabular-nums; margin: .25rem 0; }
@@ -201,7 +201,7 @@ main:has(> .wk) { padding-top: 0; }
 .wk-label { font-weight: 700; margin-right: .3rem; }
 .wk-badge { font-size: .62rem; font-weight: 700; border: 1px solid currentColor; border-radius: 3px; padding: 0 2px; margin-right: .3rem; opacity: .75; }
 .wk-now { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid #e11; z-index: 2; pointer-events: none; }
-@media (prefers-color-scheme: dark) {
+:root[data-theme="dark"] {
   .wk-bar { background: #202225; }
   .wk-bar button { border-color: #555; color: #e6e6e6; }
   .wk-ranges button.on { background: #2f4f9e; border-color: #3d63c0; color: #f0f4ff; }
