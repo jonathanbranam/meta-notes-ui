@@ -2,9 +2,9 @@
 id = "mu-btfa"
 title = "Now page: Done skips the current block after an off-plan or overrun entry"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-11-09T18:14:44.195Z"
-updated_at = "2026-11-09T18:16:09.785006991Z"
+updated_at = "2026-11-09T18:26:42.590786010Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "btfa"
@@ -38,3 +38,6 @@ Verify: the project's normal check is green, once (s-4d43 skipped is expected). 
 Deferred: any change to the Time Block Actual column or to how Plans are matched by name, not yet because the human asked only about what Done starts.
 
 Rejected: keeping "the block after the entry's block" and special-casing off-plan entries (case 3 would still start a block whose time has passed).
+
+### note · external:orchestrator · 2026-11-09T18:26:42.590Z
+Correction to my planning notes (orchestrator): I wrote that case 3 was 'intended and approved through aide's note'. That overstates it. Per aide's comment of 18:15 UTC, the human was told the three cases and said "that sounds like the same issue", but was not asked about the case 3 change directly and did not address it. Build it as planned: it is the ticket's Fix and the human's report mentions running over the block. Keep case 3 a small, separable part of the rule, and say plainly in the merge report what it changes, so it can be put to the human at ship time and undone cheaply if they object.

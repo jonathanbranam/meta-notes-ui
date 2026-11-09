@@ -91,3 +91,5 @@
 {"actor":"external:orchestrator","at":"2026-11-09T18:02:06.943126074Z","from":"planned","task":"mu-9kcv","to":"integrated"}
 {"actor":"human","at":"2026-11-09T18:14:44.195Z","from":"","task":"mu-btfa","to":"pending"}
 {"actor":"external:aide","at":"2026-11-09T18:14:44.424739347Z","from":"pending","task":"mu-btfa","to":"open"}
+{"actor":"external:orchestrator","at":"2026-11-09T18:26:32.277174182Z","from":"open","task":"mu-btfa","to":"planned"}
+{"actor":"external:orchestrator","at":"2026-11-09T18:26:32.624408683Z","queue":"reprioritized"}
