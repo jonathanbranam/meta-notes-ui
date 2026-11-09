@@ -4,7 +4,7 @@ title = "Menu option to override light/dark: system, light, dark"
 kind = "feature"
 state = "planned"
 created_at = "2026-11-09T17:22:20.984Z"
-updated_at = "2026-11-09T17:43:01.607691564Z"
+updated_at = "2026-11-09T17:59:49.353666266Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9kcv"
@@ -29,3 +29,6 @@ Deferred: syncing the choice across browsers, not yet because the human asked on
 
 ### note · external:orchestrator · 2026-11-09T17:43:01.607Z
 Orchestrator: required before merge, per aide's note (m-0262): the Check's screenshots show the rendered week grid (not 'Loading...'), with their paths recorded on this thread. mu-2fmn, which runs first, fixes the wait in scripts/shots.mjs.
+
+### note · agent:theme · 2026-11-09T17:59:49.353Z
+Screenshots (mu-9kcv, commit 948eedf): /tmp/theme/shots/{page,week}-sys{dark,light}-{System,Light,Dark}.png, 1400px wide. Week grid rendered with mock data (boxes shown). Looked at: week sysdark Light/System/Dark, page sysdark Dark. Reload kept the choice in all six cases (data-theme and body colour read after reload); explicit Light on dark system gave a light page. NOT checked: the 'page' images show 'Loading...' under the open Menu (taken before the note loaded; a retake was blocked by the sandbox), so a normal note page is unseen in all settings; I did not view every image; no real phone.
