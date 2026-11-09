@@ -2,11 +2,14 @@
 id = "mu-bgb6"
 title = "Build fails on macOS: client files differ only by case (timelog.ts / TimeLog.tsx and two more)"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-09T14:48:28.434Z"
-updated_at = "2026-11-09T15:12:38.615345068Z"
+updated_at = "2026-11-09T15:14:06.726395064Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/casefix"
+commit = "c62c74a"
+summary = "Renamed the run-together source files in client/src and server to kebab-case (due-tasks, last-page, push-routes, tag-tasks, tag-view, tasks-page, task-status, time-log, tree-pane, menu-items, with tests and imports); npm run check now runs scripts/check-case-collisions.mjs; new rule .bridle/rules/file-naming.md. v0.29.4, merge c62c74a. Orchestrator: read the rename list, no two tracked paths collide by case, no import of an old name, and a fresh clone of c62c74a passes npm ci and npm run build on Linux with Node 24. NOT built on macOS: no Mac here. Suite not re-run by the orchestrator (manager's report: typecheck clean, unit 100 tests, specs 248 passed + 1 skipped). specs/steps/*.ts keep their run-together names (outside the agreed directories; they do not collide)."
 ticket = "bgb6"
 +++
 
@@ -40,3 +43,9 @@ Relayed to the bridle aide as o-0036, for a bridle pack rule. The project-local 
 
 ### note · agent:casefix · 2026-11-09T15:12:38.615Z
 Done on bridle/casefix at 0598bf6 (v0.29.4). Renamed with git mv: timelog, tagview, menu (to menu-items), lastpage, taskspage, taskstatus, treepane (client/src); duetasks, pushroutes, tagtasks (server). Imports and docs/design/web-push.md updated. No other run-together or capitalised .ts names in client/src, server, shared. Added scripts/check-case-collisions.mjs (tested in scripts/case-collisions.test.ts), wired first into npm run check; rule .bridle/rules/file-naming.md. Left alone: specs/steps/*.ts names (lastpage, treepane, menu, tagview, taskspage, weekpage), outside the listed scope; only their imports changed. CSS class names and /api/timelog paths unchanged.
+
+### note · external:orchestrator · 2026-11-09T15:14:06.721Z
+integrated: c62c74a (branch bridle/casefix)
+
+### note · external:orchestrator · 2026-11-09T15:14:06.726Z
+cleanup: removed nothing

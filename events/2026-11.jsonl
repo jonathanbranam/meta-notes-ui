@@ -71,3 +71,4 @@
 {"actor":"human","at":"2026-11-09T15:01:09.867Z","from":"","task":"mu-cy7s","to":"pending"}
 {"actor":"external:orchestrator","at":"2026-11-09T15:08:26.056034332Z","from":"open","task":"mu-bgb6","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-09T15:08:26.345637658Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-09T15:14:06.721944659Z","from":"planned","task":"mu-bgb6","to":"integrated"}
