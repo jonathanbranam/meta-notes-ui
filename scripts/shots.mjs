@@ -1,5 +1,5 @@
 // Screenshot the UI against a temp copy of examples/notes, for agents to look at.
-// Usage: npm run shots [-- --out DIR] [--no-build] [route ...]   (routes are hash routes, default "#!today")
+// Usage: npm run shots [-- --out DIR] [--no-build] [--dark] [route ...]   (routes are hash routes, default "#!today")
 // Dev tooling only: needs the playwright devDependency and the system Chrome (no browser download).
 import { execFileSync, spawn } from "node:child_process";
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
@@ -11,7 +11,7 @@ import { chromium } from "playwright";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { values, positionals } = parseArgs({
-  options: { out: { type: "string", default: ".shots" }, "no-build": { type: "boolean" } },
+  options: { out: { type: "string", default: ".shots" }, "no-build": { type: "boolean" }, dark: { type: "boolean" } },
   allowPositionals: true,
 });
 const routes = positionals.length ? positionals : ["#!today"];
@@ -51,7 +51,7 @@ try {
   browser = await chromium.launch({ channel: "chrome" });
   const sizes = { desktop: { width: 1400, height: 900 }, mobile: { width: 400, height: 800 } };
   for (const [size, viewport] of Object.entries(sizes)) {
-    const ctx = await browser.newContext({ viewport });
+    const ctx = await browser.newContext({ viewport, colorScheme: values.dark ? "dark" : "light" });
     const page = await ctx.newPage();
     await page.goto(`${url}/?token=${token}`);
     for (const route of routes) {
@@ -60,7 +60,7 @@ try {
       await page.waitForSelector("main");
       await page.waitForTimeout(500);
       const shot = async (tree) => {
-        const file = path.join(out, `${name}-${size}-tree-${tree}.png`);
+        const file = path.join(out, `${name}-${size}${values.dark ? "-dark" : ""}-tree-${tree}.png`);
         await page.screenshot({ path: file });
         console.log(file);
       };
