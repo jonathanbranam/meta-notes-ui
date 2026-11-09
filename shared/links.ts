@@ -29,6 +29,20 @@ export function parseHash(hash: string): { path: string; heading?: string } {
   return i === -1 ? { path: hash } : { path: hash.slice(0, i), heading: hash.slice(i + 1) || undefined };
 }
 
+/**
+ * The path decoded once more, for a note that failed to open because its address arrived
+ * double-encoded (`%2520`). Null when decoding changes nothing or the escapes are malformed
+ * (a stray `%`). Only one extra decode: the first decode stays authoritative.
+ */
+export function decodeAgain(path: string): string | null {
+  try {
+    const once = decodeURIComponent(path);
+    return once === path ? null : once;
+  } catch {
+    return null;
+  }
+}
+
 /** Join and normalise; null when the result leaves the notes root. */
 function normalise(parts: string[]): string | null {
   const out: string[] = [];

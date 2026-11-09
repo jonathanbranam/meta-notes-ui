@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractLinks, parseWikiLink } from "./links";
+import { decodeAgain, extractLinks, parseWikiLink } from "./links";
 
 // Resolving links is specified in design/specs/rendering.md.
 describe("links in text", () => {
@@ -12,5 +12,20 @@ describe("links in text", () => {
       "area/health",
       "project/kitchen",
     ]);
+  });
+});
+
+describe("a double-encoded address", () => {
+  it("decodes the path once more", () => {
+    expect(decodeAgain("area/family/gifts/Christmas%202026.md")).toBe("area/family/gifts/Christmas 2026.md");
+  });
+  it("gives no retry for a stray percent", () => {
+    expect(decodeAgain("area/Sale 100%.md")).toBeNull();
+  });
+  it("gives no retry when there is nothing to decode", () => {
+    expect(decodeAgain("area/health.md")).toBeNull();
+  });
+  it("decodes once, not until stable", () => {
+    expect(decodeAgain("a%2520b.md")).toBe("a%20b.md");
   });
 });

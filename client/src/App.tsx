@@ -1,7 +1,7 @@
 import { createContext, type CSSProperties, type PointerEvent as ReactPointerEvent, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { headingSlug, parseHash } from "../../shared/links";
+import { decodeAgain, headingSlug, parseHash } from "../../shared/links";
 import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { clampTreeWidth, readTreePane, writeTreePane } from "./treepane";
@@ -372,14 +372,29 @@ export function App() {
   const loadNote = useCallback(() => {
     const p = pathRef.current;
     if (!p || p === TODAY_PATH || p === NOW_TAB_PATH || p.startsWith(WEEK_PATH) || tabOf(p) === "lists" || !isNote(p)) return setNote(null);
+    const fail = () => {
+      setNote(null);
+      if (pathRef.current === p) setError(`Cannot open ${p}`);
+    };
     getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(p)}`)
       .then((n) => {
         setNote(n);
         setError("");
       })
       .catch(() => {
-        setNote(null);
-        if (pathRef.current === p) setError(`Cannot open ${p}`);
+        // An address that arrived double-encoded: try the path decoded once more (design/specs/rendering.md).
+        const again = decodeAgain(p);
+        if (again === null) return fail();
+        getJson<NoteResponse>(`/api/note?path=${encodeURIComponent(again)}`).then((n) => {
+          if (pathRef.current !== p) return;
+          // Correct the address in place: the decoded path, and the heading part kept as it was typed.
+          const raw = location.hash.slice(1);
+          const i = raw.indexOf("#");
+          history.replaceState(null, "", `#${encodeURIComponent(again).replace(/%2F/g, "/")}${i === -1 ? "" : raw.slice(i)}`);
+          setTarget((t) => (t.path === p ? { ...t, path: again } : t));
+          setNote(n);
+          setError("");
+        }, fail);
       });
   }, []);
 
@@ -427,10 +442,12 @@ export function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
-  // Scrolls to a `[[path#heading]]` link's heading once the note is shown.
+  // Scrolls to a `[[path#heading]]` link's heading once the note is shown. Both sides go through the slug,
+  // so an address typed as "#Zeal" finds the "## Zeal" heading as a wiki link's "#zeal" does.
   useEffect(() => {
     if (!target.heading || !note || note.path !== path) return;
-    const h = [...document.querySelectorAll<HTMLElement>("article.note :is(h1,h2,h3,h4,h5,h6)")].find((e) => headingSlug(e.textContent ?? "") === target.heading);
+    const want = headingSlug(target.heading);
+    const h = [...document.querySelectorAll<HTMLElement>("article.note :is(h1,h2,h3,h4,h5,h6)")].find((e) => headingSlug(e.textContent ?? "") === want);
     h?.scrollIntoView();
   }, [target, note, path]);
 

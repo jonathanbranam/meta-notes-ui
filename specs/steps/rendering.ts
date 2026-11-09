@@ -8,7 +8,7 @@ import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
 import { metaNotes, parseFrontmatter, propText, valueSegments } from "../../client/src/markdown.js";
 import { stripFrontmatter } from "../../client/src/notes.js";
-import { parseHash } from "../../shared/links.js";
+import { decodeAgain, parseHash } from "../../shared/links.js";
 import { EXAMPLE_ROOT } from "../../server/example.js";
 import { createApp } from "../../server/app.js";
 import { makeFixtureRoot } from "../../server/fixture.js";
@@ -79,6 +79,14 @@ export function renderingSteps(steps: Steps) {
   steps.when(/^the address is "([^"]*)"$/, (w, hash) => void (w.hash = hash));
   steps.then(/^it opens the note "([^"]+)" at the heading "([^"]+)"$/, (w, p, heading) => {
     expect(parseHash(w.hash)).toEqual({ path: p, heading });
+  });
+
+  steps.when(/^the note "([^"]+)" fails to open$/, (w, p) => void (w.retry = decodeAgain(p)));
+  steps.then(/^the second try is for "([^"]+)"$/, (w, p) => {
+    expect(w.retry).toBe(p);
+  });
+  steps.then(/^there is no second try$/, (w) => {
+    expect(w.retry).toBeNull();
   });
 
   steps.then(/^its properties are "(.*)"$/, (w, props) => {

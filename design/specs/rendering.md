@@ -81,7 +81,46 @@ anchor. Links inside code stay text.
 *Verification*: **non-executable**
 
 - **WHEN** the browser opens a note from a link with a heading
-- **THEN** the page scrolls to the heading whose text matches, once the note has loaded
+- **THEN** the page scrolls to the heading whose text matches, once the note has loaded; the heading in the address matches as a wiki link's heading does, so "#Zeal" and "#zeal" both find "## Zeal"
+
+### Requirement: A double-encoded address still opens its note  {#r-150e}
+
+When a note fails to open and its path still holds percent escapes, the client SHALL decode the path once more and try that note; if it opens, the page SHALL show it at the heading, and the address SHALL be corrected to the decoded path. Only the first decode is authoritative: a note that opens on the first try SHALL open as before, with no second decode. If the second try fails, or the path cannot be decoded (a stray `%`), the client SHALL give no second try and SHALL show "Cannot open" for the path as first opened.
+
+#### Scenario: A double-encoded path is decoded once more  {#s-c50c}
+
+*Verification*: **executable**
+
+- **WHEN** the note "area/family/gifts/Christmas%202026.md" fails to open
+- **THEN** the second try is for "area/family/gifts/Christmas 2026.md"
+
+#### Scenario: A stray percent gives no second try  {#s-360f}
+
+*Verification*: **executable**
+
+- **WHEN** the note "area/Sale 100%.md" fails to open
+- **THEN** there is no second try
+
+#### Scenario: A double-encoded link opens at its heading  {#s-5107}
+
+*Verification*: **non-executable**
+
+- **WHEN** the address is "area/family/gifts/Christmas%202026.md#Zeal" and that note exists as "area/family/gifts/Christmas 2026.md"
+- **THEN** the page shows that note scrolled to the "Zeal" heading, and the address reads "area/family/gifts/Christmas%202026.md#Zeal" with the decoded path
+
+#### Scenario: A note that opens first time is unchanged  {#s-c8f0}
+
+*Verification*: **non-executable**
+
+- **WHEN** the address names a note that opens on the first try, including one whose name holds "%20"
+- **THEN** the page shows that note and the address is not changed
+
+#### Scenario: A failed second try shows the first error  {#s-f37f}
+
+*Verification*: **non-executable**
+
+- **WHEN** the address names a note that fails both to open and after the second decode
+- **THEN** the page shows "Cannot open" with the path as first opened, and the address is not changed
 
 ### Requirement: Frontmatter is shown as properties  {#r-ff52}
 
