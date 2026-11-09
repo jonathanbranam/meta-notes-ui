@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "planned"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:52:35.240997253Z"
+updated_at = "2026-11-09T17:55:21.049185Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -60,3 +60,6 @@ Orchestrator: required before merge, per aide's note (m-0262): dark and light sc
 Screenshots (desktop 1400x900, throwaway server port 0, copy of examples/notes): /tmp/mu2fmn-shots/ -
 week-open-{light,dark}.png (opens at 7 AM, bar + date headers + step buttons with dates), week-scrolled-{light,dark}.png (scrolled 500px, bar and headers still in view), now-, lists-, today-, note-{light,dark}.png (note keeps sidebar and header row; others have neither). I looked at each week/now/lists/today image and the dark note; light note not opened.
 Not checked: the example week has no boxes, so "opens above the earliest box" and the box styles are unit-tested only; Menu > Open... and Cmd-K not clicked in a browser (they do not depend on the sidebar); phone layout not screenshotted. Seen, not changed: the today day-name link in the week header is default blue, hard to read in dark. No CHANGELOG file exists in the repo, so none updated. Commit 0339edc.
+
+### note · agent:dedicated · 2026-11-09T17:55:21.049Z
+Re-shot with a mixed week (mocked /api/week: log, plan, fill-in, cal, error, future error, holiday, due list): /tmp/mu2fmn-shots/week-open-boxes-{dark,light}.png and week-scrolled-boxes-{dark,light}.png. Looked at dark open and light scrolled: opens at 8:30 AM above the 9 AM box, bar and headers stay when scrolled, today link readable in dark (.wk-head a colour, 5910cbd). The Due list items are plain text, not links. Not looked at: dark scrolled and light open (same code, same script).
