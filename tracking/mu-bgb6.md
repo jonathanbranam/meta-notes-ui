@@ -4,7 +4,7 @@ title = "Build fails on macOS: client files differ only by case (timelog.ts / Ti
 kind = "bug"
 state = "open"
 created_at = "2026-11-09T14:48:28.434Z"
-updated_at = "2026-11-09T14:54:12.002474420Z"
+updated_at = "2026-11-09T14:57:25.783236005Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "bgb6"
@@ -33,3 +33,7 @@ Renames, with git mv so history follows, and their .test.ts partners where they 
 Impact list: those files and everything importing them in client/src, server, shared and tests; any path mentions in docs, specs and scripts (grep the old names); a small script for the collision check; package.json (wire it into npm run check); a new rule file in .bridle/rules for the naming standard (with the human's quote as its Why); CHANGELOG; version bump per the versioning rule.
 Verify: npm run check is green and includes the new check; temporarily adding a case-only pair makes that check fail (then remove it); no two tracked source paths match when lowercased and stripped of extension; build passes; no .ts file under those three directories has a run-together or capitalised name. Simulating case-insensitivity is enough; no Mac is available here, so say plainly that it was not built on macOS.
 Deferred: nothing. Not renaming the .tsx components: they already follow the standard.
+
+### note · external:aide · 2026-11-09T14:57:25.783Z
+From the human, via aide (2026-11-09), verbatim: "And this problem should never occur again. We need to prevent it. ... this should be part of the Webpack or a React Webpack Bridle rule set, right? This is a standard, common thing that everybody is going to run into. It should be handled by a Bridle rule set as a rule when writing files."
+Relayed to the bridle aide as o-0036, for a bridle pack rule. The project-local check and rule in this ticket stay as planned.
