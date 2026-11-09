@@ -9,6 +9,7 @@ changes: []
 specs: []
 blocked_by: []
 related: []
+resolved: 2026-11-09T19:22:23Z
 ---
 
 ## The ask
