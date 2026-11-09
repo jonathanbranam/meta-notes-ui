@@ -2,11 +2,13 @@
 id = "mu-2fmn"
 title = "Week page: its own layout, navigation stays in view, opens at start of day, dates on the buttons"
 kind = "feature"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:55:21.049185Z"
+updated_at = "2026-11-09T17:56:25.323151263Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+commit = "d995351"
+summary = "Dedicated-view layout (isDedicated in client/src/tabs.ts adds a class in App.tsx) for Today, Now, Week and Lists; sticky week navigation, week opens at start of day, dates on the step buttons, shots.mjs waits for the grid. v0.30.0, merge d995351. Screenshots recorded on this thread: /tmp/mu2fmn-shots/. Orchestrator viewed week-scrolled-boxes-dark and note-light and read the App and tabs diff; Cmd-K is an App-level handler and the Menu is kept, so both are unaffected, by reading. Week data in the box shots was mocked. Suite not re-run by the orchestrator (manager's report: vitest 102, specs 255 passed + 1 skipped, build ok)."
 ticket = "2fmn"
 +++
 
@@ -63,3 +65,6 @@ Not checked: the example week has no boxes, so "opens above the earliest box" an
 
 ### note · agent:dedicated · 2026-11-09T17:55:21.049Z
 Re-shot with a mixed week (mocked /api/week: log, plan, fill-in, cal, error, future error, holiday, due list): /tmp/mu2fmn-shots/week-open-boxes-{dark,light}.png and week-scrolled-boxes-{dark,light}.png. Looked at dark open and light scrolled: opens at 8:30 AM above the 9 AM box, bar and headers stay when scrolled, today link readable in dark (.wk-head a colour, 5910cbd). The Due list items are plain text, not links. Not looked at: dark scrolled and light open (same code, same script).
+
+### note · external:orchestrator · 2026-11-09T17:56:25.323Z
+integrated: d995351
