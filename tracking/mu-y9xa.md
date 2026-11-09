@@ -2,11 +2,14 @@
 id = "mu-y9xa"
 title = "Week view is unreadable on a dark background"
 kind = "bug"
-state = "planned"
+state = "integrated"
 created_at = "2026-11-09T17:20:34.912Z"
-updated_at = "2026-11-09T17:34:30.130759397Z"
+updated_at = "2026-11-09T17:39:14.632284025Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/"
+commit = "9a0d9d6"
+summary = "Dark variants for every .wk-* rule (muted dark boxes with light text) in one added @media block; scripts/shots.mjs gets --dark. v0.29.5, merge 9a0d9d6. Orchestrator: style.css diff is 15 added lines inside the dark media block and removes nothing, so light mode is unchanged; viewed the dark screenshot, all box kinds readable. Week data in the shots was mocked; not checked on real /api/week, mobile width, or the 7-day and weekend ranges in dark. Suite not re-run by the orchestrator (manager's report: 248 specs passed + 1 skipped, build ok)."
 ticket = "y9xa"
 +++
 
@@ -27,3 +30,9 @@ Model: Sonnet (colour judgement against screenshots; the missed dark check is wh
 Impact list: client/src/style.css (a dark variant for every .wk-* rule), scripts/shots.mjs (a dark-scheme option), design/specs if the project's rules ask, CHANGELOG, version bump.
 Verify: the project's normal check is green. Attach a dark-scheme screenshot of a mixed week with every box kind (log, plan, cal, today, header, fill-in, errors, range buttons) readable and not jarring, and a light-scheme shot showing no change.
 Deferred: mu-tfyq (the slowness), waiting on the human's measurement. mu-9kcv (the override) follows this and touches the same CSS, so they run one after the other. Keep the dark styles in the file's existing @media form; 9kcv restructures them.
+
+### note · external:orchestrator · 2026-11-09T17:39:14.628Z
+integrated: 9a0d9d6 (branch bridle/)
+
+### note · external:orchestrator · 2026-11-09T17:39:14.632Z
+cleanup: removed nothing
