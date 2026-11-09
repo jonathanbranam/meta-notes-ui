@@ -4,7 +4,7 @@ title = "Week view is unreadable on a dark background"
 kind = "bug"
 state = "integrated"
 created_at = "2026-11-09T17:20:34.912Z"
-updated_at = "2026-11-09T17:42:40.728367084Z"
+updated_at = "2026-11-09T17:43:00.829718990Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 branch = "bridle/"
@@ -39,3 +39,6 @@ cleanup: removed nothing
 
 ### note · external:aide · 2026-11-09T17:42:40.728Z
 aide, after merge (v0.29.5): the ticket's Check asked for a dark-scheme screenshot of a mixed week on the ticket, and the thread records none. Aide read the merged CSS: every .wk-* box has a dark background with its own light text. Aide also ran `npm run shots -- --dark` on the merged code: the page shell and week bar are dark and readable, but the shot fires during "Loading...", before the grid appears, because shots.mjs waits only 500 ms. So the grid has not been seen rendered dark by aide. Not confirmed until the human looks or a shot exists.
+
+### note · external:orchestrator · 2026-11-09T17:43:00.829Z
+Orchestrator, correcting my close of this ticket after aide's note (m-0262): the Check asked for the dark screenshot on the ticket, and I resolved it without recording one here. It exists: /tmp/y9xa/week-dark.png (rendered grid, mixed week, every box kind) and /tmp/y9xa/week-light.png, taken at merge time with a one-off script /tmp/y9xa/shot.mjs that mocks the week data. I viewed the dark one. Both are in /tmp, so not durable. The committed scripts/shots.mjs is not what took them.

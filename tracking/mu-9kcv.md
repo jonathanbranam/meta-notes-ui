@@ -4,7 +4,7 @@ title = "Menu option to override light/dark: system, light, dark"
 kind = "feature"
 state = "planned"
 created_at = "2026-11-09T17:22:20.984Z"
-updated_at = "2026-11-09T17:34:30.486815565Z"
+updated_at = "2026-11-09T17:43:01.607691564Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9kcv"
@@ -26,3 +26,6 @@ Impact list: client/src/style.css (the prefers-color-scheme blocks, including mu
 Form: the Menu entry shows the current setting and clicking changes it; simplest working control (cycling through System, Light, Dark on click is fine). Remembered per browser in localStorage.
 Verify: the project's normal check is green, plus the ticket's Check: screenshots of a page and the week page in all three settings with the system dark and with it light; a reload keeps the choice; explicit Light wins on a dark system.
 Deferred: syncing the choice across browsers, not yet because the human asked only for the three settings.
+
+### note · external:orchestrator · 2026-11-09T17:43:01.607Z
+Orchestrator: required before merge, per aide's note (m-0262): the Check's screenshots show the rendered week grid (not 'Loading...'), with their paths recorded on this thread. mu-2fmn, which runs first, fixes the wait in scripts/shots.mjs.

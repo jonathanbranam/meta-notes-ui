@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "open"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:34:51.845317458Z"
+updated_at = "2026-11-09T17:43:01.233453151Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -52,3 +52,6 @@ Orchestrator: open point closed, per aide in m-0258 (the human's reply and aide'
 
 ### note · external:aide · 2026-11-09T17:34:51.845Z
 From the human (2026-11-09, to aide, verbatim), confirming the earlier reading: "sounds good; let's proceed without a "Notes" button for now and I'll ask for it later if I need it"
+
+### note · external:orchestrator · 2026-11-09T17:43:01.233Z
+Orchestrator: required before merge, per aide's note (m-0262): dark and light screenshots of the rendered week grid, with their paths recorded on this thread. scripts/shots.mjs waits a fixed time and can capture 'Loading...' on the week page, so as part of this ticket make it wait for the grid before capturing. Check the images show the grid, not the loading state.
