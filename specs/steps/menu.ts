@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
-import { alertsItem, closesMenu, dayLink, logoutItem } from "../../client/src/menu";
+import { alertsItem, closesMenu, dayLink, logoutItem } from "../../client/src/menu-items";
 
 export function menuSteps(steps: Steps) {
   steps.when(/^the server has push on, notifications are allowed, and this device is not subscribed$/, (w) => {

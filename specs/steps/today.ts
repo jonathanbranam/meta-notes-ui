@@ -10,7 +10,7 @@ import { createApp } from "../../server/app.js";
 import { EXAMPLE_ROOT, makeExampleRoot } from "../../server/example.js";
 import { inlineSegments } from "../../client/src/markdown";
 import { buildAlerts, currentRow, isPlanned, parseTimeBlock } from "../../shared/today.js";
-import { taskStatusBody } from "../../client/src/taskstatus";
+import { taskStatusBody } from "../../client/src/task-status";
 
 const run = promisify(execFile);
 const TOKEN = "today-token";

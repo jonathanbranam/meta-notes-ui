@@ -3,7 +3,7 @@ import type { Steps } from "vitest-bridle";
 import type { TagTasksResponse } from "../../shared/types.js";
 import { createApp } from "../../server/app.js";
 import { makeExampleRoot } from "../../server/example.js";
-import { tagFromPath } from "../../client/src/tagview";
+import { tagFromPath } from "../../client/src/tag-view";
 
 const TOKEN = "tag-token";
 type World = Record<string, any>;

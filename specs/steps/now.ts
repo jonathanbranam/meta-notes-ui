@@ -7,7 +7,7 @@ import { makeExampleRoot } from "../../server/example.js";
 import type { TodayResponse } from "../../shared/types.js";
 import { parseTimeBlock } from "../../shared/today.js";
 import { blocksOf, closedEntry, doneMessage, hm, nowState, shortTime, timers } from "../../client/src/now";
-import { appendBody, parseTimeLog } from "../../client/src/timelog";
+import { appendBody, parseTimeLog } from "../../client/src/time-log";
 
 const TOKEN = "now-token";
 type World = Record<string, any>;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { tagFromPath, taskLabel } from "./tagview";
+import { tagFromPath, taskLabel } from "./tag-view";
 
 describe("tagFromPath", () => {
   it("reads a tag view address", () => {

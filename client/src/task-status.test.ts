@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { taskStatusBody } from "./taskstatus";
+import { taskStatusBody } from "./task-status";
 
 describe("taskStatusBody", () => {
   it("sends the note, line and text as listed, with the status", () => {

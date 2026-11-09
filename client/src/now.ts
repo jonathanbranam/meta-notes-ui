@@ -1,5 +1,5 @@
 import { isPlanned, parseClock, parseHm, parseTimeBlock, type BlockRow } from "../../shared/today";
-import { dropEmptyEnd, parseTimeLog, type LogEntry } from "./timelog";
+import { dropEmptyEnd, parseTimeLog, type LogEntry } from "./time-log";
 
 /** Consecutive Time Block rows with the same Plan: what the human does from `start` to `end` (minutes since midnight). */
 export interface Block {

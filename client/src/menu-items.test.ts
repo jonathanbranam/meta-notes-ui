@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { alertsItem, closesMenu, logoutItem } from "./menu";
+import { alertsItem, closesMenu, logoutItem } from "./menu-items";
 
 describe("alertsItem", () => {
   it("is absent when push is off on the server", () => {
