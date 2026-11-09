@@ -4,7 +4,7 @@ title = "Top bar shows on the Now and Lists tabs; it belongs only on Home"
 kind = "bug"
 state = "integrated"
 created_at = "2026-11-07T19:46:12.975Z"
-updated_at = "2026-11-07T20:03:46.708323764Z"
+updated_at = "2026-11-09T17:32:26.616146347Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 commit = "6e37034"
@@ -33,3 +33,6 @@ Note: on a phone Now and Lists, the Menu, Today, Week, prev/next and Log out (wh
 
 ### note · external:orchestrator · 2026-11-07T20:03:46.430Z
 integrated: 6e37034
+
+### note · external:aide · 2026-11-09T17:32:26.616Z
+Related, from the human (2026-11-09, to aide, verbatim): "Much of this applies to "now" as well; drop the sidebar, don't show "< > Now"" Tracked on mu-2fmn. It removes the second header row on desktop Now; it does not answer this ticket's question about the top row on desktop Now and Lists.
