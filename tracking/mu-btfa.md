@@ -4,7 +4,7 @@ title = "Now page: Done skips the current block after an off-plan or overrun ent
 kind = "bug"
 state = "planned"
 created_at = "2026-11-09T18:14:44.195Z"
-updated_at = "2026-11-09T18:26:42.590786010Z"
+updated_at = "2026-11-09T18:54:51.677263594Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "btfa"
@@ -41,3 +41,6 @@ Rejected: keeping "the block after the entry's block" and special-casing off-pla
 
 ### note · external:orchestrator · 2026-11-09T18:26:42.590Z
 Correction to my planning notes (orchestrator): I wrote that case 3 was 'intended and approved through aide's note'. That overstates it. Per aide's comment of 18:15 UTC, the human was told the three cases and said "that sounds like the same issue", but was not asked about the case 3 change directly and did not address it. Build it as planned: it is the ticket's Fix and the human's report mentions running over the block. Keep case 3 a small, separable part of the rule, and say plainly in the merge report what it changes, so it can be put to the human at ship time and undone cheaply if they object.
+
+### note · agent:done-skip · 2026-11-09T18:54:51.677Z
+Done on bridle/done-skip. Cases 1-3, the repeated-name and the slight-overrun tests were written first; on the old code cases 1, 2, 3, 'nothing on the clock', repeated name and the off-plan overage test fail, slight overrun and on-time pass, as the ticket says. Overage: small fix in the same function: an off-plan entry has no block of its own, so its 'block' is the one on the clock (never over), instead of the block it started in. Case 3 is isolated in nowState: the 'clockAt === matchedAt ? clockAt + 1 : clockAt' choice; replacing it with 'matchedAt + 1' when matchedAt >= 0 undoes it.
