@@ -59,3 +59,4 @@
 {"actor":"external:orchestrator","at":"2026-11-08T23:57:39.723122794Z","from":"pending","task":"mu-mq38","to":"open"}
 {"actor":"external:orchestrator","at":"2026-11-09T00:08:14.938506557Z","from":"open","task":"mu-mq38","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-09T00:08:15.003269055Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-09T00:24:01.864379484Z","from":"planned","task":"mu-mq38","to":"integrated"}
