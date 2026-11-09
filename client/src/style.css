@@ -207,6 +207,7 @@ main:has(> .wk) { padding-top: 0; }
   .wk-ranges button.on { background: #2f4f9e; border-color: #3d63c0; color: #f0f4ff; }
   .wk-head { background: #202225; border-bottom-color: #333; color: #e6e6e6; }
   .wk-head.wk-today { background: #1f2c47; }
+  .wk-head a { color: #8ab4ff; }
   .wk-col { border-left-color: #333;
     background: repeating-linear-gradient(to bottom, #2a2c30 0, #2a2c30 1px, transparent 1px, transparent calc(var(--wk-row) * 4)); }
   .wk-log { background: #243552; border-color: #36518a; color: #dbe6fa; }
