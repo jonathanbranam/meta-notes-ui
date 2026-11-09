@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "open"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:32:44.532775167Z"
+updated_at = "2026-11-09T17:32:53.694264232Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -32,3 +32,6 @@ So the design is a "dedicated view" layout, distinct from the notes viewer's she
 
 ### note · external:orchestrator · 2026-11-09T17:32:44.532Z
 Orchestrator: plan addition after the human's word relayed by aide in m-0254 (quoted above on this thread): the desktop Now page also loses the sidebar and the second header row. Impact list adds the Now page's component if App.tsx alone does not cover it. Add a Now page screenshot to the Check. Lists unchanged.
+
+### note · external:orchestrator · 2026-11-09T17:32:53.694Z
+Orchestrator: plan addition after the human's word relayed by aide in m-0255: 'these are dedicated views, not the general notes viewer page'. Build one dedicated-view layout that a page opts into (no file sidebar, no second header row; the top row stays), and opt Week and Now into it. One flag or wrapper in App.tsx is enough; only Week and Now are confirmed, so no other page changes. Week-specific behaviour (start-of-day scroll, sticky navigation, button dates) stays in the week view, not in the shared layout.
