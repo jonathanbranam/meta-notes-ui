@@ -11,7 +11,7 @@ import { TimeLogPanel } from "./TimeLog";
 import { EditableCell, rowCells } from "./TimeCell";
 import { dailyPath, neighbours } from "./neighbours";
 import { Menu } from "./Menu";
-import { dayLink } from "./menu";
+import { dayLink, logoutItem } from "./menu";
 import { TagView } from "./TagView";
 import { TasksView } from "./TasksView";
 import { tagFromPath } from "./tagview";
@@ -28,6 +28,14 @@ import { embedImages, fileUrl, flattenFiles, frontmatterLines, isImage, isNote, 
 import { readLastPage, startHash, writeLastPage } from "./lastpage";
 
 const pad = (n: number) => String(n).padStart(2, "0");
+/** Submits a form as a navigation (a Menu item's run); the server answers with a redirect. */
+function submitForm(action: string, method: string) {
+  const form = document.createElement("form");
+  form.method = method.toLowerCase();
+  form.action = action;
+  document.body.append(form);
+  form.submit();
+}
 function clock(d: Date) {
   return { today: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`, nowMinutes: d.getHours() * 60 + d.getMinutes() };
 }
@@ -581,6 +589,7 @@ export function App() {
     () => (current && (path === TODAY_PATH || isNote(path)) ? neighbours(current, filePaths) : { prev: null, next: null }),
     [current, path, filePaths],
   );
+  const out = logoutItem(loggedIn);
   const link = dayLink(path === TODAY_PATH, path, todayState.data?.daily?.path ?? null);
   const openToday = () => open(TODAY_PATH);
   const openDaily = () =>
@@ -608,11 +617,6 @@ export function App() {
         {!mobile && <button onClick={() => open(weekPath(parseWeekPath(WEEK_PATH, clock(now).today)))}>Week</button>}
         {canMessage && !messageOnPage && <button onClick={() => setComposing(true)}>Message</button>}
         {sentNote && !messageOnPage && <span className="hint">Message sent</span>}
-        {loggedIn && (
-          <form method="post" action="/logout">
-            <button type="submit">Log out</button>
-          </form>
-        )}
         <Menu
           items={[
             { label: "Open…", run: () => setQuick(true) },
@@ -620,6 +624,7 @@ export function App() {
             { label: "Reload", run: () => location.reload() },
             { label: "Daily", run: openDaily },
             { label: "Tasks", run: () => open(TASKS_TAB_PATH) },
+            ...(out ? [{ label: out.label, run: () => submitForm(out.action, out.method) }] : []),
           ]}
         />
         <div className="titlebar">

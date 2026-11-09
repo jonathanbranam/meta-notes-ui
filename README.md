@@ -6,7 +6,7 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.29.2, v1 in development.
+Status: v0.29.3, v1 in development.
 
 ## How it fits
 
@@ -53,7 +53,7 @@ node <clone>/dist/server/index.js --root <notes root> [--port N] [--host H] --to
   Running it again replaces the login and revokes every session. While that file exists the
   token (cookie, bearer, `?token=`) stops working and the server needs a session from
   `/login` (HttpOnly, SameSite=Lax, Secure over HTTPS; ids stored hashed in `sessions.json`;
-  30 days, sliding on use; **Log out** in the header revokes this device). A failed login
+  30 days, sliding on use; **Log out** in the Menu revokes this device). A failed login
   waits one second. One user only. With no login file the token works as above.
 - On listen it writes `<root>/.meta-notes-cache/ui/server.json`
   (`pid`, `host`, `port`, `url`, `version`) and removes it on exit.

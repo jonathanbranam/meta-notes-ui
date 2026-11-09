@@ -37,6 +37,33 @@ alerts item SHALL read "Enable alerts" when this device is not subscribed and
 - **WHEN** the server has push off
 - **THEN** the menu has no alerts item
 
+### Requirement: The menu holds Log out when there is a login  {#r-9354}
+
+When the server has a login, the menu SHALL hold a Log out item after Tasks. It SHALL be a POST to
+`/logout` (never a GET), so the server revokes this device's session and redirects to `/login`. With
+no login (token mode) the menu SHALL have no Log out item, and the top bar SHALL have no Log out button.
+
+#### Scenario: Logged in  {#s-822d}
+
+*Verification*: **executable**
+
+- **WHEN** the server has a login
+- **THEN** the menu's last item is "Log out", a POST to "/logout"
+
+#### Scenario: No login  {#s-6cd7}
+
+*Verification*: **executable**
+
+- **WHEN** the server has no login
+- **THEN** the menu has no Log out item
+
+#### Scenario: Clicking Log out in a browser  {#s-8e9c}
+
+*Verification*: **non-executable**
+
+- **WHEN** a signed-in user picks Log out from the Menu
+- **THEN** the session ends and the browser lands on /login, and the top bar has no Log out button
+
 ### Requirement: The menu closes  {#r-c535}
 
 The menu SHALL close on a pick, on Escape and on a press outside it, and SHALL

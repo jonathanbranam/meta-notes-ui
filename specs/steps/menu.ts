@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import type { Steps } from "vitest-bridle";
-import { alertsItem, closesMenu, dayLink } from "../../client/src/menu";
+import { alertsItem, closesMenu, dayLink, logoutItem } from "../../client/src/menu";
 
 export function menuSteps(steps: Steps) {
   steps.when(/^the server has push on, notifications are allowed, and this device is not subscribed$/, (w) => {
@@ -17,6 +17,19 @@ export function menuSteps(steps: Steps) {
   });
   steps.then(/^the menu has no alerts item$/, (w) => {
     expect(w.item).toBeNull();
+  });
+
+  steps.when(/^the server has a login$/, (w) => {
+    w.out = logoutItem(true);
+  });
+  steps.when(/^the server has no login$/, (w) => {
+    w.out = logoutItem(false);
+  });
+  steps.then(/^the menu's last item is "([^"]+)", a POST to "([^"]+)"$/, (w, label, action) => {
+    expect(w.out).toEqual({ label, method: "POST", action });
+  });
+  steps.then(/^the menu has no Log out item$/, (w) => {
+    expect(w.out).toBeNull();
   });
 
   steps.when(/^Escape is pressed, or a press lands outside the menu$/, (w) => {

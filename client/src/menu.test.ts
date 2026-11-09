@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { alertsItem, closesMenu } from "./menu";
+import { alertsItem, closesMenu, logoutItem } from "./menu";
 
 describe("alertsItem", () => {
   it("is absent when push is off on the server", () => {
@@ -29,5 +29,14 @@ describe("closesMenu", () => {
   it("stays open on other keys and on a press inside", () => {
     expect(closesMenu({ type: "keydown", key: "a" })).toBe(false);
     expect(closesMenu({ type: "pointerdown", inside: true })).toBe(false);
+  });
+});
+
+describe("logoutItem", () => {
+  it("is a POST to /logout when there is a login", () => {
+    expect(logoutItem(true)).toEqual({ label: "Log out", method: "POST", action: "/logout" });
+  });
+  it("is absent with no login (token mode)", () => {
+    expect(logoutItem(false)).toBeNull();
   });
 });

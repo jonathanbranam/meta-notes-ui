@@ -17,7 +17,21 @@ export function alertsItem(push: PushState, perm: string): AlertsItem | null {
   return { label: "Alerts are blocked in this browser", action: null };
 }
 
-export type MenuEvent = { type: "keydown"; key: string } | { type: "pointerdown"; inside: boolean };
+export interface LogoutItem {
+  label: string;
+  method: "POST";
+  action: "/logout";
+}
+
+/**
+ * The menu's Log out item, last: a POST to /logout (the server revokes the session and redirects to /login),
+ * never a GET. Null with no login (token mode).
+ */
+export function logoutItem(loggedIn: boolean): LogoutItem | null {
+  return loggedIn ? { label: "Log out", method: "POST", action: "/logout" } : null;
+}
+
+export type MenuEvent ={ type: "keydown"; key: string } | { type: "pointerdown"; inside: boolean };
 
 /** Escape and a press outside the menu close it; a press inside does not (the item's own click does). */
 export const closesMenu = (e: MenuEvent): boolean => (e.type === "keydown" ? e.key === "Escape" : !e.inside);
