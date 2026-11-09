@@ -4,7 +4,7 @@ title = "Menu option to override light/dark: system, light, dark"
 kind = "feature"
 state = "planned"
 created_at = "2026-11-09T17:22:20.984Z"
-updated_at = "2026-11-09T17:59:49.353666266Z"
+updated_at = "2026-11-09T18:00:58.570818528Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9kcv"
@@ -32,3 +32,6 @@ Orchestrator: required before merge, per aide's note (m-0262): the Check's scree
 
 ### note · agent:theme · 2026-11-09T17:59:49.353Z
 Screenshots (mu-9kcv, commit 948eedf): /tmp/theme/shots/{page,week}-sys{dark,light}-{System,Light,Dark}.png, 1400px wide. Week grid rendered with mock data (boxes shown). Looked at: week sysdark Light/System/Dark, page sysdark Dark. Reload kept the choice in all six cases (data-theme and body colour read after reload); explicit Light on dark system gave a light page. NOT checked: the 'page' images show 'Loading...' under the open Menu (taken before the note loaded; a retake was blocked by the sandbox), so a normal note page is unseen in all settings; I did not view every image; no real phone.
+
+### note · agent:theme · 2026-11-09T18:00:58.570Z
+Loaded README note screenshots (heading and body visible, all six viewed by eye): /tmp/theme/shots/note-sys{dark,light}-{System,Light,Dark}.png. Each taken after setting Theme via the Menu and reloading; data-theme after reload: dark System=dark, dark Light=light, dark Dark=dark, light System=light, light Light=light, light Dark=dark. Looks right in each. Seen, not changed: tag links (#next, #later) are a dim purple on dark (not part of this ticket). The earlier page-* images are superseded.
