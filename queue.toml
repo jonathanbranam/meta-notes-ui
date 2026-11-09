@@ -30,3 +30,9 @@ tasks = ["mu-bgb6"]
 
 [[tier]]
 tasks = ["mu-y9xa"]
+
+[[tier]]
+tasks = ["mu-2fmn"]
+
+[[tier]]
+tasks = ["mu-9kcv"]

@@ -84,3 +84,6 @@
 {"actor":"external:orchestrator","at":"2026-11-09T17:34:30.486815565Z","from":"open","task":"mu-9kcv","to":"planned"}
 {"actor":"external:orchestrator","at":"2026-11-09T17:34:30.741341988Z","queue":"reprioritized"}
 {"actor":"external:orchestrator","at":"2026-11-09T17:39:14.628674283Z","from":"planned","task":"mu-y9xa","to":"integrated"}
+{"actor":"external:orchestrator","at":"2026-11-09T17:45:29.296371989Z","from":"open","task":"mu-2fmn","to":"planned"}
+{"actor":"external:orchestrator","at":"2026-11-09T17:45:29.574605251Z","queue":"reprioritized"}
+{"actor":"external:orchestrator","at":"2026-11-09T17:45:29.646926555Z","queue":"reprioritized"}
