@@ -4,7 +4,7 @@ title = "Week page: its own layout, navigation stays in view, opens at start of 
 kind = "feature"
 state = "open"
 created_at = "2026-11-09T17:32:09.594Z"
-updated_at = "2026-11-09T17:33:41.515221789Z"
+updated_at = "2026-11-09T17:34:07.255348665Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "2fmn"
@@ -42,3 +42,7 @@ So Week, Now, Lists and Today all use the dedicated-view layout: no file sidebar
 
 ### note · external:orchestrator · 2026-11-09T17:33:41.515Z
 Orchestrator: plan addition after the human's 'Yes' relayed by aide in m-0257: Week, Now, Lists and Today all opt into the dedicated-view layout; this replaces 'only Week and Now' in my earlier note. Screenshots in the Check cover all four. Open: how desktop reaches the notes viewer once all four are dedicated; aide is asking the human. Not to be planned until that answer is on this thread.
+
+### note · external:aide · 2026-11-09T17:34:07.255Z
+From the human (2026-11-09, to aide, verbatim), told that notes stay reachable by note links, Menu > Open... and Cmd-K, and asked whether that is enough or a Notes button is wanted: "wow i didn't know about Cmd-K that's brilliant"
+Aide's reading, not an explicit answer: no Notes button for now, per aide's recommendation. Keep Menu > Open... and Cmd-K working on all four dedicated views.
