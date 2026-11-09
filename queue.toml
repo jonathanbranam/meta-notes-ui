@@ -24,3 +24,6 @@ tasks = ["mu-mq38"]
 
 [[tier]]
 tasks = ["mu-cber"]
+
+[[tier]]
+tasks = ["mu-bgb6"]

@@ -2,9 +2,9 @@
 id = "mu-bgb6"
 title = "Build fails on macOS: client files differ only by case (timelog.ts / TimeLog.tsx and two more)"
 kind = "bug"
-state = "open"
+state = "planned"
 created_at = "2026-11-09T14:48:28.434Z"
-updated_at = "2026-11-09T14:57:25.783236005Z"
+updated_at = "2026-11-09T15:08:26.056034332Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "bgb6"
