@@ -39,9 +39,9 @@ const norm = (s: string) => labelOf(s).replace(/#\S+/g, "").replace(/\[\[|\]\]/g
 export interface NowState {
   /** The last log entry when it has no end. */
   running: { entry: LogEntry; label: string; start: number } | null;
-  /** The block the running entry belongs to, or (nothing running) the one now, else the next to come. */
+  /** The block the running entry matched by name (else the one on the clock), or (nothing running) the one now, else the next to come. */
   block: Block | null;
-  /** The block after `block`. */
+  /** Running: the block Done starts. Not running: the block after `block`. */
   next: Block | null;
   /** The last finished log entry. */
   previous: LogEntry | null;
@@ -59,17 +59,25 @@ export function nowState(text: string, nowMin: number): NowState {
   const running = last && startMin !== null ? { entry: last, label: labelOf(last.header), start: startMin } : null;
   const previous = [...(log ?? [])].reverse().find((e) => e.end !== "") ?? null;
 
-  let at = -1;
+  const clockAt = blocks.findIndex((b) => b.start <= nowMin && nowMin < b.end);
+  const upcomingAt = blocks.findIndex((b) => b.start > nowMin);
+  let block: Block | null;
+  let next: Block | null;
   if (running) {
-    // The block with the same plan as the entry that ends after it started, else the block it started in.
-    at = blocks.findIndex((b) => norm(b.plan) === norm(running.entry.header) && b.end > running.start);
-    if (at < 0) at = blocks.findIndex((b) => b.start <= running.start && running.start < b.end);
+    // The block the entry matched by name (same plan, ends after the entry started), if any.
+    const matchedAt = blocks.findIndex((b) => norm(b.plan) === norm(running.entry.header) && b.end > running.start);
+    // Overage counts against the block the entry is for; an off-plan entry has none, so it is never over.
+    block = matchedAt >= 0 ? blocks[matchedAt] : (blocks[clockAt] ?? null);
+    // Done starts the block on the clock, unless that is the one the entry matched (then the one after it).
+    // With none on the clock, the next to come. (Case 3, mu-btfa: without the `clockAt !== matchedAt`
+    // test and its `matchedAt >= 0` branch, a long-overrun entry would start the block after its own.)
+    const startAt = clockAt >= 0 ? (clockAt === matchedAt ? clockAt + 1 : clockAt) : upcomingAt;
+    next = blocks[startAt] ?? null;
   } else {
-    at = blocks.findIndex((b) => b.start <= nowMin && nowMin < b.end);
-    if (at < 0) at = blocks.findIndex((b) => b.start > nowMin);
+    const at = clockAt >= 0 ? clockAt : upcomingAt;
+    block = blocks[at] ?? null;
+    next = at >= 0 ? (blocks[at + 1] ?? null) : null;
   }
-  const block = at >= 0 ? blocks[at] : null;
-  const next = at >= 0 ? (blocks[at + 1] ?? null) : (running ? (blocks.find((b) => b.start > nowMin) ?? null) : null);
   return { running, block, next, previous, blocks, hasLog: log !== null };
 }
 

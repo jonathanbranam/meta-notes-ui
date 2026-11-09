@@ -64,8 +64,11 @@ Start button, and Start SHALL append one Time Log entry for that block starting 
 ### Requirement: Done ends the entry and starts the next block  {#r-d27a}
 
 Done SHALL, in one Time Log append, end the running entry at the current time and add an entry for
-the next block starting then, and SHALL send the aide a message when messaging is configured. When no
-block follows, Done SHALL only end the entry. The Time Block Actual column is not written.
+the block it starts then, and SHALL send the aide a message when messaging is configured. The block
+it starts is the one planned on the clock now, unless that is the block the entry matched by name
+(same plan, ending after the entry started), then the block after it; with no block on the clock, the
+next one to come. The "Next:" line, the message and the write SHALL name the same block. When there
+is none, Done SHALL only end the entry. The Time Block Actual column is not written.
 
 #### Scenario: Done chains to the next block  {#s-a6d8}
 
@@ -90,6 +93,27 @@ block follows, Done SHALL only end the entry. The Time Block Actual column is no
 
 - **WHEN** "Drive to work" ran 7:50 to 8:19 in a block planned until 8:15, followed by "work" until 10:00
 - **THEN** the message reads "Done: Drive to work, 7:50-8:19 (4 min over). Now: work, until 10:00."
+
+#### Scenario: An off-plan entry starts the block on the clock  {#s-b661}
+
+*Verification*: **executable**
+
+- **WHEN** blocks A 9-10, B 10-11, C 11-12 are planned, "call" (not in the plan) started 10:20, and the user presses Done at 10:40
+- **THEN** the block started is "B"
+
+#### Scenario: An overrun of a whole block starts the block on the clock  {#s-d37f}
+
+*Verification*: **executable**
+
+- **WHEN** blocks A 9-10, B 10-11, C 11-12 are planned, "A" started 9:00, and the user presses Done at 11:30
+- **THEN** the block started is "C"
+
+#### Scenario: A slight overrun starts the block after the entry's own  {#s-871d}
+
+*Verification*: **executable**
+
+- **WHEN** blocks A 9-10, B 10-11, C 11-12 are planned, "A" started 9:00, and the user presses Done at 10:10
+- **THEN** the block started is "B"
 
 ### Requirement: The page follows the files  {#r-6e4b}
 

@@ -102,6 +102,12 @@ export function nowSteps(steps: Steps) {
   steps.then(/^"Drive to work" now ends at 08:04$/, async (w) => expect(parseTimeLog(await read(w))![0].end).toBe("08:04"));
   steps.then(/^the Time Block is unchanged$/, async (w) => expect(timeBlockOf(await read(w))).toBe(timeBlockOf(w.text)));
 
+  steps.when(/^blocks A 9-10, B 10-11, C 11-12 are planned, "(\w+)" (?:\(not in the plan\) )?started (\d+):(\d+), and the user presses Done at (\d+):(\d+)$/, (w, name, sh, sm, h, m) => {
+    const text = note([["A", "9:00am", "9:45am"], ["B", "10:00am", "10:45am"], ["C", "11:00am", "11:45am"]], [[name, `${sh.padStart(2, "0")}:${sm}`]]);
+    w.started = nowState(text, Number(h) * 60 + Number(m)).next?.plan;
+  });
+  steps.then(/^the block started is "(\w+)"$/, (w, plan) => expect(w.started).toBe(plan));
+
   steps.when(/^"work" runs from 08:15 with no block after it, and the user presses Done at 9:50$/, async (w) => {
     await setup(w, note([["work", "8:15am", "9:30am"]], [["work", "08:15"]]));
     const s = nowState(w.text, 590);
