@@ -7,3 +7,4 @@ node_modules/
 dist/
 .shots/
 .agent-site/
+.bridle/tmp/
