@@ -2,11 +2,13 @@
 id = "mu-jaej"
 title = "Now page: Done gives no feedback and can double-submit; disable and show pending on tap"
 kind = "bug"
-state = "open"
+state = "integrated"
 created_at = "2026-11-18T12:50:57.740Z"
-updated_at = "2026-11-18T12:52:06.176150662Z"
+updated_at = "2026-11-18T12:56:51.770232281Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+branch = "bridle/done-pending"
+commit = "742e785"
 ticket = "jaej"
 +++
 
@@ -71,3 +73,9 @@ readied by external:orchestrator
 
 ### note · external:orchestrator · 2026-11-18T12:52:06.176Z
 Readied by orchestrator (bug, self-evident ask; rule ready-without-asking). Ticket file made from the submission, with the human's words verbatim.
+
+### note · external:orchestrator · 2026-11-18T12:56:51.199Z
+integrated: 742e785 (branch bridle/done-pending)
+
+### note · external:orchestrator · 2026-11-18T12:56:51.770Z
+cleanup: removed nothing
