@@ -115,6 +115,26 @@ is none, Done SHALL only end the entry. The Time Block Actual column is not writ
 - **WHEN** blocks A 9-10, B 10-11, C 11-12 are planned, "A" started 9:00, and the user presses Done at 10:10
 - **THEN** the block started is "B"
 
+### Requirement: Done and Start show pending and send once  {#r-5207}
+
+When Done or Start is pressed, the page SHALL at once stop the timer, disable the button and label it
+"Saving..." with a greyed look, and SHALL send no second request while one is pending. When the
+request ends, in success or error, the button is enabled again (an error is shown as before).
+
+#### Scenario: A second press sends nothing  {#s-01a9}
+
+*Verification*: **executable**
+
+- **WHEN** the user presses Done twice before the server answers
+- **THEN** one request is sent
+
+#### Scenario: The button shows it is saving  {#s-028a}
+
+*Verification*: **non-executable**
+
+- **WHEN** the user presses Done and the server is slow
+- **THEN** the button is greyed and reads "Saving...", the timer holds still, and both return when the server answers
+
 ### Requirement: The page follows the files  {#r-6e4b}
 
 The Now page SHALL use the same live data as Today: a change to the daily note's Time Block or Time

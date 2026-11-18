@@ -166,6 +166,7 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .now-current.over { border-color: #dc2626; }
 .now-worked { font-size: 3rem; font-variant-numeric: tabular-nums; margin: .25rem 0; }
 .now-over { font-size: 1.5rem; font-weight: 700; color: #dc2626; margin: 0; font-variant-numeric: tabular-nums; }
+.now-action:disabled { opacity: .45; cursor: progress; background: #ddd; }
 .now-action { display: block; width: 100%; min-height: 3.5rem; margin-top: .75rem; font: inherit; font-size: 1.25rem; font-weight: 700; text-align: center; border: 1px solid #bbb; border-radius: 8px; }
 .now-blocks { list-style: none; padding: 0; }
 .now-blocks li { padding: .35rem 0; }
