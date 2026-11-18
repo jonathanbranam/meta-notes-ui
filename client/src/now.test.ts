@@ -1,5 +1,5 @@
-import { expect, test } from "vitest";
-import { blocksOf, closedEntry, doneMessage, labelOf, logMinutes, nowState, stopwatch, timers } from "./now";
+import { describe, expect, it, test } from "vitest";
+import { blocksOf, closedEntry, doneMessage, labelOf, logMinutes, nowState, singleFlight, stopwatch, timers } from "./now";
 import { parseTimeBlock } from "../../shared/today";
 import { parseTimeLog } from "./time-log";
 
@@ -78,4 +78,18 @@ test("the Done message and the Next line share the answer; an off-plan entry is 
   expect(s.next?.plan).toBe("B");
   expect(doneMessage(s, at(10, 40))).toBe("Done: call, 10:20-10:40. Now: B, until 11:00.");
   expect(timers(s, at(10, 40) * 60).over).toBe(0);
+});
+
+describe("singleFlight", () => {
+  it("ignores a call while pending and clears after an error", async () => {
+    const g = singleFlight();
+    let release!: () => void;
+    const first = g.run(() => new Promise<void>((r) => (release = r)));
+    expect(await g.run(async () => {})).toBe(false);
+    release();
+    await first;
+    await expect(g.run(async () => { throw new Error("x"); })).rejects.toThrow();
+    expect(g.pending).toBe(false);
+    expect(await g.run(async () => {})).toBe(true);
+  });
 });

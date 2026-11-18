@@ -114,3 +114,24 @@ export function stopwatch(sec: number): string {
   const pad = (n: number) => String(n).padStart(2, "0");
   return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
 }
+
+/** A one-request-at-a-time guard: `run` ignores calls while one is pending (a ref, so two taps in one render still send one request). */
+export function singleFlight() {
+  let pending = false;
+  return {
+    get pending() {
+      return pending;
+    },
+    /** Runs `fn` unless one is pending; resolves to false when ignored. The guard clears when `fn` settles, even if it throws. */
+    async run(fn: () => Promise<void>): Promise<boolean> {
+      if (pending) return false;
+      pending = true;
+      try {
+        await fn();
+      } finally {
+        pending = false;
+      }
+      return true;
+    },
+  };
+}

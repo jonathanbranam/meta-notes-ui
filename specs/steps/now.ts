@@ -6,7 +6,7 @@ import { createApp } from "../../server/app.js";
 import { makeExampleRoot } from "../../server/example.js";
 import type { TodayResponse } from "../../shared/types.js";
 import { parseTimeBlock } from "../../shared/today.js";
-import { blocksOf, closedEntry, doneMessage, hm, nowState, shortTime, timers } from "../../client/src/now";
+import { blocksOf, closedEntry, doneMessage, hm, nowState, shortTime, singleFlight, timers } from "../../client/src/now";
 import { appendBody, parseTimeLog } from "../../client/src/time-log";
 
 const TOKEN = "now-token";
@@ -131,5 +131,19 @@ export function nowSteps(steps: Steps) {
     const today = (await res.json()) as TodayResponse;
     expect(nowState(today.daily!.text, 500).previous?.header).toBe("- Drive to work:");
   });
+  steps.when(/^the user presses Done twice before the server answers$/, async (w) => {
+    const g = singleFlight();
+    let sent = 0;
+    let release!: () => void;
+    const slow = () => new Promise<void>((r) => ((sent += 1), (release = r)));
+    const first = g.run(slow);
+    const second = await g.run(slow);
+    expect(second).toBe(false);
+    release();
+    await first;
+    expect(g.pending).toBe(false);
+    w.sent = sent;
+  });
+  steps.then(/^one request is sent$/, (w) => expect(w.sent).toBe(1));
   void shortTime;
 }

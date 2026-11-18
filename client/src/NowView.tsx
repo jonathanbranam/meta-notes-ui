@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { closedEntry, doneMessage, hm, labelOf, nowState, shortTime, stopwatch, timers } from "./now";
+import { useEffect, useRef, useState } from "react";
+import { closedEntry, doneMessage, hm, labelOf, nowState, shortTime, singleFlight, stopwatch, timers } from "./now";
 import { appendTimeLog, parseTimeLog } from "./time-log";
 import type { useToday } from "./TodayView";
 import type { SendFn } from "./MessageSheet";
@@ -23,10 +23,14 @@ export function NowView({ today, canMessage, send }: { today: ReturnType<typeof 
   const [tick, setTick] = useState(() => new Date());
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const flight = useRef(singleFlight());
+  // The clock stops while a request is pending, so the timer holds still until the server answers.
   useEffect(() => {
+    if (busy) return;
+    setTick(new Date());
     const t = setInterval(() => setTick(new Date()), 1000);
     return () => clearInterval(t);
-  }, []);
+  }, [busy]);
   const { data, error: loadError } = today;
   if (loadError) return <p className="error">{loadError}</p>;
   if (!data) return <p className="hint">Loading...</p>;
@@ -39,8 +43,18 @@ export function NowView({ today, canMessage, send }: { today: ReturnType<typeof 
 
   const act = async () => {
     const log = parseTimeLog(data.daily!.text);
-    if (busy || !log) return;
-    setBusy(true);
+    if (!log) return;
+    // The ref guard blocks a second tap in the same render; `busy` greys the button and stops the clock.
+    await flight.current.run(async () => {
+      setBusy(true);
+      try {
+        await request(log);
+      } finally {
+        setBusy(false);
+      }
+    });
+  };
+  const request = async (log: NonNullable<ReturnType<typeof parseTimeLog>>) => {
     setError("");
     const t = new Date();
     const m = t.getHours() * 60 + t.getMinutes();
@@ -51,7 +65,6 @@ export function NowView({ today, canMessage, send }: { today: ReturnType<typeof 
       if (r.ok && canMessage) void send(doneMessage(fresh, m));
     } else r = fresh.block ? await appendTimeLog(path, fresh.block.plan, hm(m), log) : { ok: false, error: "Nothing planned to start" };
     if (!r.ok) setError(r.error ?? "Changed meanwhile; look again");
-    setBusy(false);
   };
 
   return (
@@ -73,7 +86,7 @@ export function NowView({ today, canMessage, send }: { today: ReturnType<typeof 
           <h2>Nothing planned</h2>
         )}
         {(s.running || s.block) && s.hasLog && (
-          <button className="primary now-action" disabled={busy} onClick={() => void act()}>{s.running ? "Done" : "Start"}</button>
+          <button className="primary now-action" disabled={busy} aria-busy={busy} onClick={() => void act()}>{busy ? "Saving..." : s.running ? "Done" : "Start"}</button>
         )}
         {(s.running || s.block) && !s.hasLog && <p className="hint">Today's note has no Time Log section.</p>}
         {error && <p className="error conflict">{error}</p>}
