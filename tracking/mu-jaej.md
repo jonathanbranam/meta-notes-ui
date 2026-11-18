@@ -2,9 +2,9 @@
 id = "mu-jaej"
 title = "Now page: Done gives no feedback and can double-submit; disable and show pending on tap"
 kind = "bug"
-state = "pending"
+state = "open"
 created_at = "2026-11-18T12:50:57.740Z"
-updated_at = "2026-11-18T12:51:39.359673139Z"
+updated_at = "2026-11-18T12:52:06.176150662Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "jaej"
@@ -65,3 +65,9 @@ When Done is tapped:
 
 ### note · external:aide · 2026-11-18T12:50:57.790Z
 submitted by external:aide
+
+### note · external:orchestrator · 2026-11-18T12:51:54.856Z
+readied by external:orchestrator
+
+### note · external:orchestrator · 2026-11-18T12:52:06.176Z
+Readied by orchestrator (bug, self-evident ask; rule ready-without-asking). Ticket file made from the submission, with the human's words verbatim.
