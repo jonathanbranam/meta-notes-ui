@@ -4,10 +4,13 @@ title = "Now page: Done gives no feedback and can double-submit; disable and sho
 kind = "bug"
 state = "pending"
 created_at = "2026-11-18T12:50:57.740Z"
-updated_at = "2026-11-18T12:50:57.790064275Z"
+updated_at = "2026-11-18T12:51:39.359673139Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+ticket = "jaej"
 +++
+
+docs/tickets/open/now-page-done-gives-no-feedback-and-can-double-submit-disabl-jaej.md
 
 submitted by external:aide
 
