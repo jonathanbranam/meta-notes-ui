@@ -135,3 +135,9 @@ export function singleFlight() {
     },
   };
 }
+
+/** The daily template's placeholder entry (`- start day:` with `* start: HH:MM`): an entry whose start is not a time. Start replaces it. */
+export const isPlaceholder = (e: LogEntry) => logMinutes(e.start) === null;
+
+/** A new open entry as `time-log update` writes it. */
+export const newEntry = (plan: string, startHm: string) => `${plan.trim().startsWith("- ") ? plan.trim() : `- ${plan.trim()}`}\n  * start: ${startHm}`;

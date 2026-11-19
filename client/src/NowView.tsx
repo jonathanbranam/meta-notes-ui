@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { closedEntry, doneMessage, hm, labelOf, nowState, shortTime, singleFlight, stopwatch, timers } from "./now";
+import { closedEntry, doneMessage, hm, isPlaceholder, labelOf, newEntry, nowState, shortTime, singleFlight, stopwatch, timers } from "./now";
 import { appendTimeLog, parseTimeLog } from "./time-log";
 import type { useToday } from "./TodayView";
 import type { SendFn } from "./MessageSheet";
@@ -63,7 +63,11 @@ export function NowView({ today, canMessage, send }: { today: ReturnType<typeof 
     if (fresh.running) {
       r = fresh.next ? await appendTimeLog(path, fresh.next.plan, hm(m), log, true) : await closeEntry(path, fresh.running.entry.raw, closedEntry(fresh.running.entry, hm(m)));
       if (r.ok && canMessage) void send(doneMessage(fresh, m));
-    } else r = fresh.block ? await appendTimeLog(path, fresh.block.plan, hm(m), log) : { ok: false, error: "Nothing planned to start" };
+    } else if (!fresh.block) r = { ok: false, error: "Nothing planned to start" };
+    else if (log.length && isPlaceholder(log[log.length - 1])) {
+      // The template's placeholder entry (start HH:MM) can't be a --prev; replace it with the new entry.
+      r = await closeEntry(path, log[log.length - 1].raw, newEntry(fresh.block.plan, hm(m)));
+    } else r = await appendTimeLog(path, fresh.block.plan, hm(m), log);
     if (!r.ok) setError(r.error ?? "Changed meanwhile; look again");
   };
 

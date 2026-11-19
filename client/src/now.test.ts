@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from "vitest";
-import { blocksOf, closedEntry, doneMessage, labelOf, logMinutes, nowState, singleFlight, stopwatch, timers } from "./now";
+import { blocksOf, closedEntry, doneMessage, isPlaceholder, labelOf, newEntry, logMinutes, nowState, singleFlight, stopwatch, timers } from "./now";
 import { parseTimeBlock } from "../../shared/today";
 import { parseTimeLog } from "./time-log";
 
@@ -91,5 +91,20 @@ describe("singleFlight", () => {
     await expect(g.run(async () => { throw new Error("x"); })).rejects.toThrow();
     expect(g.pending).toBe(false);
     expect(await g.run(async () => {})).toBe(true);
+  });
+});
+
+describe("placeholder entry", () => {
+  const log = (text: string) => parseTimeLog(`### Log\n\n${text}\n`)!;
+  it("is an entry whose start is not a time", () => {
+    expect(isPlaceholder(log("- start day:\n  * start: HH:MM\n  * end:   HH:MM")[0])).toBe(true);
+  });
+  it("is not a normal entry, open or finished", () => {
+    expect(isPlaceholder(log("- work\n  * start: 08:20\n  * end: 09:00")[0])).toBe(false);
+    expect(isPlaceholder(log("- work\n  * start: ~08:20")[0])).toBe(false);
+  });
+  it("newEntry writes header and start", () => {
+    expect(newEntry("work", "08:20")).toBe("- work\n  * start: 08:20");
+    expect(newEntry("- work #x", "08:20")).toBe("- work #x\n  * start: 08:20");
   });
 });
