@@ -4,7 +4,7 @@ title = "Now page: Start gives 'Invalid request' when the day's log holds only t
 kind = "bug"
 state = "open"
 created_at = "2026-11-19T12:47:49.181Z"
-updated_at = "2026-11-19T12:48:55.074591367Z"
+updated_at = "2026-11-19T12:56:16.206760359Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "p9bq"
@@ -62,3 +62,6 @@ readied by external:orchestrator
 
 ### note · external:orchestrator · 2026-11-19T12:48:55.074Z
 Readied by orchestrator (bug; ask self-evident). Priority: the human's daily Now page is broken each morning until the placeholder is replaced, so take it next. Re the human's question: mu-jaej (742e785, v0.31.2) was tested by its worker (263 passed, browser check on a throwaway site with a delayed API: Done disabled, one POST), but the manager did not re-run it, and no test covered a log holding only the template placeholder. Check whether mu-jaej caused this or it predates it, and say which in the landing note.
+
+### note · agent:start-invalid · 2026-11-19T12:56:16.206Z
+Cause: the daily template's placeholder entry has start 'HH:MM'. Start sent it as --prev-start; the server's clock check (and the meta-notes CLI: invalid time: 'HH:MM') refused it, so the page showed a bare error. Predates mu-jaej (v0.31.2): the append path was unchanged by it. Fix v0.31.3 (368a8e0): Start replaces a placeholder last entry via time-log update with --expect; append errors now name the bad field.
