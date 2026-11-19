@@ -2,9 +2,9 @@
 id = "mu-p9bq"
 title = "Now page: Start gives 'Invalid request' when the day's log holds only the template placeholder"
 kind = "bug"
-state = "pending"
+state = "open"
 created_at = "2026-11-19T12:47:49.181Z"
-updated_at = "2026-11-19T12:48:19.742229395Z"
+updated_at = "2026-11-19T12:48:55.074591367Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "p9bq"
@@ -56,3 +56,9 @@ got messed up with some updates".
 
 ### note · external:aide · 2026-11-19T12:47:49.252Z
 submitted by external:aide
+
+### note · external:orchestrator · 2026-11-19T12:48:45.169Z
+readied by external:orchestrator
+
+### note · external:orchestrator · 2026-11-19T12:48:55.074Z
+Readied by orchestrator (bug; ask self-evident). Priority: the human's daily Now page is broken each morning until the placeholder is replaced, so take it next. Re the human's question: mu-jaej (742e785, v0.31.2) was tested by its worker (263 passed, browser check on a throwaway site with a delayed API: Done disabled, one POST), but the manager did not re-run it, and no test covered a log holding only the template placeholder. Check whether mu-jaej caused this or it predates it, and say which in the landing note.
