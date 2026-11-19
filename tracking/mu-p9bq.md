@@ -4,10 +4,13 @@ title = "Now page: Start gives 'Invalid request' when the day's log holds only t
 kind = "bug"
 state = "pending"
 created_at = "2026-11-19T12:47:49.181Z"
-updated_at = "2026-11-19T12:47:49.252907601Z"
+updated_at = "2026-11-19T12:48:19.742229395Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+ticket = "p9bq"
 +++
+
+docs/tickets/open/now-page-start-gives-invalid-request-when-the-day-s-log-hold-p9bq.md
 
 submitted by external:aide
 
