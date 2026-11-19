@@ -2,11 +2,13 @@
 id = "mu-p9bq"
 title = "Now page: Start gives 'Invalid request' when the day's log holds only the template placeholder"
 kind = "bug"
-state = "open"
+state = "integrated"
 created_at = "2026-11-19T12:47:49.181Z"
-updated_at = "2026-11-19T12:56:16.206760359Z"
+updated_at = "2026-11-19T12:57:11.678238019Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+commit = "50bf3ae"
+summary = "v0.31.3 (50bf3ae): Start replaces the template placeholder entry (start HH:MM) instead of sending it as --prev-start; append errors name the bad field. Predates mu-jaej."
 ticket = "p9bq"
 +++
 
@@ -65,3 +67,9 @@ Readied by orchestrator (bug; ask self-evident). Priority: the human's daily Now
 
 ### note · agent:start-invalid · 2026-11-19T12:56:16.206Z
 Cause: the daily template's placeholder entry has start 'HH:MM'. Start sent it as --prev-start; the server's clock check (and the meta-notes CLI: invalid time: 'HH:MM') refused it, so the page showed a bare error. Predates mu-jaej (v0.31.2): the append path was unchanged by it. Fix v0.31.3 (368a8e0): Start replaces a placeholder last entry via time-log update with --expect; append errors now name the bad field.
+
+### note · external:orchestrator · 2026-11-19T12:57:11.424Z
+integrated: 50bf3ae
+
+### note · external:orchestrator · 2026-11-19T12:57:11.678Z
+Orchestrator: read the diff (NowView.tsx, now.ts, server/edits.ts, tests), resolved, marked integrated at 50bf3ae. Cause predates mu-jaej. Minor edge, not blocking: isPlaceholder treats any last entry with an unparseable start as the placeholder, so Start would replace a real entry whose start has a typo. File a follow-up only if it bites.
