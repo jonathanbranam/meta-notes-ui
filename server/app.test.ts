@@ -33,6 +33,16 @@ describe("api", () => {
     expect(await res.json()).toEqual({ version: "9.9.9", login: false, message: false });
   });
 
+  it("names the bad field when a Time Log append is refused", async () => {
+    const res = await app.request("/api/timelog/append", {
+      method: "POST",
+      headers: { ...auth, "content-type": "application/json" },
+      body: JSON.stringify({ path: "x.md", text: "- work", prev: "- start day:", prevStart: "HH:MM" }),
+    });
+    expect(res.status).toBe(400);
+    expect(((await res.json()) as { error: string }).error).toMatch(/^bad request: /);
+  });
+
   // Push is off here (no push contact): these paths are unmatched, so they must be JSON 404s, not index.html.
   it.each(["/api/push/key", "/api/nonexistent"])("answers %s with a JSON 404 when push is off", async (url) => {
     const res = await app.request(url, { headers: auth });

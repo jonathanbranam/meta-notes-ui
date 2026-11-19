@@ -108,12 +108,10 @@ export function editRoutes(app: Hono, root: string): void {
     const rel = await notePath(root, b.path, true);
     const opt = (v: unknown, ok: (s: string) => boolean) => v === undefined || v === "" || (isStr(v) && ok(v));
     const oneLine = (s: string) => !s.includes("\n");
-    if (
-      !rel || !isStr(b.text) || !/^- \S/.test(b.text) || !oneLine(b.text) ||
-      !opt(b.start, isClock) || !opt(b.prevStart, isClock) || !opt(b.prev, (s) => /^- /.test(s) && oneLine(s)) ||
-      (b.closePrev && !b.prevOpen) || (b.first && (b.prev || b.prevStart || b.prevOpen))
-    )
-      return c.json({ ok: false, error: "bad request" }, 400);
+    const bad = !rel ? "path" : !isStr(b.text) || !/^- \S/.test(b.text) || !oneLine(b.text) ? "text" : !opt(b.start, isClock) ? "start" :
+      !opt(b.prevStart, isClock) ? "the last entry's start time (not a clock time)" : !opt(b.prev, (s) => /^- /.test(s) && oneLine(s)) ? "prev" :
+      (b.closePrev && !b.prevOpen) || (b.first && (b.prev || b.prevStart || b.prevOpen)) ? "prev options" : "";
+    if (bad || !rel) return c.json({ ok: false, error: `bad request: ${bad}` }, 400);
     const args = ["time-log", "append", rel, `--text=${b.text}`];
     if (b.start) args.push(`--start=${b.start.trim()}`);
     if (b.first) args.push("--first");

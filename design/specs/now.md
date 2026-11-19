@@ -61,6 +61,13 @@ Start button, and Start SHALL append one Time Log entry for that block starting 
 - **THEN** the page shows "work" with nothing running
 - **AND** Start appends exactly one entry "- work" starting 08:20 and leaves the finished entry as it was
 
+#### Scenario: The log holds only the template placeholder  {#s-9ba5}
+
+*Verification*: **executable**
+
+- **WHEN** the log holds only the template's "- start day:" entry (start and end "HH:MM") and it is 8:20 with "work" planned
+- **THEN** Start replaces the placeholder with exactly one entry "- work" starting 08:20
+
 ### Requirement: Done ends the entry and starts the next block  {#r-d27a}
 
 Done SHALL, in one Time Log append, end the running entry at the current time and add an entry for

@@ -6,7 +6,7 @@ import { createApp } from "../../server/app.js";
 import { makeExampleRoot } from "../../server/example.js";
 import type { TodayResponse } from "../../shared/types.js";
 import { parseTimeBlock } from "../../shared/today.js";
-import { blocksOf, closedEntry, doneMessage, hm, nowState, shortTime, singleFlight, timers } from "../../client/src/now";
+import { blocksOf, closedEntry, doneMessage, hm, isPlaceholder, newEntry, nowState, shortTime, singleFlight, timers } from "../../client/src/now";
 import { appendBody, parseTimeLog } from "../../client/src/time-log";
 
 const TOKEN = "now-token";
@@ -87,6 +87,18 @@ export function nowSteps(steps: Steps) {
     await post(w, "/api/timelog/append", appendBody(w.daily, w.state.block.plan, "08:20", parseTimeLog(w.text)!));
     const log = parseTimeLog(await read(w))!;
     expect(log.map((e) => [e.header, e.start, e.end])).toEqual([["- Drive to work:", "07:50", "08:10"], ["- work", "08:20", ""]]);
+  });
+
+  steps.when(/^the log holds only the template's "- start day:" entry \(start and end "HH:MM"\) and it is 8:20 with "work" planned$/, async (w) => {
+    await setup(w, note([["work", "8:15am", "9:45am"]], [["start day", "HH:MM", "HH:MM"]]));
+    const log = parseTimeLog(w.text)!;
+    const s = nowState(w.text, 500);
+    expect(isPlaceholder(log[0])).toBe(true);
+    await post(w, "/api/timelog/update", { path: w.daily, expect: log[0].raw, text: newEntry(s.block!.plan, "08:20") });
+  });
+  steps.then(/^Start replaces the placeholder with exactly one entry "- work" starting 08:20$/, async (w) => {
+    const log = parseTimeLog(await read(w))!;
+    expect(log.map((e) => [e.header, e.start, e.end])).toEqual([["- work", "08:20", ""]]);
   });
 
   steps.when(/^"Drive to work" runs from 07:50, "work" is planned next, and the user presses Done at 8:04$/, async (w) => {
