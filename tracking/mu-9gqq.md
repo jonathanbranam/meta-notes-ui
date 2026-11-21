@@ -4,7 +4,7 @@ title = "List page: the check-off mark is a letter X drawn outside its box; chec
 kind = "bug"
 state = "open"
 created_at = "2026-11-21T17:36:24.830Z"
-updated_at = "2026-11-21T17:37:52.407912744Z"
+updated_at = "2026-11-21T17:44:15.577893574Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9gqq"
@@ -35,3 +35,13 @@ submitted by external:aide
 
 ### note · external:orchestrator · 2026-11-21T17:37:52.407Z
 readied by external:orchestrator
+
+### note · agent:checkbox · 2026-11-21T17:44:15.577Z
+Visual inspection done (Chrome headless via playwright-core; WebKit is not installed, so no Safari engine). Throwaway dev:example site on its own port, stopped after. I looked at each shot: marks are inside the boxes. Screenshots in /tmp/checkbox-shots/ (each at iphone390 = 390px wide at 3x, and desktop1280):
+- lists-page-iphone390.png / lists-page-desktop1280.png: Lists tab, Walmart list: open (Milk, long wrapping item), done (Eggs, blue box with check, struck through), canceled (Bread, muted box with dash, struck through).
+- list-*.png: the same list file opened as a note page (Home tab).
+- note-*.png: note page task lines: open, done, canceled, moved, partial.
+- today-*.png: Today page: open task lines.
+- tasks-*.png: Tasks tab, TaskRow (open boxes + Cancel).
+- now-*.png: Now page: it has no checkbox control, nothing to fix.
+Found and fixed on the way: note pages drew a second grey native checkbox beside the box; hidden now.
