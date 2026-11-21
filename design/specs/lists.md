@@ -134,7 +134,7 @@ filled) and canceled (a dash, muted; the list item's text also struck through) d
 
 ### Requirement: An open item can be canceled  {#r-3489}
 
-An open item SHALL have a Skip button (at least 44px tall, for a thumb) that marks it canceled
+An open item SHALL have a Skip button (the same size as the item's link button, human via aide 2026-11-21) that marks it canceled
 ("not doing") through `meta-notes list cancel` with `--expect`, so the file gets `- [-]`. The item
 leaves its group and shows in the Canceled section, struck through and muted; nothing is deleted.
 A canceled item has no Skip button and stays canceled on reload.
@@ -160,4 +160,4 @@ A canceled item has no Skip button and stays canceled on reload.
 *Verification*: **non-executable**
 
 - **WHEN** an open item is viewed at 390px wide
-- **THEN** its Skip button is at least 44px tall, and tapping it moves the item to Canceled
+- **THEN** its Skip button is the same size as a link button beside it, and tapping it moves the item to Canceled
