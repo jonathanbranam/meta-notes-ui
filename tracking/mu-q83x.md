@@ -4,7 +4,7 @@ title = "Spec s-4d43 (Other statuses from the UI) fails by date: make it date-in
 kind = "fix"
 state = "open"
 created_at = "2026-10-17T15:26:21.921Z"
-updated_at = "2026-11-21T17:38:31.445424370Z"
+updated_at = "2026-11-21T18:24:33.018499271Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 priority = "low"
@@ -24,3 +24,6 @@ open 4h, never planned: back to pending. Ready it again once someone will plan i
 
 ### note · agent:manager-2 · 2026-11-21T17:38:31.445Z
 readied by agent:manager-2
+
+### note · external:orchestrator · 2026-11-21T18:24:33.018Z
+Orchestrator review of merge 9785ff3: read the diff (skip removed from specs/steps/edits.ts, s-4d43's steps reordered in design/specs/edits.md). Cause, per manager-2: '-' on a recurring line inserts its next occurrence, so the later line-8 step hit the wrong line; it wasn't the date. Tests only, nothing visible. Resolving.
