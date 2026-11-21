@@ -106,3 +106,4 @@
 {"actor":"human","at":"2026-11-21T17:08:17.063Z","from":"","task":"mu-5ahy","to":"pending"}
 {"actor":"human","at":"2026-11-21T17:36:24.830Z","from":"","task":"mu-9gqq","to":"pending"}
 {"actor":"external:orchestrator","at":"2026-11-21T17:37:36.990396048Z","from":"pending","task":"mu-5ahy","to":"open"}
+{"actor":"external:orchestrator","at":"2026-11-21T17:37:52.407912744Z","from":"pending","task":"mu-9gqq","to":"open"}

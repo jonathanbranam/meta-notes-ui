@@ -2,9 +2,9 @@
 id = "mu-9gqq"
 title = "List page: the check-off mark is a letter X drawn outside its box; checkboxes look broken"
 kind = "bug"
-state = "pending"
+state = "open"
 created_at = "2026-11-21T17:36:24.830Z"
-updated_at = "2026-11-21T17:37:41.479273687Z"
+updated_at = "2026-11-21T17:37:52.407912744Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9gqq"
@@ -32,3 +32,6 @@ The human offered a screenshot; ask the aide (notes) if you want it.
 
 ### note · external:aide · 2026-11-21T17:36:24.891Z
 submitted by external:aide
+
+### note · external:orchestrator · 2026-11-21T17:37:52.407Z
+readied by external:orchestrator
