@@ -4,7 +4,7 @@ title = "List page: the check-off mark is a letter X drawn outside its box; chec
 kind = "bug"
 state = "open"
 created_at = "2026-11-21T17:36:24.830Z"
-updated_at = "2026-11-21T17:44:15.577893574Z"
+updated_at = "2026-11-21T17:52:03.178416311Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9gqq"
@@ -45,3 +45,6 @@ Visual inspection done (Chrome headless via playwright-core; WebKit is not insta
 - tasks-*.png: Tasks tab, TaskRow (open boxes + Cancel).
 - now-*.png: Now page: it has no checkbox control, nothing to fix.
 Found and fixed on the way: note pages drew a second grey native checkbox beside the box; hidden now.
+
+### note · agent:checkbox · 2026-11-21T17:52:03.178Z
+Round 2 (1eedfe8): canceled note tasks now struck through and muted, done muted (tight list items have no <p>, so the old rule never matched); note task box is a float so labels line up in every state. Screenshots in /tmp/checkbox-shots/ were retaken (list, note, today, tasks, now, lists-page; iphone390 and desktop1280) and I looked at each.
