@@ -4,10 +4,13 @@ title = "List page: the check-off mark is a letter X drawn outside its box; chec
 kind = "bug"
 state = "pending"
 created_at = "2026-11-21T17:36:24.830Z"
-updated_at = "2026-11-21T17:36:24.891830998Z"
+updated_at = "2026-11-21T17:37:41.479273687Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+ticket = "9gqq"
 +++
+
+docs/tickets/open/list-page-the-check-off-mark-is-a-letter-x-drawn-outside-its-9gqq.md
 
 submitted by external:aide
 

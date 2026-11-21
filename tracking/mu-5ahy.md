@@ -2,9 +2,9 @@
 id = "mu-5ahy"
 title = 'Lists: cancel an item ("not doing") from the UI, not only check it'
 kind = "feature"
-state = "pending"
+state = "open"
 created_at = "2026-11-21T17:08:17.063Z"
-updated_at = "2026-11-21T17:37:19.418518512Z"
+updated_at = "2026-11-21T17:37:36.990396048Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "5ahy"
@@ -27,3 +27,6 @@ Example list: resource/lists/26-Q4/2026-11-21 Walmart.md in the notes root (item
 
 ### note · external:aide · 2026-11-21T17:08:17.139Z
 submitted by external:aide
+
+### note · external:orchestrator · 2026-11-21T17:37:36.990Z
+readied by external:orchestrator
