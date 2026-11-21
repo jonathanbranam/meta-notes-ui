@@ -5,7 +5,7 @@
 The Lists tab shows the human's lists (a shopping list for a store, say) Reminders-style: open items
 by group, tap to check one off into a Got section at the bottom, tap there to bring it back. It
 opens on the day's current list. Everything is read and written through `meta-notes list ...`
-(`--json`, and `check` / `uncheck` with `--expect`); the UI never parses or edits a list note
+(`--json`, and `check` / `uncheck` / `cancel` with `--expect`); the UI never parses or edits a list note
 itself. Out of scope for now: creating, editing or sorting lists in the UI (the agent does that).
 (Ticket mu-xfm2, epic mu-5tju.)
 
@@ -131,3 +131,33 @@ filled) and canceled (a dash, muted; the list item's text also struck through) d
 
 - **WHEN** a list holds an open, a done and a canceled item, viewed at 390px and at 1280px wide
 - **THEN** the open box is empty, the done box is filled with a check mark inside it, and the canceled box shows a dash inside it
+
+### Requirement: An open item can be canceled  {#r-3489}
+
+An open item SHALL have a Skip button (at least 44px tall, for a thumb) that marks it canceled
+("not doing") through `meta-notes list cancel` with `--expect`, so the file gets `- [-]`. The item
+leaves its group and shows in the Canceled section, struck through and muted; nothing is deleted.
+A canceled item has no Skip button and stays canceled on reload.
+
+#### Scenario: Cancel keeps the item  {#s-eb5d}
+
+*Verification*: **executable**
+
+- **WHEN** the user cancels "buns" in a list with "buns" and "chips"
+- **THEN** "buns" is in the Canceled section and "chips" is the only open item
+- **AND** the file line for "buns" is "- [-] buns"
+
+#### Scenario: Cancel refused when the text changed  {#s-2868}
+
+*Verification*: **executable**
+
+- **WHEN** the user cancels "buns" after the item's text was changed to "rolls" in the file
+- **THEN** the server answers 409 with an error
+- **AND** the item is still open
+
+#### Scenario: The Skip button on a phone  {#s-0796}
+
+*Verification*: **non-executable**
+
+- **WHEN** an open item is viewed at 390px wide
+- **THEN** its Skip button is at least 44px tall, and tapping it moves the item to Canceled
