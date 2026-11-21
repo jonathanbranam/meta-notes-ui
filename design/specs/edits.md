@@ -48,10 +48,10 @@ recurring task gets its next line.
 - **WHEN** the client sets line 9 of "area/health.md" as it shows it to status ">"
 - **THEN** the edit succeeds
 - **AND** the note "area/health.md" holds a line starting "- [>] Call the dentist"
-- **WHEN** the client sets line 7 of "area/health.md" as it shows it to status "-"
-- **THEN** the note "area/health.md" holds a line starting "- [-] Annual checkup"
 - **WHEN** the client sets line 8 of "area/health.md" as it shows it to status "o"
 - **THEN** the note "area/health.md" holds a line starting "- [o] Stretch"
+- **WHEN** the client sets line 7 of "area/health.md" as it shows it to status "-"
+- **THEN** the note "area/health.md" holds a line starting "- [-] Annual checkup"
 
 #### Scenario: Picking a status  {#s-2b5e}
 
