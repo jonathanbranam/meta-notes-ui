@@ -2,9 +2,9 @@
 id = "mu-9gqq"
 title = "List page: the check-off mark is a letter X drawn outside its box; checkboxes look broken"
 kind = "bug"
-state = "open"
+state = "pending"
 created_at = "2026-11-21T17:36:24.830Z"
-updated_at = "2026-11-21T17:52:57.734038848Z"
+updated_at = "2026-11-21T21:53:20.343260980Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9gqq"
@@ -51,3 +51,6 @@ Round 2 (1eedfe8): canceled note tasks now struck through and muted, done muted 
 
 ### note · external:orchestrator · 2026-11-21T17:52:57.734Z
 Orchestrator review of merge 407c267 (v0.31.4): read the diff (style.css, ListsView.tsx, a new checkbox-style test, a lists spec) and opened the screenshots myself: lists-page-iphone390, note-desktop1280, tasks-iphone390. Marks sit inside their boxes; done is a blue check, canceled is a muted dash and struck through, moved and partial have their own marks; labels line up. Gaps: Chrome only (no Safari/WebKit), and the shots live in /tmp/checkbox-shots on vesta, not on this thread, so they won't last. Resolving.
+
+### note · system · 2026-11-21T21:53:20.293Z
+open 4h, never planned: back to pending. Ready it again once someone will plan it.
