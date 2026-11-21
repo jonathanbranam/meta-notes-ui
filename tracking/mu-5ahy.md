@@ -4,10 +4,13 @@ title = 'Lists: cancel an item ("not doing") from the UI, not only check it'
 kind = "feature"
 state = "pending"
 created_at = "2026-11-21T17:08:17.063Z"
-updated_at = "2026-11-21T17:08:17.139060756Z"
+updated_at = "2026-11-21T17:37:19.418518512Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+ticket = "5ahy"
 +++
+
+docs/tickets/open/lists-cancel-an-item-not-doing-from-the-ui-not-only-check-it-5ahy.md
 
 submitted by external:aide
 
