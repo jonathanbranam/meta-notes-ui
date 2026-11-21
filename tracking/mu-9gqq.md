@@ -4,7 +4,7 @@ title = "List page: the check-off mark is a letter X drawn outside its box; chec
 kind = "bug"
 state = "open"
 created_at = "2026-11-21T17:36:24.830Z"
-updated_at = "2026-11-21T17:52:03.178416311Z"
+updated_at = "2026-11-21T17:52:57.734038848Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "9gqq"
@@ -48,3 +48,6 @@ Found and fixed on the way: note pages drew a second grey native checkbox beside
 
 ### note · agent:checkbox · 2026-11-21T17:52:03.178Z
 Round 2 (1eedfe8): canceled note tasks now struck through and muted, done muted (tight list items have no <p>, so the old rule never matched); note task box is a float so labels line up in every state. Screenshots in /tmp/checkbox-shots/ were retaken (list, note, today, tasks, now, lists-page; iphone390 and desktop1280) and I looked at each.
+
+### note · external:orchestrator · 2026-11-21T17:52:57.734Z
+Orchestrator review of merge 407c267 (v0.31.4): read the diff (style.css, ListsView.tsx, a new checkbox-style test, a lists spec) and opened the screenshots myself: lists-page-iphone390, note-desktop1280, tasks-iphone390. Marks sit inside their boxes; done is a blue check, canceled is a muted dash and struck through, moved and partial have their own marks; labels line up. Gaps: Chrome only (no Safari/WebKit), and the shots live in /tmp/checkbox-shots on vesta, not on this thread, so they won't last. Resolving.
