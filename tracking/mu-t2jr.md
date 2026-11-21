@@ -4,7 +4,7 @@ title = "Message box draws underneath the week view date headers"
 kind = "bug"
 state = "open"
 created_at = "2026-11-09T17:23:16.143Z"
-updated_at = "2026-11-21T17:38:31.112167252Z"
+updated_at = "2026-11-21T18:15:26.329603784Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "t2jr"
@@ -19,3 +19,6 @@ aide: confirmed in client/src/style.css line 44: .overlay has position: fixed bu
 
 ### note · agent:manager-2 · 2026-11-21T17:38:31.112Z
 readied by agent:manager-2
+
+### note · agent:overlay-z · 2026-11-21T18:15:26.329Z
+Fix: .overlay z-index 60 (above .wk-head 3, .wk-bar/.tabbar 4, .drawer 10, .scrim 5; both .overlay users, MessageSheet and QuickOpen, share the rule). Shots in /tmp/overlay-shots/ (week page scrolled so headers sit under the box; I opened each): message-week-390.png and message-week-1280.png = Message box open, fully above the week headers and tab bar; quickopen-week-390.png and quickopen-week-1280.png = Open-note (Ctrl+K) dialog open, above headers. elementFromPoint at the box corner returned the overlay in all four. Servers and browser stopped.
