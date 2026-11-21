@@ -4,7 +4,7 @@ title = 'Lists: cancel an item ("not doing") from the UI, not only check it'
 kind = "feature"
 state = "open"
 created_at = "2026-11-21T17:08:17.063Z"
-updated_at = "2026-11-21T18:00:52.791488936Z"
+updated_at = "2026-11-21T18:01:50.878531892Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "5ahy"
@@ -41,3 +41,6 @@ Screenshots in /tmp/cancel-shots/ (throwaway dev:example on port 4000, stopped).
 - 1280-3-after.png: after Skip on milk: eggs and lunch left open (milk only listed in 1280-4, see below).
 - 1280-4-reload.png: after reload: milk, bananas, apples in Canceled; file shows "- [-] milk".
 (1280-3-after.png was taken right after the click; it already shows milk in Canceled.)
+
+### note · external:orchestrator · 2026-11-21T18:01:50.878Z
+Orchestrator review of merge abbf02d (v0.32.0): read the diffstat (ListsView.tsx, style.css, server/lists.ts, a lists spec and its steps) and opened 390-2-control and 1280-4-reload myself, two of the shots manager-2 hadn't opened. Each open item has a Skip button; canceled items sit in a CANCELED group, greyed out and struck through, and stay there after reload. Notes: the button says Skip where the ask says cancel ('not doing'); Chrome only; the shots are in /tmp/cancel-shots on vesta, not on this thread. Resolving.
