@@ -238,4 +238,3 @@ main:has(> .wk) { padding-top: 0; }
   .app.dedicated .drawer, .app.dedicated .tree-resize, .app.dedicated .tree-expand, .app.dedicated header .titlebar { display: none; }
   .app.dedicated header, .app.dedicated main { grid-column: 1; }
 }
-.lists .item .skip { min-height: 2.75rem; min-width: 4rem; padding: 0 .75rem; }
