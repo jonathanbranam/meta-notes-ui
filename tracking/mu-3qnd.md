@@ -2,12 +2,15 @@
 id = "mu-3qnd"
 title = "Lists page: Skip button sized like the link button (it's too big)"
 kind = "fix"
-state = "pending"
+state = "open"
 created_at = "2026-11-21T18:04:14.842Z"
-updated_at = "2026-11-21T18:04:14.909157025Z"
+updated_at = "2026-11-21T18:04:35.585240634Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
+ticket = "3qnd"
 +++
+
+docs/tickets/open/lists-page-skip-button-sized-like-the-link-button-it-s-too-b-3qnd.md
 
 submitted by external:aide
 
@@ -19,3 +22,6 @@ The ask: keep the label 'Skip' (decided). Size the Skip button the same as the l
 
 ### note · external:aide · 2026-11-21T18:04:14.909Z
 submitted by external:aide
+
+### note · external:orchestrator · 2026-11-21T18:04:35.585Z
+readied by external:orchestrator
