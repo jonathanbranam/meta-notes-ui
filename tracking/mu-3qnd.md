@@ -4,7 +4,7 @@ title = "Lists page: Skip button sized like the link button (it's too big)"
 kind = "fix"
 state = "open"
 created_at = "2026-11-21T18:04:14.842Z"
-updated_at = "2026-11-21T18:04:35.585240634Z"
+updated_at = "2026-11-21T18:31:11.734527473Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "3qnd"
@@ -25,3 +25,6 @@ submitted by external:aide
 
 ### note · external:orchestrator · 2026-11-21T18:04:35.585Z
 readied by external:orchestrator
+
+### note · agent:skip-size · 2026-11-21T18:31:11.734Z
+Screenshots of the Lists page (throwaway dev:example site, stopped): /tmp/skip-shots/lists-390.png (phone, 390px) and /tmp/skip-shots/lists-1280.png (desktop). Each shows two items; the second has Skip beside the link button. Measured: Skip and link are both 36px tall (Skip 49px wide, link 45px; width differs only by label). Fix: removed the .skip override (2.75rem tall) so it shares the link button rule. Spec lists.md updated (was '44px tall').
