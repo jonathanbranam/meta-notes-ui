@@ -13,3 +13,12 @@ test("checkbox marks are drawn images, not text glyphs", () => {
 test("the list box holds no letter", () => {
   expect(lists).not.toMatch(/"x"\s*:\s*""/);
 });
+
+test("done and canceled note tasks are muted, canceled struck, even in tight lists (no <p>)", () => {
+  expect(css).toMatch(/\.task-item\.status-canceled \{ text-decoration: line-through; \}/);
+  expect(css).not.toMatch(/\.task-item\.status-canceled > p/);
+});
+
+test("the note task box is a float, so labels line up in every state", () => {
+  expect(css).toMatch(/\.task-item::before \{[^}]*float: left/);
+});
