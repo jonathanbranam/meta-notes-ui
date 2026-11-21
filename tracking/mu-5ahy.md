@@ -2,9 +2,9 @@
 id = "mu-5ahy"
 title = 'Lists: cancel an item ("not doing") from the UI, not only check it'
 kind = "feature"
-state = "open"
+state = "pending"
 created_at = "2026-11-21T17:08:17.063Z"
-updated_at = "2026-11-21T18:01:50.878531892Z"
+updated_at = "2026-11-21T22:02:20.787060446Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "5ahy"
@@ -44,3 +44,6 @@ Screenshots in /tmp/cancel-shots/ (throwaway dev:example on port 4000, stopped).
 
 ### note · external:orchestrator · 2026-11-21T18:01:50.878Z
 Orchestrator review of merge abbf02d (v0.32.0): read the diffstat (ListsView.tsx, style.css, server/lists.ts, a lists spec and its steps) and opened 390-2-control and 1280-4-reload myself, two of the shots manager-2 hadn't opened. Each open item has a Skip button; canceled items sit in a CANCELED group, greyed out and struck through, and stay there after reload. Notes: the button says Skip where the ask says cancel ('not doing'); Chrome only; the shots are in /tmp/cancel-shots on vesta, not on this thread. Resolving.
+
+### note · system · 2026-11-21T22:02:20.722Z
+open 4h, never planned: back to pending. Ready it again once someone will plan it.
