@@ -61,6 +61,8 @@ export interface CliEntry {
   text: string;
   start: string | null;
   end: string | null;
+  /** The CLI's per-entry errors, e.g. "duplicate start", "duplicate end". */
+  errors?: string[];
 }
 
 export interface LogEntry {
@@ -77,32 +79,6 @@ export interface LogError {
   at: number | null;
 }
 
-/** A raw Time Log entry's `start:` and `end:` lines, by the entry's header line number (1-based). */
-export interface RawEntry {
-  line: number;
-  starts: string[];
-  ends: string[];
-}
-
-/**
- * The entries under the note's `Log` heading, read raw. `meta-notes time --json` keeps only the last
- * start and end of an entry, so this is what finds duplicates.
- */
-export function rawLog(text: string): RawEntry[] {
-  const lines = text.split("\n");
-  const from = lines.findIndex((l) => /^#+\s*log\s*$/i.test(l));
-  if (from < 0) return [];
-  const out: RawEntry[] = [];
-  for (let n = from + 1; n < lines.length; n++) {
-    const l = lines[n];
-    if (/^#/.test(l)) break;
-    if (/^- /.test(l)) out.push({ line: n + 1, starts: [], ends: [] });
-    const m = /^\s+[*-]\s+(start|end):\s*(.*?)\s*$/i.exec(l);
-    if (m && out.length) (m[1].toLowerCase() === "start" ? out.at(-1)!.starts : out.at(-1)!.ends).push(m[2]);
-  }
-  return out;
-}
-
 const slotOf = (min: number) => Math.floor(min / SLOT) * SLOT;
 
 /**
@@ -110,7 +86,7 @@ const slotOf = (min: number) => Math.floor(min / SLOT) * SLOT;
  * the day is today: an entry with a start and no end that began before then is running, not an error,
  * and runs to now.
  */
-export function readLog(cli: CliEntry[], raw: RawEntry[], running: number | null): { entries: LogEntry[]; errors: LogError[] } {
+export function readLog(cli: CliEntry[], running: number | null): { entries: LogEntry[]; errors: LogError[] } {
   const entries: LogEntry[] = [];
   const errors: LogError[] = [];
   const name = (t: string) => t.replace(/:\s*$/, "");
@@ -126,11 +102,11 @@ export function readLog(cli: CliEntry[], raw: RawEntry[], running: number | null
       else errors.push({ label: "missing end", text, at: slotOf(start) });
     } else errors.push({ label: "missing start", text, at: null });
   }
-  const names = new Map(cli.map((e) => [e.line, name(e.text)]));
-  for (const r of raw) {
-    const text = names.get(r.line) ?? "";
-    if (r.starts.length > 1) errors.push({ label: "duplicate starts", text, at: slotOf(parseHm(r.starts[0]) ?? 0) });
-    if (r.ends.length > 1) errors.push({ label: "duplicate ends", text, at: slotOf(parseHm(r.ends[0]) ?? 0) });
+  for (const e of cli) {
+    const text = name(e.text);
+    // the CLI keeps the last start and end of an entry, so the error sits at those
+    if (e.errors?.includes("duplicate start")) errors.push({ label: "duplicate starts", text, at: slotOf(parseHm(e.start) ?? 0) });
+    if (e.errors?.includes("duplicate end")) errors.push({ label: "duplicate ends", text, at: slotOf(parseHm(e.end) ?? 0) });
   }
   return { entries, errors };
 }
