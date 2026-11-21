@@ -139,7 +139,7 @@ type BlockProps = { node?: { position?: { start: { line: number }; end: { line: 
 
 /** The statuses the picker offers: the character `meta-notes task update --status` takes, and its label. */
 const STATUS_OPTIONS: [string, string][] = [[" ", "Open"], ["x", "Done"], [">", "Rescheduled"], ["-", "Canceled"], ["o", "Partial"]];
-const STATUS_CHAR: Record<string, string> = { open: " ", done: "x", moved: ">", canceled: "-", partial: "o" };
+const STATUS_CHAR: Record<string, string> = { from: "<", open: " ", done: "x", moved: ">", canceled: "-", partial: "o" };
 
 /** A paragraph, list item or table: double-click opens its raw lines for editing; clicking a task's box toggles it. */
 function block(Tag: "p" | "li" | "table") {
@@ -179,6 +179,7 @@ function block(Tag: "p" | "li" | "table") {
             {STATUS_OPTIONS.map(([c, label]) => (
               <option key={c} value={c}>{label}</option>
             ))}
+            {statusName(status) === "from" && <option value="<" disabled>Copy</option>}
           </select>
         )}
       </Tag>

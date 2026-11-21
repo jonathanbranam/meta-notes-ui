@@ -38,3 +38,12 @@ describe("inlineSegments", () => {
     expect(inlineSegments("go https://example.com/a?b=1, ok", ctx)).toEqual([{ text: "go " }, { text: "https://example.com/a?b=1", url: "https://example.com/a?b=1" }, { text: ", ok" }]);
   });
 });
+
+describe("statusName", () => {
+  it("knows < as from, and a from line is not open", async () => {
+    const { statusName, isOpen } = await import("./markdown");
+    expect(statusName("<")).toBe("from");
+    expect(isOpen("<")).toBe(false);
+    expect(statusName(">")).toBe("moved");
+  });
+});
