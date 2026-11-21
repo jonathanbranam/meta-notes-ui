@@ -13,7 +13,7 @@ async function listPath(root: string, rel: unknown): Promise<string | null> {
   }
 }
 
-/** Lists routes: reads and the check/uncheck writes are all `meta-notes list ...` (rule writes-through-the-cli). */
+/** Lists routes: reads and the check/uncheck/cancel writes are all `meta-notes list ...` (rule writes-through-the-cli). */
 export function listRoutes(app: Hono, root: string): void {
   // Every list, newest first, and the day's current list (null when none).
   app.get("/api/lists", async (c) => {
@@ -31,11 +31,11 @@ export function listRoutes(app: Hono, root: string): void {
     return c.json(r, r.ok ? 200 : 400);
   });
 
-  // Check or uncheck an item. body: {list, n, expect, action: "check"|"uncheck"}; expect is the item's text as shown.
+  // Check, uncheck or cancel an item. body: {list, n, expect, action: "check"|"uncheck"|"cancel"}; expect is the item's text as shown.
   app.post("/api/list/check", async (c) => {
     const b = await c.req.json().catch(() => ({}));
     const rel = await listPath(root, b.list);
-    if (!rel || !Number.isInteger(b.n) || b.n < 1 || typeof b.expect !== "string" || (b.action !== "check" && b.action !== "uncheck"))
+    if (!rel || !Number.isInteger(b.n) || b.n < 1 || typeof b.expect !== "string" || !["check", "uncheck", "cancel"].includes(b.action))
       return c.json({ ok: false, error: "bad request" }, 400);
     const r = await runMetaNotes(root, ["list", b.action, rel, String(b.n), `--expect=${b.expect}`]);
     return c.json(r, r.ok ? 200 : 409);

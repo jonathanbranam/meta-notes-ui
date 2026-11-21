@@ -170,7 +170,7 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .lists .item .box { --cb: 1.75rem; flex: none; }
 .lists .item.done .text, .lists .item.canceled .text { text-decoration: line-through; opacity: .6; }
 .lists .item.canceled { opacity: .5; }
-.lists .item .source { flex: none; min-height: 2.25rem; border: 1px solid #bbb; border-radius: 8px; background: none; font: inherit; }
+.lists .item .skip, .lists .item .source { flex: none; min-height: 2.25rem; padding: 0 .5rem; border: 1px solid #bbb; border-radius: 8px; background: none; font: inherit; }
 @media (max-width: 720px) { main { padding-bottom: 4.5rem; } }
 :root[data-theme="dark"] { .tabbar { background: #202225; border-color: #333; } }
 .now-current { text-align: center; padding: 1rem .5rem; border-radius: 12px; border: 1px solid #ddd; }
@@ -237,3 +237,4 @@ main:has(> .wk) { padding-top: 0; }
   .app.dedicated .drawer, .app.dedicated .tree-resize, .app.dedicated .tree-expand, .app.dedicated header .titlebar { display: none; }
   .app.dedicated header, .app.dedicated main { grid-column: 1; }
 }
+.lists .item .skip { min-height: 2.75rem; min-width: 4rem; padding: 0 .75rem; }

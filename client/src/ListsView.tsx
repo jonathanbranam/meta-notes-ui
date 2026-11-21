@@ -60,17 +60,22 @@ export function ListsView({
   }, [list]);
   useEffect(() => void load(), [load, refreshKey]);
 
-  const toggle = async (item: ListItem) => {
+  const act = async (item: ListItem, action: "check" | "uncheck" | "cancel") => {
     if (!list) return;
-    const r = await api<{ ok: boolean; error?: string }>("/api/list/check", { list, n: item.number, expect: item.text, action: item.state === "open" ? "check" : "uncheck" });
+    const r = await api<{ ok: boolean; error?: string }>("/api/list/check", { list, n: item.number, expect: item.text, action });
     setError(r.ok ? "" : (r.error ?? "Cannot change the item"));
     await load();
   };
 
   const row = (item: ListItem) => (
     <li key={item.number} className={`item ${item.state}`}>
-      <button className="box" role="checkbox" aria-checked={item.state === "canceled" ? "mixed" : item.state === "done"} aria-label={item.text} disabled={item.state === "canceled"} onClick={() => void toggle(item)} />
+      <button className="box" role="checkbox" aria-checked={item.state === "canceled" ? "mixed" : item.state === "done"} aria-label={item.text} disabled={item.state === "canceled"} onClick={() => void act(item, item.state === "open" ? "check" : "uncheck")} />
       <span className="text">{item.text}</span>
+      {item.state === "open" && (
+        <button className="skip" aria-label={`Not doing ${item.text}`} onClick={() => void act(item, "cancel")}>
+          Skip
+        </button>
+      )}
       {item.source && (
         <button className="source" aria-label={`Open the task for ${item.text}`} onClick={() => openSource(item.source!)}>
           link

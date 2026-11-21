@@ -112,6 +112,25 @@ export function listsSteps(steps: Steps) {
   });
   steps.then(/^the item is still open$/, async (w) => expect(await bread(w)).toContain("rolls"));
 
+  steps.when(/^the user cancels "buns" in a list with "buns" and "chips"$/, async (w) => {
+    await bunsList(w);
+    await toggle(w, "cancel");
+  });
+  steps.then(/^"buns" is in the Canceled section and "chips" is the only open item$/, async (w) => {
+    expect(texts(canceledItems(await show(w)))).toEqual(["buns"]);
+    expect(await bread(w)).toEqual(["chips"]);
+  });
+  steps.then(/^the file line for "buns" is "- \[-\] buns"$/, async (w) => {
+    const { readFile } = await import("node:fs/promises");
+    expect(await readFile(`${w.root}/${w.list}`, "utf8")).toMatch(/^- \[-\] buns$/m);
+  });
+  steps.when(/^the user cancels "buns" after the item's text was changed to "rolls" in the file$/, async (w) => {
+    await bunsList(w);
+    const n = (await buns(w)).number;
+    await cli(w, "item-edit", w.list, String(n), "--text", "rolls");
+    await call(w, "/api/list/check", { list: w.list, n, expect: "buns", action: "cancel" });
+  });
+
   const src = { file: "area/t", line: 2, text: "- [ ] buy screws" };
   steps.when(/^an item's source is "area\/t" line 2, "- \[ \] buy screws", and the note's line 2 is "- \[ \] buy screws"$/, (w) => {
     w.open = { path: sourcePath(src), line: locateLine("# T\n- [ ] buy screws\n", src) };
