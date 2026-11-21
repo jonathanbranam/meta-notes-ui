@@ -69,9 +69,7 @@ export function ListsView({
 
   const row = (item: ListItem) => (
     <li key={item.number} className={`item ${item.state}`}>
-      <button className="box" role="checkbox" aria-checked={item.state === "done"} aria-label={item.text} disabled={item.state === "canceled"} onClick={() => void toggle(item)}>
-        {item.state === "done" ? "x" : ""}
-      </button>
+      <button className="box" role="checkbox" aria-checked={item.state === "canceled" ? "mixed" : item.state === "done"} aria-label={item.text} disabled={item.state === "canceled"} onClick={() => void toggle(item)} />
       <span className="text">{item.text}</span>
       {item.source && (
         <button className="source" aria-label={`Open the task for ${item.text}`} onClick={() => openSource(item.source!)}>

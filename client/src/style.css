@@ -16,7 +16,6 @@ header .menu { display: none; }
 header .nav { display: none; }
 @media (display-mode: standalone) { header .nav { display: inline-block; } }
 .app > * { min-width: 0; }
-input[type=checkbox] { width: 1.25rem; height: 1.25rem; vertical-align: middle; }
 button { font: inherit; background: none; border: 0; cursor: pointer; padding: .25rem .5rem; text-align: left; }
 header button { border: 1px solid #bbb; border-radius: 6px; }
 .drawer { grid-column: 1; grid-row: 2; overflow: auto; padding: .5rem; background: #f4f4f6; border-right: 1px solid #ddd; }
@@ -70,13 +69,26 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
 .props .prop-map { padding-left: .5rem; border-left: 2px solid #ddd; }
 .logtime { color: #666; font-size: .85em; background: #f4f4f6; border-radius: 4px; padding: 0 .35rem; }
 .task-item { list-style: none; }
-.task-item::before { content: "☐"; margin: 0 .4rem 0 -1.4rem; }
-.task-item.status-done::before { content: "☑"; }
-.task-item.status-moved::before { content: "➜"; }
-.task-item.status-canceled::before { content: "☒"; }
-.task-item.status-partial::before { content: "◐"; }
-.task-item.status-done > p, .task-item.status-canceled > p { opacity: .6; }
-.task-item.status-canceled > p { text-decoration: line-through; }
+/* One checkbox look for every control: a box with the mark drawn inside it as a background
+   image, so it is centred at any size. --cb sets the size. States: open, done, canceled. */
+.task-item::before, .task-row input[type=checkbox], .lists .item .box {
+  appearance: none; -webkit-appearance: none; display: inline-block; box-sizing: border-box;
+  width: var(--cb, 1.2rem); height: var(--cb, 1.2rem); margin: 0; padding: 0;
+  border: 2px solid #888; border-radius: 6px; background: transparent no-repeat center / 80% 80%;
+  vertical-align: middle; font: inherit;
+}
+/* A float, so the gap after the box is the same whether or not gfm left a hidden input (and its space) before the text. */
+.task-item::before { --cb: 1.1rem; content: ""; float: left; margin: .3rem .5rem 0 -1.6rem; }
+.task-item.status-done::before, .task-row input[type=checkbox]:checked, .lists .item.done .box { background-color: #2563eb; border-color: #2563eb; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='white' stroke-width='2.2'/%3E%3C/svg%3E"); }
+.task-item.status-canceled::before, .lists .item.canceled .box { background-color: #eee; border-color: #bbb; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8' stroke='%23777' stroke-width='2.2'/%3E%3C/svg%3E"); }
+.task-item.status-moved::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8h8M8.5 4.5L12 8l-3.500 3.500' stroke='%23666' stroke-width='2'/%3E%3C/svg%3E"); }
+.task-item.status-partial::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 3.500a4.500 4.500 0 010 9z' fill='%232563eb' stroke='none'/%3E%3C/svg%3E"); }
+:root[data-theme="dark"] { .task-item.status-canceled::before, .lists .item.canceled .box { background-color: #333; border-color: #555; } }
+.task-item > input[type=checkbox], .task-item > p > input[type=checkbox] { display: none; } /* gfm's disabled input: the ::before box is the one drawn */
+/* A tight list item has no <p>, so the text is the li's own; the box and the picker are not text. */
+.task-item.status-done, .task-item.status-canceled { color: #777; }
+.task-item.status-canceled { text-decoration: line-through; }
+.task-item .status-pick { text-decoration: none; }
 .status-pick { margin-left: .5rem; min-height: 2rem; font-size: .8em; color: #666; border: 1px solid #ddd; border-radius: 6px; background: #fff; }
 .chip { font-size: .8em; padding: 0 .4em; border-radius: 999px; background: #e8eaee; white-space: nowrap; }
 .chip.overdue { background: #fde2e0; color: #c0392b; font-weight: 600; }
@@ -141,7 +153,7 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .note a.tag { text-decoration: none; }
 .tagtasks, .duetasks { list-style: none; padding: 0; }
 .tagtasks li, .duetasks li { display: flex; gap: .6rem; align-items: flex-start; padding: .4rem 0; }
-.task-row input[type=checkbox] { width: 1.4rem; height: 1.4rem; flex: none; margin-top: .15rem; }
+.task-row input[type=checkbox] { --cb: 1.4rem; flex: none; margin-top: .15rem; }
 .task-row .task-text { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
 .task-row .cancel-task { flex: none; min-height: 2.25rem; padding: 0 .6rem; font: inherit; border: 1px solid #bbb; border-radius: 6px; background: none; color: inherit; }
 .task-row.overdue { color: #c0392b; }
@@ -155,8 +167,7 @@ header .menu-box { order: 98; margin-left: auto; position: relative; }
 .lists h3 { font-size: .85rem; text-transform: uppercase; opacity: .7; margin: 1rem 0 .25rem; }
 .lists .item { display: flex; align-items: center; gap: .75rem; min-height: 3rem; border-bottom: 1px solid #eee; }
 .lists .item .text { flex: 1 1 auto; }
-.lists .item .box { flex: none; width: 1.75rem; height: 1.75rem; border: 2px solid #888; border-radius: 50%; background: none; font: inherit; line-height: 1; padding: 0; }
-.lists .item.done .box { background: #2563eb; border-color: #2563eb; color: #fff; }
+.lists .item .box { --cb: 1.75rem; flex: none; }
 .lists .item.done .text, .lists .item.canceled .text { text-decoration: line-through; opacity: .6; }
 .lists .item.canceled { opacity: .5; }
 .lists .item .source { flex: none; min-height: 2.25rem; border: 1px solid #bbb; border-radius: 8px; background: none; font: inherit; }
