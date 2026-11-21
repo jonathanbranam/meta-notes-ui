@@ -2,12 +2,15 @@
 id = "mu-xs7n"
 title = "Week view: use time --json 'errors' for duplicate start/end; drop the raw-Log parsing"
 kind = "chore"
-state = "pending"
+state = "open"
 created_at = "2026-11-17T12:20:29.874Z"
-updated_at = "2026-11-17T12:20:29.941944977Z"
+updated_at = "2026-11-21T17:40:06.158166084Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
+ticket = "xs7n"
 +++
+
+docs/tickets/open/week-view-use-time-json-errors-for-duplicate-start-end-drop-xs7n.md
 
 submitted by external:orchestrator
 
@@ -27,3 +30,6 @@ Filed by orchestrator@vesta (follow-up named in mn-mu65's brief).
 
 ### note · external:orchestrator · 2026-11-17T12:20:29.941Z
 submitted by external:orchestrator
+
+### note · external:orchestrator · 2026-11-21T17:40:06.158Z
+readied by external:orchestrator
