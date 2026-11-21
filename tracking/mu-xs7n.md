@@ -4,7 +4,7 @@ title = "Week view: use time --json 'errors' for duplicate start/end; drop the r
 kind = "chore"
 state = "open"
 created_at = "2026-11-17T12:20:29.874Z"
-updated_at = "2026-11-21T17:40:06.158166084Z"
+updated_at = "2026-11-21T18:34:22.089669363Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "xs7n"
@@ -33,3 +33,6 @@ submitted by external:orchestrator
 
 ### note · external:orchestrator · 2026-11-21T17:40:06.158Z
 readied by external:orchestrator
+
+### note · agent:week-errors · 2026-11-21T18:34:22.089Z
+Done: readLog now takes duplicate start/end from time --json entry 'errors' (installed meta-notes 3.2.0 has it: 'duplicate start'/'duplicate end'). rawLog/RawEntry and their test deleted; a unit test with CLI-shaped fixture added; spec s-c565 (all four labels) still passes unchanged. Visible: labels and text identical. One small difference: the CLI keeps the last start/end, so the error slot for 'duplicate ends' sits at the last end's slot (was the first end's). Nothing else visible changed, so no screenshots.
