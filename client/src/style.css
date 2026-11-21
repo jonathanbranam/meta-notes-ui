@@ -40,7 +40,7 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
 .error { color: #c0392b; }
 .hint { color: #888; }
 .page-actions { margin: 0 0 .75rem; }
-.overlay { position: fixed; inset: 0; background: #0006; display: flex; justify-content: center; align-items: flex-start; padding-top: 10vh; }
+.overlay { position: fixed; inset: 0; background: #0006; display: flex; justify-content: center; align-items: flex-start; padding-top: 10vh; z-index: 60; }
 .quick { background: #fff; width: min(36rem, 94vw); border-radius: 8px; padding: .5rem; max-height: 70vh; overflow: auto; }
 .quick textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .5rem; }
 .quick input { width: 100%; font: inherit; padding: .5rem; }
