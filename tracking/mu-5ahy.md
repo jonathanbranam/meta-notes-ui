@@ -4,7 +4,7 @@ title = 'Lists: cancel an item ("not doing") from the UI, not only check it'
 kind = "feature"
 state = "open"
 created_at = "2026-11-21T17:08:17.063Z"
-updated_at = "2026-11-21T17:37:36.990396048Z"
+updated_at = "2026-11-21T18:00:52.791488936Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "5ahy"
@@ -30,3 +30,14 @@ submitted by external:aide
 
 ### note · external:orchestrator · 2026-11-21T17:37:36.990Z
 readied by external:orchestrator
+
+### note · agent:list-cancel · 2026-11-21T18:00:52.791Z
+Screenshots in /tmp/cancel-shots/ (throwaway dev:example on port 4000, stopped). List "Walmart" (Produce: bananas, apples; Dairy: milk, eggs, lunch stuff). I opened each. Note: my script ran twice, so some "before" shots already show earlier-canceled items (apples, and bananas) in Canceled.
+- 390-1-before.png: phone, list with open items, each with a 44px-tall Skip button right of the text; apples canceled (struck, muted dash box).
+- 390-2-control.png: same view, the Skip control (64x44px) at the thumb edge.
+- 390-3-after.png: after tapping Skip on bananas: bananas moved to Canceled, struck through.
+- 390-4-reload.png: after page reload: bananas and apples still Canceled.
+- 1280-1-before.png, 1280-2-control.png: desktop, Skip buttons at right edge, milk/eggs/lunch open.
+- 1280-3-after.png: after Skip on milk: eggs and lunch left open (milk only listed in 1280-4, see below).
+- 1280-4-reload.png: after reload: milk, bananas, apples in Canceled; file shows "- [-] milk".
+(1280-3-after.png was taken right after the click; it already shows milk in Canceled.)
