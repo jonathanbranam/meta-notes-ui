@@ -22,3 +22,11 @@ test("done and canceled note tasks are muted, canceled struck, even in tight lis
 test("the note task box is a float, so labels line up in every state", () => {
   expect(css).toMatch(/\.task-item::before \{[^}]*float: left/);
 });
+
+test("an .overlay dialog stacks above the sticky and fixed layers of the page (mu-t2jr)", () => {
+  const z = (sel: string) => Number(new RegExp(`^${sel} \\{[^}]*z-index: (\\d+)`, "m").exec(css)?.[1]);
+  const overlay = z("\\.overlay");
+  for (const sel of ["\\.wk-head", "\\.wk-bar", "\\.tabbar", "\\.drawer", "\\.scrim"]) {
+    expect(overlay).toBeGreaterThan(z(sel) || 0);
+  }
+});
