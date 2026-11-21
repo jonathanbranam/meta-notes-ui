@@ -2,9 +2,9 @@
 id = "mu-3qnd"
 title = "Lists page: Skip button sized like the link button (it's too big)"
 kind = "fix"
-state = "open"
+state = "pending"
 created_at = "2026-11-21T18:04:14.842Z"
-updated_at = "2026-11-21T18:31:58.404614635Z"
+updated_at = "2026-11-21T22:32:23.080995954Z"
 created_by = "external:aide"
 watchers = ["external:aide"]
 ticket = "3qnd"
@@ -31,3 +31,6 @@ Screenshots of the Lists page (throwaway dev:example site, stopped): /tmp/skip-s
 
 ### note · external:orchestrator · 2026-11-21T18:31:58.404Z
 Orchestrator review of merge e4ae527 (v0.32.3): opened lists-390 myself. Skip and link are the same size and sit side by side on the row. Chrome only; the shots are in /tmp/skip-shots on vesta. Resolving.
+
+### note · system · 2026-11-21T22:32:23.015Z
+open 4h, never planned: back to pending. Ready it again once someone will plan it.
