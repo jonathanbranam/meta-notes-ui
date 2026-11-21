@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import type { Hono } from "hono";
 import { parseTimeBlock } from "../shared/today.js";
 import type { TodayTask } from "../shared/types.js";
-import { daySlots, rawLog, readLog, type CalEvent, type CliEntry, type DaySlots, type LogError } from "../shared/week.js";
+import { daySlots, readLog, type CalEvent, type CliEntry, type DaySlots, type LogError } from "../shared/week.js";
 import { runMetaNotes } from "./edits.js";
 import { confine } from "./paths.js";
 
@@ -69,7 +69,7 @@ export async function buildWeek(root: string, start: string, count: number, now?
   const days = dates.map((date, i): WeekDay => {
     const { text, note, entries } = perDay[i];
     const isToday = date === today.date;
-    const log = readLog(entries, rawLog(text), isToday ? today.min : null);
+    const log = readLog(entries, isToday ? today.min : null);
     const events = calDays.find((d) => d.date === date)?.events ?? [];
     const grid = daySlots({
       nowMin: date < today.date ? Infinity : isToday ? today.min : -Infinity,

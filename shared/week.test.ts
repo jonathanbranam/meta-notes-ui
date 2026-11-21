@@ -1,19 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { cascade, daySlots, rawLog, readLog } from "./week.js";
-
-describe("rawLog", () => {
-  it("lists each entry's start and end lines by header line", () => {
-    const text = "# D\n\n### Log\n\n- a:\n  * start: 08:00\n  * start: 08:05\n  * end: 09:00\n- b:\n  * start: 09:00\n\n### Time Block\n- x:\n  * start: 1:00";
-    expect(rawLog(text)).toEqual([
-      { line: 5, starts: ["08:00", "08:05"], ends: ["09:00"] },
-      { line: 9, starts: ["09:00"], ends: [] },
-    ]);
-  });
-});
+import { cascade, daySlots, readLog } from "./week.js";
 
 describe("readLog", () => {
   it("keeps an entry with neither time out of the grid", () => {
-    const r = readLog([{ line: 5, text: "x:", start: null, end: null }], [], null);
+    const r = readLog([{ line: 5, text: "x:", start: null, end: null }], null);
     expect(r.entries).toEqual([]);
     expect(r.errors).toEqual([{ label: "missing start", text: "x", at: null }]);
   });
@@ -22,8 +12,22 @@ describe("readLog", () => {
       { line: 5, text: "a:", start: "09:00", end: null },
       { line: 8, text: "b:", start: "10:00", end: null },
     ];
-    expect(readLog(cli, [], 10 * 60 + 5).errors.map((e) => e.text)).toEqual(["a"]);
-    expect(readLog(cli, [], 9 * 60 + 30).errors.map((e) => e.text)).toEqual(["a", "b"]);
+    expect(readLog(cli, 10 * 60 + 5).errors.map((e) => e.text)).toEqual(["a"]);
+    expect(readLog(cli, 9 * 60 + 30).errors.map((e) => e.text)).toEqual(["a", "b"]);
+  });
+  it("reads duplicate starts and ends from the CLI's errors", () => {
+    const r = readLog(
+      [
+        { line: 5, text: "a:", start: "09:20", end: "09:45", errors: ["duplicate start"] },
+        { line: 9, text: "b:", start: "10:00", end: "10:45", errors: ["duplicate end"] },
+      ],
+      null,
+    );
+    expect(r.entries.map((e) => e.text)).toEqual(["a", "b"]);
+    expect(r.errors).toEqual([
+      { label: "duplicate starts", text: "a", at: 555 },
+      { label: "duplicate ends", text: "b", at: 645 },
+    ]);
   });
 });
 
