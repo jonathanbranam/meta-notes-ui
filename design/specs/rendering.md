@@ -237,6 +237,14 @@ task never does. Notes and subtasks under a task render as a nested list.
 - **AND** the page does not contain "[&gt;]"
 - **AND** the page shows the chips "due: 📅 2026-09-10, start: 🛫 2026-10-01, scheduled: ⏳ 2026-10-05, due: 📅 2026-10-12, due: 📅 2026-10-10"
 
+#### Scenario: A copy of a task  {#s-c0f1}
+
+*Verification*: **executable**
+
+- **WHEN** a note holds "- [<] Copied 📅 2026-09-10\n- [ ] Real 📅 2026-09-10\n"
+- **THEN** the task "Copied" is from and not overdue
+- **AND** the task "Real" is open and overdue
+
 #### Scenario: Time and recurrence  {#s-39a2}
 
 *Verification*: **executable**

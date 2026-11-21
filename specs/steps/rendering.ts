@@ -115,7 +115,7 @@ export function renderingSteps(steps: Steps) {
   });
   steps.then(/^the page marks no tags$/, (w) => expect(page(w)).not.toContain("data-tag"));
 
-  steps.then(/^the (task|checklist item) "([^"]+)" is (open|done|rescheduled|canceled|partial)( and (?:not )?overdue)?$/, (w, kind, text, status, overdue) => {
+  steps.then(/^the (task|checklist item) "([^"]+)" is (open|done|rescheduled|from|canceled|partial)( and (?:not )?overdue)?$/, (w, kind, text, status, overdue) => {
     const li = [...page(w).matchAll(/<li class='(task-item [^']*)'[^>]*>(.*?)<\/li>/g)].find((m) => m[2].includes(text));
     expect(li, `${kind} "${text}"`).toBeDefined();
     const classes = li![1].split(" ");

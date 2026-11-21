@@ -94,7 +94,9 @@ Read-only, in the client (`client/src/markdown.ts`, a remark plugin):
 - Checkbox lines (`- [c]`) with a `📅` or `🛫` date are tasks; without one
   they are checklist items (class `checklist`) and show the same status.
   Both show their status and chips for `📅 ⏳ 🛫 ✅ ⏰ 🔁`
-  and times; an open task due before today is red.
+  and times; an open task due before today is red. A `[<]` line is a copy
+  of a task kept elsewhere: drawn like `[>]` with a left arrow, never open or
+  overdue; the status picker shows it but does not offer it.
 - The Time Block table: single-tilde plans struck out, `no plan` rows
   dimmed, and on today's note the row holding the current time highlighted.
 - The Time Log (`### Log`): each entry shows `start – end · duration`

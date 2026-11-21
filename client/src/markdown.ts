@@ -104,7 +104,7 @@ export function taskChips(nodes: Node[], status: string, today: string): { nodes
   return { nodes: out, info };
 }
 
-export const isOpen = (status: string) => !"xX->".includes(status);
+export const isOpen = (status: string) => !"xX-><".includes(status);
 
 const plain = (n: Node): string => (n.value ?? "") + (n.children ?? []).map(plain).join("");
 
@@ -181,6 +181,7 @@ function taskItem(item: Node, ctx: RenderContext): void {
 export function statusName(s: string): string {
   if ("xX".includes(s)) return "done";
   if (s === ">") return "moved";
+  if (s === "<") return "from";
   if (s === "-") return "canceled";
   if (".oO".includes(s)) return "partial";
   return "open";
