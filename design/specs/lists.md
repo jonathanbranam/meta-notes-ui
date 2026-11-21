@@ -117,3 +117,17 @@ On a list page the shared message sheet SHALL attach the open list's path as its
 
 - **WHEN** the user sends "add milk" from the list page "!lists/resource/lists/26-Q4/2026-11-07 Walmart.md"
 - **THEN** the message text starts "[from the UI, page: resource/lists/26-Q4/2026-11-07 Walmart.md]"
+
+### Requirement: One checkbox look, mark inside the box  {#r-eb63}
+
+Every checkbox-like control (the list page's item boxes, task rows on Today, Tasks and tag pages,
+and task lines on note pages) SHALL be a box with its mark drawn inside it as a centered image, at
+every size and on mobile Safari, never a letter. It SHALL show open (empty box), done (checked,
+filled) and canceled (a dash, muted; the list item's text also struck through) distinctly.
+
+#### Scenario: The three states  {#s-a735}
+
+*Verification*: **non-executable**
+
+- **WHEN** a list holds an open, a done and a canceled item, viewed at 390px and at 1280px wide
+- **THEN** the open box is empty, the done box is filled with a check mark inside it, and the canceled box shows a dash inside it
