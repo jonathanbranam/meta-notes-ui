@@ -19,3 +19,8 @@ bridle_version = "0.7.6"
 id = "0008-gitignore-bridle-tmp"
 applied_at = "2026-11-14T12:05:21.532014262Z"
 bridle_version = "0.8.0"
+
+[[applied]]
+id = "0009-gitignore-review-documents"
+applied_at = "2026-11-27T15:09:12.100534390Z"
+bridle_version = "0.8.1"
