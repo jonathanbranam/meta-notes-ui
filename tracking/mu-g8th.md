@@ -4,7 +4,7 @@ title = "Commit (and push) notes changed through the UI"
 kind = "feature"
 state = "open"
 created_at = "2026-11-28T14:32:06.017Z"
-updated_at = "2026-11-28T14:36:14.837937635Z"
+updated_at = "2026-11-28T14:46:01.876379122Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 ticket = "g8th"
@@ -55,3 +55,39 @@ readied by external:orchestrator
 
 ### note · external:orchestrator · 2026-11-28T14:36:14.837Z
 Readied by human via aide (notes), relayed in m-0445: "yes ready it" (9:35 AM ET), after asking for a ~1 minute debounce. Design and check in the ticket body. Sonnet.
+
+### note · agent:ui-commit · 2026-11-28T14:46:01.876Z
+Done on bridle/ui-commit: 30e5727 (v0.33.0). Local main had not moved, so no merge.
+
+Check (npm run check, green): tsc ok; vitest 121 passed (26 files); bridle spec check ok and spec
+tests 282 passed (new: design/specs/commits.md with steps in specs/steps/commits.ts); build ok.
+
+Browser (throwaway site, port 4000, temp notes repo with a missing remote): added a task, the notice
+"Changes are saved but not synced to git" showed at 390px and 1280px; after creating the remote, a
+second edit pushed both commits and the notice cleared. Browser and server stopped, port released.
+Screenshots:
+- /tmp/ui-commit-shots/390-push-failed.png
+- /tmp/ui-commit-shots/1280-push-failed.png
+
+Decisions the ticket did not cover:
+1. Commits only when the notes root is itself the top of a git work tree; a root that is a folder
+   inside another repo is left alone.
+2. Pending paths and the unpushed flag are kept in .meta-notes-cache/ui/commits.json, so a failure
+   survives a restart. At startup anything kept is flushed after 60 s. No retry timer: otherwise the
+   retry is the next UI write or shutdown.
+3. Shutdown flush is bounded at 8 s (meta-notes ui stop waits 10 s); it waits for in-flight writes.
+4. No commit during a merge, with conflicts, or off a branch (rebase): shown as a failure.
+5. A list check/uncheck records the source task's note only if the list actually closed or reopened it.
+   Writes the CLI reports as unchanged are not recorded.
+6. ssh is run with BatchMode=yes unless GIT_SSH_COMMAND, GIT_SSH or core.sshCommand is set.
+7. The UI has no move, rename or archive routes, so nothing records those yet. The committer handles a
+   move (old and new path, tested); a future route must pass both plus the rewritten links.
+
+Limits for the human (in the spec):
+- The unit is the file: someone else's uncommitted edits in a note the UI also changed are committed
+  with it.
+- git push sends the whole branch, including others' local commits.
+- No pull: if the remote moved on (another machine), the push keeps failing until someone settles it.
+- The push needs a non-interactive credential from the systemd unit and an upstream branch
+  (noted in deploy/always-on.md). Worth checking on the real notes repo after deploy.
+- There is no CHANGELOG in this repo; README updated.
