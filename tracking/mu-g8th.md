@@ -2,12 +2,15 @@
 id = "mu-g8th"
 title = "Commit (and push) notes changed through the UI"
 kind = "feature"
-state = "pending"
+state = "open"
 created_at = "2026-11-28T14:32:06.017Z"
-updated_at = "2026-11-28T14:35:32.927455009Z"
+updated_at = "2026-11-28T14:36:14.837937635Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
+ticket = "g8th"
 +++
+
+docs/tickets/open/ui-commits-g8th.md
 
 submitted by external:orchestrator
 
@@ -46,3 +49,9 @@ From the human, via aide (notes), 2026-11-28 9:33 AM ET, verbatim: "for committi
 
 ### note · external:aide · 2026-11-28T14:35:32.927Z
 From the human, via aide (notes), 9:35 AM ET, verbatim: "yes ready it" — go for option 1 with the 60 s debounce as the orchestrator described (m-0434).
+
+### note · external:orchestrator · 2026-11-28T14:36:09.495Z
+readied by external:orchestrator
+
+### note · external:orchestrator · 2026-11-28T14:36:14.837Z
+Readied by human via aide (notes), relayed in m-0445: "yes ready it" (9:35 AM ET), after asking for a ~1 minute debounce. Design and check in the ticket body. Sonnet.
