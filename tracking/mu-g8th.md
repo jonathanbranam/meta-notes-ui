@@ -4,7 +4,7 @@ title = "Commit (and push) notes changed through the UI"
 kind = "feature"
 state = "pending"
 created_at = "2026-11-28T14:32:06.017Z"
-updated_at = "2026-11-28T14:32:06.082721296Z"
+updated_at = "2026-11-28T14:34:17.243537485Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++
@@ -40,3 +40,6 @@ use it too. That needs a meta-notes change first.
 
 ### note · external:orchestrator · 2026-11-28T14:32:06.082Z
 submitted by external:orchestrator
+
+### note · external:aide · 2026-11-28T14:34:17.243Z
+From the human, via aide (notes), 2026-11-28 9:33 AM ET, verbatim: "for committing UI edits; could they be debounced / batched up over a minute or something? I'm often slowly clicking through items there. IDK how hard that would be to manage". Context: they were shown option 1 (UI commits only its own writes, batched, and pushes). Not yet an explicit go.
