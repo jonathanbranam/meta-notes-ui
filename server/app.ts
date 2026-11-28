@@ -5,8 +5,9 @@ import { promisify } from "node:util";
 import { Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { streamSSE } from "hono/streaming";
-import type { BacklinksResponse, ChangeEvent, NoteResponse, TagAliasesResponse } from "../shared/types.js";
+import type { BacklinksResponse, ChangeEvent, CommitStatus, NoteResponse, TagAliasesResponse } from "../shared/types.js";
 import { createBacklinks } from "./backlinks.js";
+import { NO_COMMITS, type Committer } from "./committer.js";
 import { editRoutes, runMetaNotes } from "./edits.js";
 import { messageRoutes, type MessageConfig } from "./message.js";
 import { pushRoutes, type PushConfig } from "./push-routes.js";
@@ -49,6 +50,8 @@ export interface AppOptions {
   message?: MessageConfig;
   /** Web Push store; without it there is no /api/push route. */
   push?: PushConfig;
+  /** Commits what the write routes change; without it nothing is committed. */
+  commits?: Committer;
   /** Subscribe to change batches; returns an unsubscribe function. */
   subscribe: (fn: (events: ChangeEvent[]) => void) => () => void;
 }
@@ -93,6 +96,7 @@ export function createApp(opts: AppOptions): Hono {
   const logins: LoginStore = createLoginStore(root);
   const failDelay = opts.failDelayMs ?? 1000;
   const backlinks = createBacklinks(root);
+  const commits = opts.commits ?? NO_COMMITS;
 
   // Tag aliases come from the CLI, read lazily and kept while .meta-notes is unchanged. A failure is not kept.
   let aliases: { mtime: number; value: Promise<TagAliasesResponse> } | null = null;
@@ -228,12 +232,12 @@ export function createApp(opts: AppOptions): Hono {
     }
   });
 
-  editRoutes(app, root);
+  editRoutes(app, root, commits);
   if (opts.message) messageRoutes(app, opts.message);
   if (opts.push) pushRoutes(app, opts.push);
   todayRoutes(app, root);
   weekRoutes(app, root);
-  listRoutes(app, root);
+  listRoutes(app, root, commits);
   tagTaskRoutes(app, root);
   dueTaskRoutes(app, root);
 
@@ -244,10 +248,15 @@ export function createApp(opts: AppOptions): Hono {
       const unsubscribe = opts.subscribe((events) => {
         for (const e of events) void stream.writeSSE({ data: JSON.stringify(e) }).catch(done);
       });
+      // The commit or push failure the UI shows: now, and each time it changes.
+      const sendCommit = (status: CommitStatus) => stream.writeSSE({ event: "commit", data: JSON.stringify(status) }).catch(done);
+      const unsubscribeCommits = commits.subscribe((status) => void sendCommit(status));
       stream.onAbort(done);
       await stream.writeSSE({ event: "ready", data: "{}" });
+      await sendCommit(commits.status());
       await closed;
       unsubscribe();
+      unsubscribeCommits();
     }),
   );
 

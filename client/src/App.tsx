@@ -2,7 +2,7 @@ import { createContext, type CSSProperties, type PointerEvent as ReactPointerEve
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { decodeAgain, headingSlug, parseHash } from "../../shared/links";
-import type { BacklinksResponse, ChangeEvent, NoteResponse, TreeNode } from "../../shared/types";
+import type { BacklinksResponse, ChangeEvent, CommitStatus, NoteResponse, TreeNode } from "../../shared/types";
 import { isOpen, metaNotes, statusName, parseFrontmatter, valueSegments, type PropValue, type RenderContext } from "./markdown";
 import { clampTreeWidth, readTreePane, writeTreePane } from "./tree-pane";
 import { isNewVersion } from "./version";
@@ -335,6 +335,8 @@ export function App() {
   const [composing, setComposing] = useState(false);
   const [sentNote, setSentNote] = useState(false);
   const [stale, setStale] = useState(false);
+  // Why the server could not commit or push the UI's changes; "" when it could.
+  const [commitError, setCommitError] = useState("");
   const checkVersion = useCallback(
     () => getJson<{ version?: string }>("/api/version").then((v) => setStale(isNewVersion(__APP_VERSION__, v.version)), () => {}),
     [],
@@ -487,6 +489,7 @@ export function App() {
       }
       opened = true;
     };
+    es.addEventListener("commit", (m) => setCommitError((JSON.parse(m.data) as CommitStatus).error ?? ""));
     es.onmessage = (m) => {
       const e = JSON.parse(m.data) as ChangeEvent;
       if (e.type !== "changed") void loadTree();
@@ -657,6 +660,13 @@ export function App() {
       )}
       {drawer && <div className="scrim" onClick={() => setDrawer(false)} />}
       <main>
+        {commitError && (
+          <p className="error commit-error" role="alert">
+            Changes are saved but not synced to git; retried after the next edit.
+            <br />
+            {commitError}
+          </p>
+        )}
         <FiredAlerts fired={todayState.fired} dismiss={todayState.dismiss} snooze={todayState.snooze} />
         {error && <p className="error">{error}</p>}
         {messageOnPage && canMessage && (

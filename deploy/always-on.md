@@ -171,3 +171,10 @@ human does these steps on the host and the phone (agents never do):
    changes, so the app's localStorage, its token and any push subscription
    start over: open `https://<new-name>.<tailnet>.ts.net/?token=<token>` once
    more, and allow notifications again.
+
+## Committing UI edits
+
+The server commits the notes it changes and pushes them (`design/specs/commits.md`). The push runs
+from the user unit with no terminal and never prompts, so the notes remote must work without one:
+an SSH key with no passphrase (or an agent the unit can reach) or a stored credential. Set the
+branch's upstream once (`git push -u`). A failure shows at the top of the page.

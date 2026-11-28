@@ -17,6 +17,11 @@ export interface ChangeEvent {
   path: string;
 }
 
+/** The `commit` event on `/api/events`: why the UI's changes are not committed or pushed, or null. */
+export interface CommitStatus {
+  error: string | null;
+}
+
 export interface ServerInfo {
   pid: number;
   host: string;

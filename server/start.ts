@@ -7,6 +7,7 @@ import { serve } from "@hono/node-server";
 import type { AddressInfo } from "node:net";
 import type { ChangeEvent, ServerInfo } from "../shared/types.js";
 import { createApp } from "./app.js";
+import { createCommitter } from "./committer.js";
 import { createPush, validContact } from "./push.js";
 import { cliInputs, createScheduler } from "./scheduler.js";
 import { loadToken } from "./token.js";
@@ -21,12 +22,12 @@ export class UsageError extends Error {}
 export interface RunningServer {
   info: ServerInfo;
   infoFile: string;
-  /** Stop listening and watching, and remove server.json. */
-  close: () => void;
+  /** Stop listening and watching, flush uncommitted UI writes (bounded), and remove server.json. */
+  close: () => Promise<void>;
 }
 
 /** Start the server from command-line arguments; resolves once it is listening and server.json is written. */
-export async function startServer(args: string[]): Promise<RunningServer> {
+export async function startServer(args: string[], opts: { commitDelayMs?: number } = {}): Promise<RunningServer> {
   const { values } = parseArgs({
     args,
     options: {
@@ -66,12 +67,15 @@ export async function startServer(args: string[]): Promise<RunningServer> {
   const scheduler = push ? createScheduler(push, cliInputs(root)) : undefined;
   if (scheduler) listeners.add(scheduler.onChanges);
 
+  const commits = createCommitter({ root, delayMs: opts.commitDelayMs });
+
   const here = path.dirname(fileURLToPath(import.meta.url));
   const app = createApp({
     root,
     token,
     version,
     message,
+    commits,
     push: push && scheduler ? { store: push, onSubscribed: () => void scheduler.replan() } : undefined,
     clientDir: path.resolve(here, "../client"),
     subscribe: (fn) => {
@@ -82,7 +86,7 @@ export async function startServer(args: string[]): Promise<RunningServer> {
 
   const infoFile = path.join(root, ".meta-notes-cache", "ui", "server.json");
 
-  let closed = false;
+  let closing: Promise<void> | undefined;
   return new Promise((resolve, reject) => {
     const server = serve({ fetch: app.fetch, hostname: host, port: Number(values.port) }, async (addr: AddressInfo) => {
       const shown = host.includes(":") ? `[${host}]` : host;
@@ -100,13 +104,13 @@ export async function startServer(args: string[]): Promise<RunningServer> {
         info,
         infoFile,
         close: () => {
-          if (closed) return;
-          closed = true;
+          if (closing) return closing;
           watcher.close();
           scheduler?.stop();
           push?.stop();
           server.close();
           rmSync(infoFile, { force: true });
+          return (closing = commits.close());
         },
       });
     });
