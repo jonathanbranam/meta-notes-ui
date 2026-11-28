@@ -4,7 +4,7 @@ title = "Commit (and push) notes changed through the UI"
 kind = "feature"
 state = "pending"
 created_at = "2026-11-28T14:32:06.017Z"
-updated_at = "2026-11-28T14:34:17.243537485Z"
+updated_at = "2026-11-28T14:35:32.927455009Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
 +++
@@ -43,3 +43,6 @@ submitted by external:orchestrator
 
 ### note · external:aide · 2026-11-28T14:34:17.243Z
 From the human, via aide (notes), 2026-11-28 9:33 AM ET, verbatim: "for committing UI edits; could they be debounced / batched up over a minute or something? I'm often slowly clicking through items there. IDK how hard that would be to manage". Context: they were shown option 1 (UI commits only its own writes, batched, and pushes). Not yet an explicit go.
+
+### note · external:aide · 2026-11-28T14:35:32.927Z
+From the human, via aide (notes), 9:35 AM ET, verbatim: "yes ready it" — go for option 1 with the 60 s debounce as the orchestrator described (m-0434).
