@@ -6,14 +6,14 @@ change, with editing and tools tailored to meta-notes' conventions (wiki
 links, tasks, the Time Block and Time Log, frontmatter), alerts and
 reminders. Roughly Obsidian, with plugins for one person's system.
 
-Status: v0.32.4, v1 in development.
+Status: v0.33.0, v1 in development.
 
 ## How it fits
 
 - `meta-notes ui start|stop|status|open` runs this server on a notes root.
 - The server reads notes from disk and changes them only through the
   `meta-notes` CLI, the way agents do, so edits are race-safe against Vim
-  and agents.
+  and agents. It commits and pushes its own changes (see Commits below).
 - It watches the notes root and pushes changes to the browser; open views, including an open editor (as a conflict), update at once, and a reconnecting phone re-fetches what it shows.
 
 ## Install
@@ -134,6 +134,13 @@ a file itself. Routes (token required, `.md` paths inside the root only):
   (the **New** button asks for a path; an existing note is refused).
 
 CLI errors are shown inline.
+
+**Commits.** When the notes root is itself a git repository, the server commits the notes its own
+writes changed, and only those: 60 s after the last write, one commit `meta-notes-ui: <N> notes
+updated`, then `git push` if there is a remote (also on shutdown or restart, bounded to 8 s). A
+failed commit or push is shown at the top of the page and retried after the next edit or restart.
+Other changes in the repo are left alone, except any others in a note the UI also changed. There is
+no pull. Spec: `design/specs/commits.md`.
 
 ## Develop
 

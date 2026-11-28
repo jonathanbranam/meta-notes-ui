@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import path from "node:path";
 import type { Hono } from "hono";
+import type { Committer } from "./committer.js";
 import { confine, isHidden, PathError } from "./paths.js";
 
 /** What `meta-notes ... --json` printed (it prints JSON on failure too). */
@@ -55,16 +56,22 @@ async function notePath(root: string, rel: unknown, mustExist: boolean): Promise
 }
 
 /** Edit routes. Every write is a meta-notes command carrying `--expect` (rule writes-through-the-cli). */
-export function editRoutes(app: Hono, root: string): void {
+export function editRoutes(app: Hono, root: string, commits: Committer): void {
   const reply = (c: { json: (b: unknown, s: 200 | 400 | 409) => Response }, r: CliResult) =>
     r.ok ? c.json(r, 200) : c.json(r, r.current !== undefined ? 409 : 400);
+  // A write that changed the note is recorded, to be committed.
+  const write = (rel: string, args: string[]) =>
+    commits.write(
+      () => runMetaNotes(root, args),
+      (r) => (r.ok && r.changed !== false && r.created !== false ? [rel] : []),
+    );
 
   // Set a task line's status. body: {path, line, expect, status}
   app.post("/api/task", async (c) => {
     const b = await c.req.json().catch(() => ({}));
     const rel = await notePath(root, b.path, true);
     if (!rel || !isLine(b.line) || !isStr(b.expect) || !isStr(b.status) || b.status.length !== 1) return c.json({ ok: false, error: "bad request" }, 400);
-    return reply(c, await runMetaNotes(root, ["task", "update", `${rel}:${b.line}`, `--expect=${b.expect}`, `--status=${b.status}`]));
+    return reply(c, await write(rel, ["task", "update", `${rel}:${b.line}`, `--expect=${b.expect}`, `--status=${b.status}`]));
   });
 
   // Add a task at the end of a note. body: {path, text, due?}. The CLI takes --expect only with --under, which the UI does not use.
@@ -74,7 +81,7 @@ export function editRoutes(app: Hono, root: string): void {
     const text = isStr(b.text) ? b.text.trim() : "";
     const due = b.due === undefined || b.due === "" ? null : b.due;
     if (!rel || !text || text.includes("\n") || (due !== null && !(isStr(due) && /^\d{4}-\d{2}-\d{2}$/.test(due)))) return c.json({ ok: false, error: "bad request" }, 400);
-    return reply(c, await runMetaNotes(root, ["task", "add", rel, text, ...(due ? [`--due=${due}`] : [])]));
+    return reply(c, await write(rel, ["task", "add", rel, text, ...(due ? [`--due=${due}`] : [])]));
   });
 
   // Replace lines from..to with text. body: {path, from, to, expect, text}
@@ -82,7 +89,7 @@ export function editRoutes(app: Hono, root: string): void {
     const b = await c.req.json().catch(() => ({}));
     const rel = await notePath(root, b.path, true);
     if (!rel || !isLine(b.from) || !isLine(b.to) || b.to < b.from || !isStr(b.expect) || !isStr(b.text)) return c.json({ ok: false, error: "bad request" }, 400);
-    return reply(c, await runMetaNotes(root, ["note", "write", rel, `--lines=${b.from}..${b.to}`, `--expect=${b.expect}`, `--text=${b.text}`]));
+    return reply(c, await write(rel, ["note", "write", rel, `--lines=${b.from}..${b.to}`, `--expect=${b.expect}`, `--text=${b.text}`]));
   });
 
   // Set one Time Block cell. body: {path, time, column: "plan"|"actual", expect, text}; expect is the cell as shown ("" for empty).
@@ -91,7 +98,7 @@ export function editRoutes(app: Hono, root: string): void {
     const rel = await notePath(root, b.path, true);
     if (!rel || !isTime(b.time) || (b.column !== "plan" && b.column !== "actual") || !isStr(b.expect) || !isStr(b.text) || b.text.includes("\n") || b.text.includes("|"))
       return c.json({ ok: false, error: "bad request" }, 400);
-    return reply(c, await runMetaNotes(root, ["time-block", "update", rel, `--time=${b.time.trim()}`, `--${b.column}=${b.text}`, `--expect=${b.expect}`]));
+    return reply(c, await write(rel, ["time-block", "update", rel, `--time=${b.time.trim()}`, `--${b.column}=${b.text}`, `--expect=${b.expect}`]));
   });
 
   // Replace the rows from..through. body: {path, time, through, expect, text}; expect and text are `| time | plan | actual |` lines.
@@ -99,7 +106,7 @@ export function editRoutes(app: Hono, root: string): void {
     const b = await c.req.json().catch(() => ({}));
     const rel = await notePath(root, b.path, true);
     if (!rel || !isTime(b.time) || !isTime(b.through) || !isStr(b.expect) || !isStr(b.text) || !b.text.trim()) return c.json({ ok: false, error: "bad request" }, 400);
-    return reply(c, await runMetaNotes(root, ["time-block", "replace", rel, `--time=${b.time.trim()}`, `--through=${b.through.trim()}`, `--expect=${b.expect}`, `--text=${b.text}`]));
+    return reply(c, await write(rel, ["time-block", "replace", rel, `--time=${b.time.trim()}`, `--through=${b.through.trim()}`, `--expect=${b.expect}`, `--text=${b.text}`]));
   });
 
   // Append a Time Log entry. body: {path, text, start?, prev?, prevStart?, prevOpen?, closePrev?, first?}; text is the header line `- what`.
@@ -119,7 +126,7 @@ export function editRoutes(app: Hono, root: string): void {
     if (b.prevStart) args.push(`--prev-start=${b.prevStart.trim()}`);
     if (b.prevOpen) args.push("--prev-open");
     if (b.closePrev) args.push("--close-prev");
-    return reply(c, await runMetaNotes(root, args));
+    return reply(c, await write(rel, args));
   });
 
   // Replace whole Time Log entries. body: {path, expect, text}; expect is the entries as shown, text empty deletes them.
@@ -127,7 +134,7 @@ export function editRoutes(app: Hono, root: string): void {
     const b = await c.req.json().catch(() => ({}));
     const rel = await notePath(root, b.path, true);
     if (!rel || !isStr(b.expect) || !b.expect.trim() || !isStr(b.text)) return c.json({ ok: false, error: "bad request" }, 400);
-    return reply(c, await runMetaNotes(root, ["time-log", "update", rel, `--expect=${b.expect}`, `--text=${b.text}`]));
+    return reply(c, await write(rel, ["time-log", "update", rel, `--expect=${b.expect}`, `--text=${b.text}`]));
   });
 
   // New note from the template meta-notes picks. body: {path}
@@ -135,7 +142,7 @@ export function editRoutes(app: Hono, root: string): void {
     const b = await c.req.json().catch(() => ({}));
     const rel = await notePath(root, b.path, false);
     if (!rel) return c.json({ ok: false, error: "bad request" }, 400);
-    const r = await runMetaNotes(root, ["note", "new", rel]);
+    const r = await write(rel, ["note", "new", rel]);
     if (r.ok && r.created === false) return c.json({ ok: false, error: `${rel} already exists` }, 409);
     return reply(c, r);
   });

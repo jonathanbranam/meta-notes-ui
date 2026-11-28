@@ -14,9 +14,9 @@ let stopping = false;
 function stop(): void {
   if (stopping) return;
   stopping = true;
-  running.close();
-  process.exit(0);
+  // close() bounds the flush, so a hung push cannot hang shutdown.
+  void running.close().finally(() => process.exit(0));
 }
-process.on("exit", () => running.close());
+process.on("exit", () => void running.close());
 process.on("SIGINT", stop);
 process.on("SIGTERM", stop);

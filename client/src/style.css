@@ -133,6 +133,8 @@ main { grid-column: 2; grid-row: 2; overflow: auto; padding: 1rem 1.5rem; }
 .timelog-edit button { min-height: 2.5rem; }
 .timelog-edit .conflict { white-space: pre-wrap; background: rgba(192, 57, 43, .12); padding: .4rem; flex-basis: 100%; }
 
+.commit-error { white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid currentColor; padding: .5rem; }
+
 .update-bar {
   position: fixed;
   left: 0;
