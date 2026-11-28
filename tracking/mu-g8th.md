@@ -2,11 +2,14 @@
 id = "mu-g8th"
 title = "Commit (and push) notes changed through the UI"
 kind = "feature"
-state = "open"
+state = "integrated"
 created_at = "2026-11-28T14:32:06.017Z"
-updated_at = "2026-11-28T14:46:01.876379122Z"
+updated_at = "2026-11-28T14:46:57.399513988Z"
 created_by = "external:orchestrator"
 watchers = ["external:orchestrator"]
+branch = "bridle/ui-commit"
+commit = "3a3cbcd"
+summary = "UI server commits only the notes its own writes changed, 60 s debounce, one commit + push per batch; flush on shutdown; failed push shown in UI and retried on next write. Merged 3a3cbcd, v0.33.0."
 ticket = "g8th"
 +++
 
@@ -91,3 +94,9 @@ Limits for the human (in the spec):
 - The push needs a non-interactive credential from the systemd unit and an upstream branch
   (noted in deploy/always-on.md). Worth checking on the real notes repo after deploy.
 - There is no CHANGELOG in this repo; README updated.
+
+### note · external:orchestrator · 2026-11-28T14:46:53.753Z
+integrated: 3a3cbcd (branch bridle/ui-commit)
+
+### note · external:orchestrator · 2026-11-28T14:46:54.380Z
+cleanup: removed nothing

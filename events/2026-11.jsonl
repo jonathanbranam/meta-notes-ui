@@ -122,3 +122,4 @@
 {"actor":"system","at":"2026-11-21T22:35:23.438757603Z","from":"open","task":"mu-xs7n","to":"pending"}
 {"actor":"human","at":"2026-11-28T14:32:06.017Z","from":"","task":"mu-g8th","to":"pending"}
 {"actor":"external:orchestrator","at":"2026-11-28T14:36:09.495556664Z","from":"pending","task":"mu-g8th","to":"open"}
+{"actor":"external:orchestrator","at":"2026-11-28T14:46:53.753496062Z","from":"open","task":"mu-g8th","to":"integrated"}
